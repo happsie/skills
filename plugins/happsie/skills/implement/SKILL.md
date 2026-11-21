@@ -1,15 +1,16 @@
 ---
 name: implement
-description: Implement a feature, task, bug fix or ticket end to end. Refines the request into a brief the developer approves, does a strategic design pass that decides whether to refactor first, then builds with test-driven development. Never assumes; every open decision or unexpected problem goes to the developer as a question. Use whenever the user asks to implement, build, code, fix, start or pick up something (e.g. "implement PROJ-123", "start on this ticket", "build this feature", "fix this bug", "let's do this one"), or gives a bare ticket key with intent to work on it. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for planning-only or review-only requests.
+description: Implement a feature, task, bug fix or ticket end to end. Refines the request into a brief the developer approves, does a strategic design pass that decides whether to refactor first, builds with test-driven development, then has the result checked against the brief by an independent subagent and opens the pull request. Never assumes; every open decision or unexpected problem goes to the developer as a question. Use whenever the user asks to implement, build, code, fix, start or pick up something (e.g. "implement PROJ-123", "start on this ticket", "build this feature", "fix this bug", "let's do this one"), or gives a bare ticket key with intent to work on it. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for planning-only or review-only requests.
 ---
 
 # Implement
 
-Three phases, each ending in something the developer has approved:
+Four phases, each ending in something the developer has approved:
 
 1. **Refine**: agree on what to build. Ends with an approved brief.
 2. **Strategic design**: decide what shape the code should have, and refactor first if that makes it healthier. Ends with an approved plan and a finished refactor.
 3. **Build**: test-driven, following the plan.
+4. **Deliver**: an independent check against the brief, then the pull request.
 
 Don't skip or reorder phases, however small or well defined the task looks. A small task makes each phase short, not optional.
 
@@ -74,7 +75,7 @@ For a bug, don't touch production code until a test reproduces it.
 1. State the bug as: given X, expected Y, actual Z.
 2. Write a test that asserts the expected behavior, in the layer closest to where the bug shows.
 3. Run it. It must fail for the reason the bug describes. A compile error or a setup failure doesn't count.
-4. If it passes, or you can't reproduce the bug, stop and ask. Report what you tried and the plausible explanations. Never ship a speculative fix.
+4. If it passes, or you can't reproduce the bug, stop and ask. Report what you tried and the plausible explanations. Never ship a speculative fix. Finding an unknown cause is the job of the `investigate` skill.
 
 That test is the first red of the loop in 3.4.
 
@@ -119,13 +120,21 @@ Rules for the loop:
 
 Commit where the plan says to, on the branch, never on the default branch.
 
-## Verify
+### 3.5 Verify
 
 Run every affected test layer, the build, and the linter or type checker. Show the output of any failure, and ask what to do about it. If something can't be run, say exactly what is unverified. Don't report success on anything you didn't run.
+
+## Phase 4: Deliver
+
+When the build is verified and committed, run the `deliver` skill without waiting to be asked. It has a subagent with a fresh context check the diff against the brief, reports the verdict, and opens the pull request once the developer approves it.
+
+Don't do that check yourself and don't skip it because the tests are green. If the verdict leads to more work, do it under the rules of phase 3 and let `deliver` check again.
 
 ## Report
 
 Keep it short:
+
+- The pull request and the verdict from `deliver`.
 
 - For a bug: whether it reproduced, and the test that proves the fix.
 - Scenarios covered, and in which layer.
