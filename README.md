@@ -19,7 +19,7 @@ How the skills fit together. `implement` runs `refine`, `strategic-design`, the 
 
 ## Add a skill
 
-Skills live in `plugins/happsie/skills/`. Create `plugins/happsie/skills/<name>/SKILL.md` with `name` and `description` frontmatter. It shows up as `happsie:<name>`. Add it to `docs/workflow.dot` and regenerate the flowchart (see `CLAUDE.md`).
+Skills live in `plugins/happsie/skills/`. Create `plugins/happsie/skills/<name>/SKILL.md` with `name` and `description` frontmatter. It shows up as `happsie:<name>`. Add it to `docs/workflow.py` and regenerate the flowchart (see `CLAUDE.md`).
 
 ## Add a plugin
 

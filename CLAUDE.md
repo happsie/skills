@@ -7,24 +7,24 @@ A Claude Code plugin marketplace. The `happsie` plugin holds general purpose ski
 - `.claude-plugin/marketplace.json`: the marketplace, lists every plugin.
 - `plugins/happsie/.claude-plugin/plugin.json`: plugin name and version.
 - `plugins/happsie/skills/<name>/SKILL.md`: one skill per folder, with extra files in `assets/` when needed.
-- `docs/workflow.dot`: source of the workflow flowchart. `docs/workflow.svg` is generated from it and shown in the README.
+- `docs/workflow.py`: generates the workflow flowchart. `docs/workflow.svg` is its output and is shown in the README.
 
 ## Keep the workflow flowchart up to date
 
-The flowchart in the README must always match the skills. Update `docs/workflow.dot` and regenerate the picture in the same change whenever:
+The flowchart in the README must always match the skills. Update `docs/workflow.py` and regenerate the picture in the same change whenever:
 
 - a skill is added, removed or renamed
 - a skill starts or stops handing off to another skill
 - a skill's input, output file (`brief.md`, `plan.md`, `investigation.md`) or approval step changes
 - the one-line summary of a skill in the chart is no longer true
 
-Regenerate with Graphviz (`brew install graphviz`):
+Regenerate (plain Python, no dependencies):
 
 ```
-dot -Tsvg docs/workflow.dot -o docs/workflow.svg
+python3 docs/workflow.py
 ```
 
-Never edit `docs/workflow.svg` by hand. Look at the rendered picture before finishing, and check that labels don't overlap. Don't replace it with Mermaid.
+Never edit `docs/workflow.svg` by hand. Look at the rendered picture before finishing (`rsvg-convert docs/workflow.svg -o /tmp/workflow.png`) and check that no text overlaps or runs outside its box; positions are set by hand in the script. Keep the three starting points: an idea with no ticket, a ticket or task that goes straight to `implement`, and a problem with an unknown cause. Don't replace it with Mermaid.
 
 ## Writing skills
 
