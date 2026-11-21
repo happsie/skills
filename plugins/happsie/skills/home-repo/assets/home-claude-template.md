@@ -43,6 +43,10 @@ Never copy single-repo content into `docs/`. If a repo-level doc and a shared do
 
 Files in `repos/` marked "Inferred" were generated from code. Treat them as a good guess and correct them when you learn better.
 
+## Work in progress
+
+Briefs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `brief.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design` and `implement` skills write and read them there.
+
 ## Adding a repo
 
 Run the `home-repo` skill again with the new repo path.
