@@ -1,0 +1,70 @@
+// Source for docs/workflow.svg. Regenerate with:
+//   dot -Tsvg docs/workflow.dot -o docs/workflow.svg
+digraph workflow {
+  graph [rankdir=TB, bgcolor="white", pad=0.3, nodesep=0.45, ranksep=0.55,
+         fontname="Helvetica,Arial,sans-serif", fontsize=12, newrank=true];
+  node  [fontname="Helvetica,Arial,sans-serif", fontsize=12, shape=box,
+         style="rounded,filled", fillcolor="#eef2ff", color="#4f5bd5",
+         penwidth=1.2, margin="0.18,0.1"];
+  edge  [fontname="Helvetica,Arial,sans-serif", fontsize=10, color="#555555",
+         fontcolor="#333333", arrowsize=0.8];
+
+  // Starting points
+  node [shape=ellipse, style=filled, fillcolor="#f3f4f6", color="#6b7280"];
+  idea    [label="Idea or work\nwith no ticket"];
+  problem [label="Problem with\nunknown cause"];
+  ticket  [label="Ticket, task or bug\nwith a known cause"];
+
+  // Decisions
+  node [shape=diamond, style=filled, fillcolor="#fff7e6", color="#c98a00", margin="0.05,0.05"];
+  howmany [label="More than\none ticket?"];
+  found   [label="Has a\nticket?"];
+  met     [label="All criteria\nmet?"];
+
+  // Results
+  node [shape=note, style=filled, fillcolor="#ecfdf3", color="#2f8f5b", margin="0.18,0.1"];
+  pr [label="Pull request,\nlinked on the ticket"];
+
+  // Skills
+  node [shape=box, style="rounded,filled", fillcolor="#eef2ff", color="#4f5bd5"];
+  creator      [label=<<b>ticket-creator</b><br/>one ticket, approved<br/>before it is created>];
+  orchestrator [label=<<b>ticket-orchestrator</b><br/>slice into a linked set,<br/>each in ticket-creator format>];
+  investigate  [label=<<b>investigate</b><br/>evidence, hypotheses, proof<br/>writes investigation.md, fixes nothing>];
+  home         [label=<<b>home-repo</b><br/>optional, set up once when working<br/>across many repos, then briefs<br/>and plans live in its work/ folder>, style="rounded,filled,dashed"];
+
+  subgraph cluster_implement {
+    label=<<b>implement</b>  runs these four phases in order, each ends with your approval>;
+    labeljust=l; style="rounded,filled"; fillcolor="#fafafa"; color="#9ca3af"; margin=18;
+    refine  [label=<<b>refine</b><br/>ask until the request is clear<br/>writes brief.md>];
+    design  [label=<<b>strategic-design</b><br/>refactor first, or not<br/>writes plan.md, does the refactor>];
+    build   [label=<<b>build</b> (part of implement)<br/>test-driven, bugs reproduced first>];
+    deliver [label=<<b>deliver</b><br/>fresh subagent checks the diff<br/>against the brief>];
+    met;
+    refine -> design  [label="  approved brief"];
+    design -> build   [label="  approved plan"];
+    build  -> deliver [label="  verified and committed"];
+    deliver -> met;
+    met -> build [constraint=false, label="no: fix, accept or\nchange the brief  "];
+  }
+
+  idea -> howmany;
+  howmany -> creator      [label="  no"];
+  howmany -> orchestrator [label="  yes"];
+  creator -> ticket;
+  orchestrator -> ticket [label="  pick one up"];
+
+  problem -> investigate;
+  investigate -> found;
+  found -> creator [label="no (also when the\ncause was not found)  "];
+  found -> ticket  [label="  yes, cause proven"];
+
+  ticket -> refine;
+  met -> pr [label="  yes, and you approve"];
+
+  build -> investigate [style=dashed, constraint=false, label="bug will not\nreproduce"];
+  refine -> creator [style=dashed, constraint=false, label="   brief has\n   no ticket"];
+  home -> refine [style=dashed, constraint=false];
+
+  { rank=same; idea; problem; }
+  { rank=same; home; refine; }
+}

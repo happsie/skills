@@ -11,9 +11,15 @@ Skills library for Claude Code, packaged as a plugin marketplace.
 
 Update later with `/plugin marketplace update happsie-skills`.
 
+## Workflow
+
+How the skills fit together. `implement` runs `refine`, `strategic-design`, the build and `deliver` in order, and each of them also works on its own.
+
+![Workflow flowchart](docs/workflow.svg)
+
 ## Add a skill
 
-Skills live in `plugins/happsie/skills/`. Create `plugins/happsie/skills/<name>/SKILL.md` with `name` and `description` frontmatter. It shows up as `happsie:<name>`.
+Skills live in `plugins/happsie/skills/`. Create `plugins/happsie/skills/<name>/SKILL.md` with `name` and `description` frontmatter. It shows up as `happsie:<name>`. Add it to `docs/workflow.dot` and regenerate the flowchart (see `CLAUDE.md`).
 
 ## Add a plugin
 
