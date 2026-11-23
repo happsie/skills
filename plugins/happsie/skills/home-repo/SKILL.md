@@ -10,7 +10,7 @@ A home repo is a personal, local repo the developer sits in while working across
 - `CLAUDE.md`: an index of the other repos (absolute paths, purpose, where their docs live) and the rules for working across them.
 - `docs/glossary.md`, `docs/adr/`, `docs/coding-standards.md`: shared docs, only for things that span two or more repos.
 - `repos/<repo_name>/`: glossary, ADRs and coding standards for repos that do not have their own. Other teams work in those repos with their own conventions, so we keep these docs here instead of adding files to their repos.
-- `work/<key-or-slug>/`: the spec and plan for each piece of work done from here, written by the `refine`, `strategic-design` and `implement` skills.
+- `work/<key-or-slug>/`: the spec and plan for each piece of work done from here, written by the `refine`, `strategic-design` and `implement` skills, and the git worktrees the code for that work is written in.
 - `.claude/settings.json`: the repos listed as additional directories, so Claude can read and edit them from here.
 
 The glossaries are the agreed domain language for the work done from here. The `refine` skill describes what an entry holds (term, meaning, other names, rules, context, status) and keeps them up to date as work is refined; this skill only sets them up and seeds them.

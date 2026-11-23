@@ -14,7 +14,7 @@ No assumptions. The verdict goes to the developer as it came back. What to do ab
 ## 1. Find the contract and the change
 
 - **The contract.** `spec.md` for this work, and `plan.md` if there is one. They live in `work/<key-or-slug>/` in a home repo, otherwise in `.implement/<key-or-slug>/` at the root of the repo. The spec must be approved. If there is no spec but there is a ticket, its acceptance criteria are the contract; tell the developer that is what will be checked. If there is neither, ask what the work should be checked against. Don't write the criteria yourself from what was built.
-- **The change.** The branch, the branch it will merge into, and every repo involved. Everything must be committed. If there are uncommitted changes, or the work sits on the default branch, stop and ask.
+- **The change.** The branch, the branch it will merge into, and every repo involved. If `plan.md` lists worktrees (the `implement` skill builds in them), the work is there: read, run and push from the worktrees, not from the developer's checkout. Everything must be committed. If there are uncommitted changes, or the work sits on the default branch, stop and ask.
 
 ## 2. Verify in a fresh subagent
 
@@ -27,7 +27,7 @@ The check is done by a new subagent, never by you, and never by a fork of this c
 Give it only what it needs to find things, and nothing about what you think of them:
 
 - The path to `spec.md` and `plan.md`, or the ticket key and how to fetch it.
-- The repo paths, the branch and the base branch.
+- The repo paths (the worktrees, when the work has them), the branch and the base branch.
 - The instructions below.
 
 Do not tell it what was built, how, which criteria you believe are met, what was hard, or what the tests showed. Do not paste your report or a summary of the work. An agent that is handed a conclusion tends to return it.
@@ -82,3 +82,5 @@ If the work has a ticket, link the pull request on it, with a link field if the 
 ## Report
 
 The pull request URL, the verdict in one line (for example "5 of 5 criteria met, lint clean"), and anything accepted as is or left unverified.
+
+If the work has worktrees, list them and say that `git worktree remove <path>` removes each one once the pull request is merged. Don't remove them yourself: review comments get fixed there.

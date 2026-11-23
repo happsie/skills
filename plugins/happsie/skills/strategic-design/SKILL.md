@@ -89,20 +89,20 @@ Write `plan.md` next to the spec with the sections below, and post it in the cha
 - **Names:** the domain names the plan adds or renames, each with the term from the spec it stands for. Existing names on the feature's path that keep a word the spec says not to use are listed too, with the reason they stay.
 - **Feature steps:** how the feature gets built once the code has its new shape. Ordered, each one tied to acceptance criteria from the spec. In `implement`, each step is built by a subagent that starts with nothing but the spec, the plan and that step, so write every step for a reader who hasn't seen this conversation: the files and symbols it touches with `file:line`, what exists when it starts, what must be true when it is done, and what it leaves for later steps. Make each step small enough to build and test in one sitting, and leave the tests green at the end of it.
 - **Risks and open questions.**
-- **Git:** branch name, and where the commits fall. Refactor commits and feature commits are always separate. If `refine` changed a glossary that is a tracked file in the repo, that change gets its own commit on the branch.
+- **Git:** branch name, the branch it starts from (the default branch unless the developer says otherwise), and where the commits fall. Refactor commits and feature commits are always separate. If `refine` changed a glossary that is a tracked file in the repo, that change gets its own commit on the branch.
 
 Wait for an explicit approval. The developer may take the refactor, reject it, or cut it down. Update the file and confirm again after any change, then set its status line once approved. If they reject the refactor, the feature steps follow the tactical version.
 
 ## 6. Carry out the refactor
 
-Only after approval, and only if the plan has refactor steps. Work on a branch, never on the default branch.
+Only after approval, and only if the plan has refactor steps. Work on the plan's branch in a git worktree made for this work, never in the developer's checkout and never on the default branch. The `implement` skill says where the worktree goes and how it is set up ("Work in a worktree"). Follow it here too, also when this skill runs on its own.
 
 Subagents with a clean context do the work, and you keep the plan and their reports. A refactor reads and rewrites a lot of code, and doing it yourself fills your context before the feature is even started. One subagent adds the characterization tests. Then the refactor steps go out in order, one subagent at a time, never in parallel. Steps that reshape the same code can go to one subagent; start a new one when the work moves to another part of the code. Never use a fork of this conversation.
 
 Give the subagent:
 
 - The paths to `spec.md` and `plan.md`, and which steps are its own. It reads the whole of both, and does only its steps.
-- The repo paths, the branch and the commands that run the tests.
+- The worktree paths, the branch and the commands that run the tests. They work only in the worktree.
 - The rest of this section, from the numbered steps to the end of the report list, passed on as it is.
 
 The work:

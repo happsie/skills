@@ -25,7 +25,7 @@ This applies to every phase and overrides everything else in this skill.
 - You want to deviate from the plan, however slightly.
 - The spec or plan turns out to be wrong or incomplete.
 
-What needs no permission: reading code and tickets, running tests and builds, writing the tests and code that the approved plan already describes, and keeping `spec.md` and `plan.md` up to date.
+What needs no permission: reading code and tickets, running tests and builds, creating the worktree the approved plan names, writing the tests and code that the plan already describes, and keeping `spec.md` and `plan.md` up to date.
 
 When you ask, state what you found (with `file:line` or the actual output), the options, and what you recommend. Then wait. Don't try a workaround while waiting, and don't carry on with other work that depends on the answer.
 
@@ -58,6 +58,25 @@ When starting, look for an existing folder for this work. If `spec.md` or `plan.
 
 If the developer's answer to a question changes the spec or the plan, update the file and get it approved again before going on.
 
+## Work in a worktree
+
+All code for a piece of work is written in a git worktree made for it, never in the developer's checkout. The checkout stays as the developer left it: they can keep working there, switch branches or start a second piece of work while this one builds, and no agent touches their uncommitted changes.
+
+There is one worktree per piece of work, for each repo it changes, and every step uses it. It is not one per subagent: the steps build on each other, so they all work on the same branch in the same place. If the agent tool can give a subagent a worktree of its own, don't use that.
+
+- **Where.** `worktrees/<repo_name>/` inside the work's folder, next to `spec.md` and `plan.md`. Outside a home repo `.implement/` is already kept out of git. In a home repo, add `work/*/worktrees/` to the home repo's `.git/info/exclude`.
+- **When.** Right before the first code is written: before the refactor in `strategic-design`, or before the build when there is no refactor. Never before the plan is approved.
+- **How.** Fetch, then `git worktree add` at that path with the branch name and the starting point from the plan's Git section. If the branch already exists, add the worktree for that branch instead of creating it. If the branch is checked out somewhere else, or the worktree can't be created, ask.
+- **Set it up.** A new worktree holds the tracked files and nothing else: no installed dependencies, no build output, no local files that git ignores. Run the repo's install or build step. If the tests need an untracked local file from the checkout, such as an `.env`, copy it over and tell the developer which files you copied.
+- **Move the glossary change.** If `refine` changed a glossary that is a tracked file in the repo, that change sits uncommitted in the checkout and belongs on the work's branch. Apply it in the worktree and restore the file in the checkout. If the file has other uncommitted changes in the checkout, ask instead.
+- **Write it down.** Put each repo's worktree path in `plan.md` under a **Worktrees** heading. Like ticking off steps, this leaves the plan's status as it is.
+
+From then on the worktree is the repo path for everything: it is what subagents are given, and where you run tests and check their reports. The checkout is only read.
+
+When resuming, use the worktree `plan.md` lists. If it is gone but the branch is still there, add it again.
+
+The worktree stays after the pull request is opened, since review comments get fixed there. Never remove it yourself; `deliver` tells the developer how.
+
 ## Phase 1: Refine
 
 Run the `refine` skill on the input. It gathers the request, reads the code, asks its questions and ends with an approved `spec.md`. The spec's Language section holds the agreed terms and rules, and `refine` writes them to the glossary. The later phases follow them.
@@ -74,7 +93,7 @@ Don't go on until the plan is approved, any refactor is finished, and every test
 
 Work test-first. Every test should pin down behavior someone relies on. A test that exists only to raise coverage costs maintenance and adds nothing.
 
-You run this phase and subagents do the building, one feature step each (3.4). Steps 3.1 to 3.3 prepare what they need.
+You run this phase and subagents do the building, one feature step each (3.4). If phase 2 had no refactor steps, the worktree doesn't exist yet: create it first ("Work in a worktree"), and run everything below in it. Steps 3.1 to 3.3 prepare what they need.
 
 ### 3.1 Map the test layers
 
@@ -119,13 +138,13 @@ To find the edge cases and what is already covered, use the code facts `refine` 
 
 ### 3.4 The loop
 
-Build the feature steps from the plan in order, each one in a new subagent with a clean context. Never use a fork of this conversation, and never reuse the subagent that built an earlier step: the point is that each step starts without the history of the others. One at a time, never in parallel. The steps build on each other and share one branch.
+Build the feature steps from the plan in order, each one in a new subagent with a clean context. Never use a fork of this conversation, and never reuse the subagent that built an earlier step: the point is that each step starts without the history of the others. One at a time, never in parallel. The steps build on each other and share one branch and one worktree.
 
 Give the subagent:
 
 - The paths to `spec.md` and `plan.md`, and which feature step is its own. It reads the whole of both, and builds only its step.
 - The scenarios for that step from 3.3, each with its layer.
-- The repo paths and the branch. It works on that branch and never on the default branch.
+- The worktree paths and the branch. It works only in the worktree, on that branch, and never in the developer's checkout or on the default branch.
 - The rest of this section, from "Work outside-in" to the end of the report list, passed on as it is.
 
 Don't tell it how you would build the step or what you expect it to run into. The plan says what to build.
@@ -171,7 +190,7 @@ Tick the step off in `plan.md`, tell the developer in a line or two what was bui
 
 ### 3.5 Verify
 
-When every step is ticked off, run every affected test layer, the build, and the linter or type checker yourself. Show the output of any failure, and ask what to do about it. If something can't be run, say exactly what is unverified. Don't report success on anything you didn't run.
+When every step is ticked off, run every affected test layer, the build, and the linter or type checker yourself, in the worktree. Show the output of any failure, and ask what to do about it. If something can't be run, say exactly what is unverified. Don't report success on anything you didn't run.
 
 ## Phase 4: Deliver
 
