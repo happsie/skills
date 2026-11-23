@@ -18,7 +18,7 @@ No assumptions. If the request doesn't say why the work matters, what done looks
 The ticket describes what the user or the business gets, in the words they would use themselves. It does not describe how to build it.
 
 - No file paths, class names, endpoints, table names or library names. They are wrong by the time someone picks the ticket up, and they shut out every non-developer reader.
-- Use the domain's own terms. If the project has a glossary, follow it.
+- Use the domain's own terms. If the project has a glossary, follow it exactly: its terms, never a word it lists under "Also called", and nothing that goes against a rule it records. The `refine` skill describes where the glossary is and what an entry holds. A ticket that calls one thing by two names gets built as two things.
 - Write in the language the project's existing tickets use.
 - Short sentences. No filler, no selling.
 
@@ -30,7 +30,9 @@ If the work is technical by nature (an upgrade, a migration, a cleanup), still s
 - **A brief from `refine`** (`brief.md`, see the `refine` skill for where it lives). It must be approved. Use it only when the work has no ticket yet. If the brief was refined from an existing ticket, say so and ask whether to update that ticket's description instead of creating a new one.
 - **Findings from `investigate`** (`investigation.md`). The ticket is usually a bug. The symptom becomes the Description, with how to see it in the steps a user would take. The cause goes in as one plain sentence; if it wasn't found, say that and what has been ruled out. The acceptance criteria describe the correct behavior, not the fix.
 
-Briefs and findings are written for developers. From a brief, carry over the goal, the target behavior, the acceptance criteria and what is out of scope, and translate them into plain language. Leave the file references and technical detail behind in both cases.
+Briefs and findings are written for developers. From a brief, carry over the goal, the target behavior, the acceptance criteria and what is out of scope, and translate them into plain language. Keep the terms from its Language section as they are; they are already the domain's words. Leave the file references and technical detail behind in both cases.
+
+Read the glossary entries for the area, if the project has a glossary.
 
 Then look in the tracker:
 
@@ -46,6 +48,7 @@ Ask for whatever is still missing, in one numbered list, with your recommended a
 - What is deliberately not part of it.
 - Project, issue type and parent or epic, when they can't be read from the request or the tracker.
 - Whether a related ticket you found really blocks this one or is just related.
+- A term the ticket needs that the glossary doesn't have, or that the request uses in another sense than the glossary. Propose the entry as `refine` does: the term, its meaning, its rules. The same goes for a request that breaks a recorded rule: ask whether the request or the rule changes.
 
 Don't ask what the request or the tracker already answers.
 
@@ -96,6 +99,7 @@ Post the draft in the chat, together with:
 
 - Where it goes: tracker, project, issue type, parent or epic.
 - The links you will create, each with its direction: "is blocked by ABC-12", "relates to ABC-40".
+- The glossary entries you will add or change, if step 2 settled any.
 
 Wait for an explicit approval. If the user changes something, update the draft and ask again.
 
@@ -111,8 +115,10 @@ Set only the fields that were approved. Leave assignee, sprint, priority and est
 
 Then create the links. Check the direction of each one before sending it: "A blocks B" and "B blocks A" are easy to swap, and trackers name the two ends differently. If the tracker has no link type for a relation, mention the other ticket's key under the relevant section of the description instead.
 
+Write the approved glossary entries into the glossary with status `agreed` and today's date. Don't commit them.
+
 If there is no way to reach the tracker, say so and give the finished ticket as text to paste in.
 
 ## Report
 
-The ticket key and URL, and the links that were created. If a link or field couldn't be set, say which and why.
+The ticket key and URL, the links that were created, and any glossary file that changed. If a link or field couldn't be set, say which and why.

@@ -48,7 +48,7 @@ If the developer's answer to a question changes the brief or the plan, update th
 
 ## Phase 1: Refine
 
-Run the `refine` skill on the input. It gathers the request, reads the code, asks its questions and ends with an approved `brief.md`.
+Run the `refine` skill on the input. It gathers the request, reads the code, asks its questions and ends with an approved `brief.md`. The brief's Language section holds the agreed terms and rules, and `refine` writes them to the glossary. The later phases follow them.
 
 Don't go on without an explicit approval of the brief.
 
@@ -81,7 +81,7 @@ That test is the first red of the loop in 3.4.
 
 ### 3.3 Choose the scenarios
 
-Derive scenarios from the brief's acceptance criteria and the real edge cases on the code path: boundaries, empty or missing data, error responses, permissions, concurrency where it matters. For each, check:
+Derive scenarios from the brief's acceptance criteria and the real edge cases on the code path: boundaries, empty or missing data, error responses, permissions, concurrency where it matters. Each rule in the brief's Language section that the work touches is a scenario too, unless a test already pins it. A rule nothing tests gets broken by the next change. For each, check:
 
 - Would this test fail if the behavior broke?
 - Would anyone care if it broke?
@@ -97,7 +97,7 @@ Put each scenario in the right layer:
 
 Don't push everything into unit tests because they are easiest, and don't repeat one scenario in every layer.
 
-Post the list, one line per scenario with its layer and the acceptance criterion it covers. Wait for a go-ahead before writing any of them.
+Post the list, one line per scenario with its layer and the acceptance criterion or rule it covers. Wait for a go-ahead before writing any of them.
 
 ### 3.4 The loop
 
@@ -116,6 +116,7 @@ Rules for the loop:
 - A test that fails for an unexpected reason, or a test you didn't write going red, stops the work. Ask.
 - Never edit a test to get it green. If you believe a test is wrong, stop and ask.
 - Existing tests keep their expected results unless the brief says that behavior changes. If one has to change and the brief doesn't cover it, ask.
+- Name things with the terms in the brief's Language section: types, functions, fields, tests, scenario text and anything a user reads. Never use a word the brief says not to use, and don't coin a synonym. If the code needs a domain concept that has no agreed term, stop and ask.
 - Stay inside the brief and the plan. No speculative abstractions, no unrelated cleanup.
 
 Commit where the plan says to, on the branch, never on the default branch.

@@ -1,6 +1,6 @@
 ---
 name: home-repo
-description: Set up or extend a home repo - a personal local repo a developer works from across many repos. It holds a CLAUDE.md index of the other repos (paths, purpose, where their docs live), shared cross-repo glossary, ADRs and coding standards, and a repos/<repo> folder with seeded docs for repos that lack their own. Use when the user asks to "set up a home repo", "create a home repo", "init my home repo", "add a repo to the home repo", or wants one place to work from across several repos without changing directory.
+description: Set up or extend a home repo - a personal local repo a developer works from across many repos. It holds a CLAUDE.md index of the other repos (paths, purpose, where their docs live), glossaries that hold the agreed domain terms and rules, shared ADRs and coding standards, and a repos/<repo> folder with seeded docs for repos that lack their own. Use when the user asks to "set up a home repo", "create a home repo", "init my home repo", "add a repo to the home repo", or wants one place to work from across several repos without changing directory.
 ---
 
 # Home repo
@@ -12,6 +12,8 @@ A home repo is a personal, local repo the developer sits in while working across
 - `repos/<repo_name>/`: glossary, ADRs and coding standards for repos that do not have their own. Other teams work in those repos with their own conventions, so we keep these docs here instead of adding files to their repos.
 - `work/<key-or-slug>/`: the brief and plan for each piece of work done from here, written by the `refine`, `strategic-design` and `implement` skills.
 - `.claude/settings.json`: the repos listed as additional directories, so Claude can read and edit them from here.
+
+The glossaries are the agreed domain language for the work done from here. The `refine` skill describes what an entry holds (term, meaning, other names, rules, context, status) and keeps them up to date as work is refined; this skill only sets them up and seeds them.
 
 Repo-level docs always win. If a repo has its own glossary, ADRs or coding standards, those are used and written to. `repos/<repo_name>/` only fills the gaps, per doc type. The home `docs/` folder is never a place for single-repo content.
 
@@ -47,7 +49,7 @@ Record for each of the three doc types either the path inside the repo, or "miss
 Create what is missing. Never overwrite existing content; merge into it.
 
 - `CLAUDE.md` from `assets/home-claude-template.md`. Fill in one index row and one detail section per repo. On a re-run, only add or update the rows for new or changed repos and leave the user's edits alone.
-- `docs/glossary.md`, `docs/coding-standards.md`, `docs/adr/README.md` (from `assets/adr-README.md`) and `docs/adr/0000-template.md` (from `assets/adr-template.md`) from `assets/`. These start empty apart from the header. Do not invent cross-repo content. Only add an entry if the scan found something that clearly spans repos (the same term used in several repos, a shared protocol), and say so in the summary.
+- `docs/glossary.md`, `docs/coding-standards.md`, `docs/adr/README.md` (from `assets/adr-README.md`) and `docs/adr/0000-template.md` (from `assets/adr-template.md`) from `assets/`. These start empty apart from the header. Do not invent cross-repo content. Only add an entry if the scan found something that clearly spans repos (the same term used with the same meaning in several repos, a shared protocol), and say so in the summary. A word that two repos use for different things is not a shared term. Each repo's glossary keeps its own meaning, and the shared glossary gets one entry that says how the meanings differ and how one maps to the other where the repos talk.
 - `.claude/settings.json` with every repo path in `permissions.additionalDirectories`. Merge with existing settings.
 - `git init` if the home directory is not a git repo, so the docs have history. Do not commit unless asked.
 
@@ -55,15 +57,17 @@ Create what is missing. Never overwrite existing content; merge into it.
 
 For each repo, for each doc type marked missing, write a seeded draft:
 
-- `repos/<repo_name>/glossary.md`: domain terms from entity and type names, package names, API resources, README. Term, one-line meaning, where it appears. Skip generic technical words.
+- `repos/<repo_name>/glossary.md`, from `assets/glossary.md`: domain terms from entity and type names, package names, API resources, README. One entry per term in the format the asset shows, every one with status `inferred`. When the code has several names for one thing, pick the most used as the term and list the rest under "Also called". Write a rule only where the code enforces it (a validation, a constraint, a state check), and state what the code does. Skip generic technical words.
 - `repos/<repo_name>/coding-standards.md`: what the code actually does. Language and framework versions, formatter and linter config, package layout, naming, error handling, test layers and naming, build and test commands. State observed conventions, not general best practice.
 - `repos/<repo_name>/adr/NNNN-<slug>.md`: one file per significant decision that is visible in the code (framework, persistence, messaging, API style, module structure), using `assets/adr-template.md` with status `Inferred`. Three to six is normal. The context section should say what the code shows; do not make up the original reasoning.
 
-Start every seeded file with:
+Start every seeded coding standards and ADR file with:
 
 ```
 > Inferred from the code on <YYYY-MM-DD>. Not verified by the owning team.
 ```
+
+The glossary has no such banner. Its entries are agreed one at a time, so each carries its own status.
 
 Do not create a `repos/` file for a doc type the repo already has. If a doc type has nothing worth writing, skip the file and note it in the summary instead of writing filler.
 

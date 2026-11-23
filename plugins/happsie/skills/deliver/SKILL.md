@@ -36,15 +36,17 @@ Instructions for the subagent, to pass on as they are:
 
 > You are checking finished work against what was agreed. You have not seen how it was built, and that is the point. Trust only what you read and run yourself. Change no files.
 >
-> 1. Read the brief: goal, target behavior, acceptance criteria, out of scope, decisions. Read the plan if there is one; it describes an approved refactor and the build steps.
+> 1. Read the brief: goal, target behavior, acceptance criteria, out of scope, language, decisions. Read the plan if there is one; it describes an approved refactor and the build steps.
 > 2. Read the full diff between the base branch and the branch, and enough of the surrounding code to understand it. Follow each changed path from its entry point.
 > 3. For each acceptance criterion, look for two things: the code that makes it true, and a test that would fail if it stopped being true. Read the test and judge whether it really checks the criterion, not just whether it exists or has a matching name.
 > 4. Run the tests, the build and the linter or type checker. Report what you ran and the result. If something can't be run, say so.
 > 5. Look for what the brief didn't ask for: changes that trace to no criterion and no step in the plan, anything listed as out of scope that was touched anyway, and existing tests whose expected results were changed, weakened, skipped or removed.
 > 6. Look for what the brief implies but the diff misses: the cases named under target behavior and decisions, callers and consumers of what changed, data that predates the change.
+> 7. If the brief has a Language section, check the diff against it. Names the diff adds or changes (types, functions, fields, endpoints, tests, text a user reads) must use the agreed terms: not a word the brief says not to use, and not a new synonym. For each rule listed there that the change touches, look for the code that keeps it true and a test that would fail if it broke.
 >
 > Report:
 > - One line per acceptance criterion: **met**, **not met** or **can't tell**, with `file:line` for the code and for the test, and one sentence of reasoning. "Met" needs both the code and a test that proves it. If you are unsure, it is "can't tell", with what would settle it.
+> - Language: every name that departs from the agreed terms, with `file:line`, and every rule that is broken or that no test pins.
 > - Changes outside the brief and the plan.
 > - Test, build and lint results, with the output of any failure.
 > - Anything else that would make you hesitate to merge this.
@@ -53,7 +55,7 @@ Instructions for the subagent, to pass on as they are:
 
 ## 3. Report the verdict
 
-Post the subagent's verdict to the developer as it came back: every criterion with its status and evidence, and every other finding. Don't summarize away a finding, reword it into something milder, or drop one because you know the explanation. If you disagree with a finding, show it anyway and say why you disagree; the developer decides.
+Post the subagent's verdict to the developer as it came back: every criterion with its status and evidence, the language findings, and every other finding. Don't summarize away a finding, reword it into something milder, or drop one because you know the explanation. If you disagree with a finding, show it anyway and say why you disagree; the developer decides.
 
 If everything is met and nothing else was found, go on to step 4.
 

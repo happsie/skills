@@ -65,7 +65,7 @@ Wait for an explicit approval. Changing the outline is cheap now and expensive a
 
 Write each ticket in the `ticket-creator` format. Across the set:
 
-- Use the same word for the same thing in every ticket.
+- Use the same word for the same thing in every ticket, and make it the glossary's word when the project has a glossary.
 - Each ticket must make sense to someone who reads only that one. Repeat the little context that needs, and refer to the parent for the rest.
 - Out of scope on one ticket names the ticket in the set that covers it ("Sharing a list is handled in T3").
 - Refer to other new tickets by temporary id for now.

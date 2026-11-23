@@ -133,7 +133,7 @@ text(182, BAND_Y + 36, "runs four phases in order. Each one ends with your appro
 
 CY, CW, CH, GAP = BAND_Y + 56, 262, 126, 34
 xs = [60 + i * (CW + GAP) for i in range(4)]
-skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes brief.md."], CYAN, badge="1")
+skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes brief.md, updates glossary."], CYAN, badge="1")
 skill(xs[1], CY, CW, CH, "strategic-design", ["Refactor first, or not?", "Writes plan.md, does the refactor."],
       "#60a5fa", badge="2")
 skill(xs[2], CY, CW, CH, "build", ["Test-driven. A bug gets a failing", "test before its fix."], "#818cf8",

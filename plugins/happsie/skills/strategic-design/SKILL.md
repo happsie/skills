@@ -46,6 +46,7 @@ Look at the tactical version and at the code around it. Signs that the code is t
 - The new behavior can't be tested without heavy setup or mocking.
 - New code has to reach through layers, or copy knowledge that lives somewhere else.
 - A name or abstraction stops being true once the feature exists.
+- The code names a thing differently than the brief's Language section does: `customer` in the code where the agreed term is "account holder". Every such name is a place where the next reader has to translate.
 - This is the second or third variant of something handled ad hoc each time.
 - The code to change is hard enough to follow that the change itself is risky.
 
@@ -60,6 +61,7 @@ Rules for the proposal:
 - **A pattern must earn its place.** Name a design pattern only when it removes a concrete problem from step 2. Never introduce one for its own sake or for features that might come later.
 - **"No refactor needed" is a valid answer**, and often the right one. If the tactical change is already small and clean, say so and move on.
 - **Stay inside the feature's path.** Refactor only code the feature touches. Report other debt you notice as a note; don't act on it.
+- **Use the agreed language.** Every class, function, field, endpoint, table and message the plan adds or renames is named with the terms in the brief's Language section, never with a word the brief says not to use. Renaming existing code to the agreed term is a refactor step like any other, inside the feature's path only. If the design needs a domain concept that has no agreed term, stop and ask. The answer goes into the brief, which then needs approval again.
 - **Match the codebase.** Use the patterns and conventions the project already uses before bringing in new ones.
 - **Weigh the cost.** A refactor that is larger or riskier than the feature needs a strong reason.
 
@@ -78,9 +80,10 @@ Write `plan.md` next to the brief with the sections below, and post it in the ch
 - **Recommendation:** refactor first, or no refactor, with the reason in a sentence or two.
 - **Refactor steps:** ordered, small, each one leaving the tests green. Empty if none.
 - **Characterization tests:** which ones to add first, and what they pin.
+- **Names:** the domain names the plan adds or renames, each with the term from the brief it stands for. Existing names on the feature's path that keep a word the brief says not to use are listed too, with the reason they stay.
 - **Feature steps:** how the feature gets built once the code has its new shape. Ordered, each one tied to acceptance criteria from the brief.
 - **Risks and open questions.**
-- **Git:** branch name, and where the commits fall. Refactor commits and feature commits are always separate.
+- **Git:** branch name, and where the commits fall. Refactor commits and feature commits are always separate. If `refine` changed a glossary that is a tracked file in the repo, that change gets its own commit on the branch.
 
 Wait for an explicit approval. The developer may take the refactor, reject it, or cut it down. Update the file and confirm again after any change, then set its status line once approved. If they reject the refactor, the feature steps follow the tactical version.
 

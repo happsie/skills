@@ -32,6 +32,7 @@ Never edit `docs/workflow.svg` by hand. Look at the rendered picture before fini
 - Skills are tracker and code host agnostic (Jira, GitHub, Linear, ...). No company-specific tools or names.
 - Every skill that makes decisions has an "ask rule" section: no assumptions, and nothing is written to a tracker or pushed before the user approves.
 - Refer to other skills by name in backticks, and reuse them instead of copying their rules. When a skill that others depend on changes (`refine`, `ticket-creator`, `deliver`), read the skills that call it and fix what no longer fits.
+- The glossary is the agreed domain language. `refine` owns the entry format and the rules for proposing and recording terms ("The shared language"); `strategic-design`, `implement`, `deliver` and `ticket-creator` enforce it. `home-repo/assets/glossary.md` repeats the entry format for seeding, so change both together.
 - Write in plain, direct English and explain why a rule exists. Match the tone of the existing skills.
 
 ## Before finishing a change
