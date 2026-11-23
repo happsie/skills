@@ -10,6 +10,7 @@ A home repo is a personal, local repo the developer sits in while working across
 - `CLAUDE.md`: an index of the other repos (absolute paths, purpose, where their docs live) and the rules for working across them.
 - `docs/glossary.md`, `docs/adr/`, `docs/coding-standards.md`: shared docs, only for things that span two or more repos.
 - `repos/<repo_name>/`: glossary, ADRs and coding standards for repos that do not have their own. Other teams work in those repos with their own conventions, so we keep these docs here instead of adding files to their repos.
+- `work/<key-or-slug>/`: the brief and plan for each piece of work done from here, written by the `refine`, `strategic-design` and `implement` skills.
 - `.claude/settings.json`: the repos listed as additional directories, so Claude can read and edit them from here.
 
 Repo-level docs always win. If a repo has its own glossary, ADRs or coding standards, those are used and written to. `repos/<repo_name>/` only fills the gaps, per doc type. The home `docs/` folder is never a place for single-repo content.
