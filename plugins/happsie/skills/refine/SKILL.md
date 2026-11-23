@@ -1,13 +1,13 @@
 ---
 name: refine
-description: Refine a feature request, task or ticket into a brief the developer has approved, before any code is written. Reads the ticket and the code it touches, cross-checks them, and asks the questions whose answers change what gets built, even when the request looks well defined. Also agrees on the domain terms and rules the work depends on and records them in the project's glossary. Use when the user asks to "refine this", "refine PROJ-123", "let's align on this ticket", "what's unclear about this feature", "grill me on this", or as the first phase of the implement skill. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Writes the brief to a file and updates the glossary; it never changes code.
+description: Refine a feature request, task or ticket into a spec the developer has approved, before any code is written. Reads the ticket and the code it touches, cross-checks them, and asks the questions whose answers change what gets built, even when the request looks well defined. Also agrees on the domain terms and rules the work depends on and records them in the project's glossary. Use when the user asks to "refine this", "refine PROJ-123", "let's align on this ticket", "what's unclear about this feature", "grill me on this", or as the first phase of the implement skill. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Writes the spec to a file and updates the glossary; it never changes code.
 ---
 
 # Refine
 
-Building the wrong thing is the most expensive mistake. This skill pins down what to build and ends with a brief the developer has explicitly approved. That brief is the contract every later step works from.
+Building the wrong thing is the most expensive mistake. This skill pins down what to build and ends with a spec the developer has explicitly approved. That spec is the contract every later step works from.
 
-This skill never edits code, creates branches or writes to the tracker. The only files it writes are the brief and, once the brief is approved, the glossary.
+This skill never edits code, creates branches or writes to the tracker. The only files it writes are the spec and, once the spec is approved, the glossary.
 
 ## The ask rule
 
@@ -15,18 +15,18 @@ No assumptions. If something is unclear, contradictory or missing, ask the devel
 
 ## Where the documents live
 
-The brief and the plan are files, so they survive a long session and can be picked up in a new one. Each piece of work gets a folder named after the ticket key, or a short slug for free text:
+The spec and the plan are files, so they survive a long session and can be picked up in a new one. Each piece of work gets a folder named after the ticket key, or a short slug for free text:
 
 - **In a home repo** (the current directory's `CLAUDE.md` says it is a home repo, as set up by the `home-repo` skill): `work/<key-or-slug>/` in the home repo. This holds even when the code changes land in other repos.
 - **Anywhere else:** `.implement/<key-or-slug>/` at the root of the repo being worked on. Keep it out of git by adding `.implement/` to `.git/info/exclude`. Don't edit the repo's `.gitignore` for this.
 
-The folder holds `brief.md` (written by `refine`) and `plan.md` (written by `strategic-design`). Each starts with a status line: `Status: draft`, or `Status: approved <YYYY-MM-DD>` once the developer has approved it. Only the developer's explicit approval sets it to approved. Any later change sets it back to draft until approved again.
+The folder holds `spec.md` (written by `refine`) and `plan.md` (written by `strategic-design`). Each starts with a status line: `Status: draft`, or `Status: approved <YYYY-MM-DD>` once the developer has approved it. Only the developer's explicit approval sets it to approved. Any later change sets it back to draft until approved again.
 
 Writing and updating these two files needs no permission. Don't commit them unless asked.
 
 ## The shared language
 
-The request, the brief, the tickets and the code should use the same word for the same thing. When they don't, people agree on a sentence and mean different things by it, and the code ends up with three names for one concept. So the project's glossary is treated the way domain-driven design treats its ubiquitous language: terms and the rules about them are proposed, agreed with the developer, written down, and from then on followed by every later step.
+The request, the spec, the tickets and the code should use the same word for the same thing. When they don't, people agree on a sentence and mean different things by it, and the code ends up with three names for one concept. So the project's glossary is treated the way domain-driven design treats its ubiquitous language: terms and the rules about them are proposed, agreed with the developer, written down, and from then on followed by every later step.
 
 A glossary entry holds a term and the agreements about it:
 
@@ -41,7 +41,7 @@ A glossary entry holds a term and the agreements about it:
 - **Status:** agreed <YYYY-MM-DD> | inferred
 ```
 
-- **Also called** lists the words to stop using. New briefs, tickets, code and tests use the term itself.
+- **Also called** lists the words to stop using. New specs, tickets, code and tests use the term itself.
 - **Rules** are the agreements: statements about the term that hold no matter which feature is being built. A rule is not an acceptance criterion. A criterion is done when the work is done; a rule keeps holding afterwards.
 - **Status** says how far to trust the entry. `agreed` means a person approved it. `inferred` means it was read out of code or tickets and nobody has confirmed it. Follow agreed entries. Treat inferred ones as a good guess, and get the ones this work relies on confirmed.
 
@@ -51,11 +51,11 @@ Where the glossary is:
 
 - **In a home repo:** the home `CLAUDE.md` says where each repo's glossary is and where terms shared between repos go. Follow it.
 - **Anywhere else:** the repo's own glossary (`GLOSSARY.md`, `docs/glossary*`, or a glossary section in the README or docs). If it uses another format, keep that format and fit the same information into it.
-- **If there is none:** ask in step 4 whether to create `docs/glossary.md`. If the developer says no, the agreed language lives only in the brief.
+- **If there is none:** ask in step 4 whether to create `docs/glossary.md`. If the developer says no, the agreed language lives only in the spec.
 
 ## 1. Gather the request
 
-If a `brief.md` already exists for this work, read it and continue from there instead of starting over.
+If a `spec.md` already exists for this work, read it and continue from there instead of starting over.
 
 - **Free text.** Take it as given. If it points at a ticket, document or conversation you can reach, read that too.
 - **Ticket key or URL.** Fetch it with whatever is available: a tracker MCP server, a CLI such as `gh issue view`, or another skill built for that tracker. Read the description, acceptance criteria and comments, then the parent or epic, sibling tickets, linked issues and any existing branches or PRs. Comments often overrule the description, so read them all.
@@ -64,7 +64,16 @@ If the ticket can't be fetched, say so and ask for the text. Don't work from a t
 
 ## 2. Read the code the change touches
 
-Find the entry points (endpoint, consumer, job, UI, CLI) and follow the path down to persistence. Read the existing tests for that path. Look for:
+Have subagents do this reading, and keep your own context for the request, the questions and the spec. Following a code path through a large codebase fills the context long before the first question is asked, and an agent with a full context reasons worse about everything after it.
+
+- Give each subagent one area to cover: an entry point and the path below it, the callers and consumers, or the glossary and project docs. Run them in parallel when there are several.
+- Give it the request as it was written and the list below. Don't give it your reading of the request or what you expect it to find. An agent that is handed a conclusion tends to return it.
+- Ask for facts, each with a `file:line` reference: what the code does today, what calls it, which tests cover it, which names it uses. No summaries without references, and no opinions on what to build.
+- They are read-only.
+
+A report is a map, not the evidence. Before you put a finding in a question or in the spec, open the lines it points to and check that they say what the report says. Read only those lines.
+
+What to find: the entry points (endpoint, consumer, job, UI, CLI) and the path down to persistence, and the existing tests for that path. Look for:
 
 - A similar feature that already exists, and how it was built.
 - Everything that calls or consumes what will change: other modules, other services, the frontend, reports, exports.
@@ -108,9 +117,9 @@ A language question is a proposal: the term, its meaning, its rules and the word
 
 Don't ask what the ticket or the code already answers. Push back when an answer conflicts with the code or the ticket. Keep going round by round until no open question would change what gets built.
 
-## 5. Write the brief and get it approved
+## 5. Write the spec and get it approved
 
-Write `brief.md` with the sections below, and post it in the chat as well:
+Write `spec.md` with the sections below, and post it in the chat as well:
 
 - **Goal:** one sentence.
 - **Type:** feature/change or bug.
@@ -118,15 +127,15 @@ Write `brief.md` with the sections below, and post it in the chat as well:
 - **After:** target behavior.
 - **Acceptance criteria:** concrete, testable statements. Each one must be checkable by a test.
 - **Out of scope:** what will not be touched.
-- **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. The rest of the brief uses these terms and no other words for the same things.
+- **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. The rest of the spec uses these terms and no other words for the same things.
 - **Decisions:** each question from step 4 with the answer the developer gave.
 
-The brief has no assumptions section. Anything you would have put there is a question for step 4.
+The spec has no assumptions section. Anything you would have put there is a question for step 4.
 
-Wait for an explicit approval. If the developer changes something, update the file and ask again. The brief is approved only when they say so; then set its status line and tell them the path.
+Wait for an explicit approval. If the developer changes something, update the file and ask again. The spec is approved only when they say so; then set its status line and tell them the path.
 
 ## 6. Update the glossary
 
-Once the brief is approved, write its new and changed terms into the glossary with status `agreed` and today's date. Approving the brief approves these entries, so nothing goes into the glossary before that. If the brief changes later and is approved again, bring the glossary in line with it.
+Once the spec is approved, write its new and changed terms into the glossary with status `agreed` and today's date. Approving the spec approves these entries, so nothing goes into the glossary before that. If the spec changes later and is approved again, bring the glossary in line with it.
 
 Don't commit the change. Tell the developer which glossary files changed. When the glossary is a tracked file in the repo being worked on, the change belongs on the work's branch, and `strategic-design` plans a commit for it.

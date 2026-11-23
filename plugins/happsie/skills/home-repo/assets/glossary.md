@@ -2,7 +2,7 @@
 
 <Scope, one line: "Terms of <repo>." or "Terms shared by more than one repo. Terms of a single repo belong in that repo's glossary, or in `repos/<repo>/glossary.md`.">
 
-The agreed words for this domain and the rules that go with them. Use these terms in briefs, tickets, code and tests. A word listed under "Also called" is not used in new work. Entries with status `agreed` were approved by a person; `inferred` ones were read out of the code and are a good guess until someone confirms them.
+The agreed words for this domain and the rules that go with them. Use these terms in specs, tickets, code and tests. A word listed under "Also called" is not used in new work. Entries with status `agreed` were approved by a person; `inferred` ones were read out of the code and are a good guess until someone confirms them.
 
 One section per term, in alphabetical order:
 

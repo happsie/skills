@@ -1,6 +1,6 @@
 ---
 name: ticket-orchestrator
-description: Break a piece of work into several tickets and create them as one connected set. Slices the work into tickets that each deliver something on their own, maps how they depend on each other, gets the whole set approved, then creates them in the right order with parent or epic and blocks / relates-to links in place. Each ticket is written in the ticket-creator format. Use whenever more than one ticket is to be created, e.g. "create tickets for this feature", "break this down into tickets", "split this epic into stories", "make an epic with stories for this", "turn this brief into tickets". Input is free text, the conversation so far, an existing epic or ticket to break down, or an approved brief from the refine skill. Works with any tracker (Jira, GitHub, Linear, ...). For a single ticket, use ticket-creator.
+description: Break a piece of work into several tickets and create them as one connected set. Slices the work into tickets that each deliver something on their own, maps how they depend on each other, gets the whole set approved, then creates them in the right order with parent or epic and blocks / relates-to links in place. Each ticket is written in the ticket-creator format. Use whenever more than one ticket is to be created, e.g. "create tickets for this feature", "break this down into tickets", "split this epic into stories", "make an epic with stories for this", "turn this spec into tickets". Input is free text, the conversation so far, an existing epic or ticket to break down, or an approved spec from the refine skill. Works with any tracker (Jira, GitHub, Linear, ...). For a single ticket, use ticket-creator.
 ---
 
 # Ticket orchestrator
@@ -17,7 +17,7 @@ No assumptions. How the work is sliced, what depends on what, and what is left o
 
 ## 1. Understand the whole
 
-Gather the request the way `ticket-creator` does: free text, the conversation, or an approved brief from `refine`. If the input is an existing epic or ticket to break down, read it with its children, links and comments.
+Gather the request the way `ticket-creator` does: free text, the conversation, or an approved spec from `refine`. If the input is an existing epic or ticket to break down, read it with its children, links and comments.
 
 Then look in the tracker for what already exists: tickets that cover part of this work, and tickets outside the set that it depends on or that wait for it. Existing tickets are reused and linked, not recreated.
 

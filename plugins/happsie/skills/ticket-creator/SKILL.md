@@ -1,6 +1,6 @@
 ---
 name: ticket-creator
-description: Write one ticket and create it in the user's tracker. The ticket is non-technical and readable by anyone on the team, yet precise enough for an agent to build from, with the sections Description, Why, Acceptance criteria, Scenarios and Out of scope. Finds related tickets and sets up links (blocks, is blocked by, relates to, parent or epic) when the tracker supports it. Use when the user asks to "create a ticket", "write a ticket for this", "make a Jira issue", "open an issue for this", "file a bug", "turn this brief into a ticket", or wants an existing ticket description rewritten in this format. Input is free text, the conversation so far, an approved brief from the refine skill, or the findings of the investigate skill. Works with any tracker (Jira, GitHub, Linear, ...). For more than one ticket, use ticket-orchestrator.
+description: Write one ticket and create it in the user's tracker. The ticket is non-technical and readable by anyone on the team, yet precise enough for an agent to build from, with the sections Description, Why, Acceptance criteria, Scenarios and Out of scope. Finds related tickets and sets up links (blocks, is blocked by, relates to, parent or epic) when the tracker supports it. Use when the user asks to "create a ticket", "write a ticket for this", "make a Jira issue", "open an issue for this", "file a bug", "turn this spec into a ticket", or wants an existing ticket description rewritten in this format. Input is free text, the conversation so far, an approved spec from the refine skill, or the findings of the investigate skill. Works with any tracker (Jira, GitHub, Linear, ...). For more than one ticket, use ticket-orchestrator.
 ---
 
 # Ticket creator
@@ -27,10 +27,10 @@ If the work is technical by nature (an upgrade, a migration, a cleanup), still s
 ## 1. Gather
 
 - **Free text or conversation.** Take it as given. Read any ticket, document or thread it points at.
-- **A brief from `refine`** (`brief.md`, see the `refine` skill for where it lives). It must be approved. Use it only when the work has no ticket yet. If the brief was refined from an existing ticket, say so and ask whether to update that ticket's description instead of creating a new one.
+- **A spec from `refine`** (`spec.md`, see the `refine` skill for where it lives). It must be approved. Use it only when the work has no ticket yet. If the spec was refined from an existing ticket, say so and ask whether to update that ticket's description instead of creating a new one.
 - **Findings from `investigate`** (`investigation.md`). The ticket is usually a bug. The symptom becomes the Description, with how to see it in the steps a user would take. The cause goes in as one plain sentence; if it wasn't found, say that and what has been ruled out. The acceptance criteria describe the correct behavior, not the fix.
 
-Briefs and findings are written for developers. From a brief, carry over the goal, the target behavior, the acceptance criteria and what is out of scope, and translate them into plain language. Keep the terms from its Language section as they are; they are already the domain's words. Leave the file references and technical detail behind in both cases.
+Specs and findings are written for developers. From a spec, carry over the goal, the target behavior, the acceptance criteria and what is out of scope, and translate them into plain language. Keep the terms from its Language section as they are; they are already the domain's words. Leave the file references and technical detail behind in both cases.
 
 Read the glossary entries for the area, if the project has a glossary.
 

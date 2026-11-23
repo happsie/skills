@@ -21,6 +21,18 @@ Notes go in `investigation.md`, in the same folder the other skills use for this
 
 Update it as you go, not at the end. An investigation often outlasts a session, and what has been ruled out is the most expensive thing to lose.
 
+## Keep the thread, hand off the digging
+
+An investigation is one line of reasoning: each result decides what to look at next. That line stays with you, and so do the hypothesis list and `investigation.md`. What fills the context is the digging: searching logs, reading through a code path, running an experiment and wading through its output. Give that to subagents, so your context is still clear when the tenth hypothesis comes up.
+
+- Give each subagent one question it can answer by looking: "what differs between these failing requests and these working ones", "what does this path do with a missing value", "run this experiment and report what comes out".
+- For an experiment, say what to run and what to record. Don't tell it which result you hope for. To test a hypothesis, ask it to look for what would disprove it. An agent that is handed a theory tends to confirm it.
+- Ask for the raw evidence along with the answer: the log lines, the output, `file:line`. A conclusion without them is one more claim to check.
+- The ask rule holds for them too. A subagent never runs an experiment that could affect something shared; that goes through you to the developer first.
+- They revert what they change. You still check `git status` in step 6.
+
+Don't hand off the thinking. Forming the hypotheses, choosing the next test and judging whether a cause is proven are yours, and you check the evidence a subagent returns before you record it as confirmed or ruled out.
+
 ## 1. Pin down the symptom
 
 Write down, and ask for what is missing:

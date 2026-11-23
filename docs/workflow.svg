@@ -70,7 +70,7 @@
 <text x="90" y="520" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="800" fill="#0b1020" text-anchor="middle" letter-spacing="0">1</text>
 <text x="112" y="520" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#22d3ee" text-anchor="start" letter-spacing="0">refine</text>
 <text x="78" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Asks what changes the outcome.</text>
-<text x="78" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Writes brief.md, updates glossary.</text>
+<text x="78" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Writes spec.md, updates glossary.</text>
 <rect x="356" y="488" width="262" height="126" rx="14" fill="#141a33" stroke="#60a5fa" stroke-width="1.5" filter="url(#glow)"/>
 <rect x="356" y="502" width="4" height="98" rx="2" fill="#60a5fa"/>
 <circle cx="386" cy="515" r="12" fill="#60a5fa"/>
@@ -83,8 +83,8 @@
 <circle cx="682" cy="515" r="12" fill="#818cf8"/>
 <text x="682" y="520" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="800" fill="#0b1020" text-anchor="middle" letter-spacing="0">3</text>
 <text x="704" y="520" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#818cf8" text-anchor="start" letter-spacing="0">build</text>
-<text x="670" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Test-driven. A bug gets a failing</text>
-<text x="670" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">test before its fix.</text>
+<text x="670" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">One fresh subagent per plan step.</text>
+<text x="670" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Test-driven; bugs reproduce first.</text>
 <text x="670" y="600" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">won't reproduce?  &#8594;  investigate</text>
 <rect x="948" y="488" width="262" height="126" rx="14" fill="#141a33" stroke="#a78bfa" stroke-width="1.5" filter="url(#glow)"/>
 <rect x="948" y="502" width="4" height="98" rx="2" fill="#a78bfa"/>
@@ -92,7 +92,7 @@
 <text x="978" y="520" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="800" fill="#0b1020" text-anchor="middle" letter-spacing="0">4</text>
 <text x="1000" y="520" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#a78bfa" text-anchor="start" letter-spacing="0">deliver</text>
 <text x="966" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Fresh subagent checks the diff</text>
-<text x="966" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">against the brief.</text>
+<text x="966" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">against the spec.</text>
 <path d="M326,551.0 L352,551.0" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
 <path d="M622,551.0 L648,551.0" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
 <path d="M918,551.0 L944,551.0" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
@@ -104,5 +104,5 @@
 <text x="1095" y="780" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle" letter-spacing="0">Pull request, linked on the ticket</text>
 <rect x="35" y="746" width="760" height="56" rx="14" fill="#141a33" stroke="#a5b0cf" stroke-opacity="0.5" stroke-dasharray="4 5"/>
 <text x="55" y="780" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#fbbf24" text-anchor="start" letter-spacing="0">home-repo</text>
-<text x="158" y="780" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">Optional, set up once. Work across many repos from one place; briefs and plans live there.</text>
+<text x="158" y="780" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">Optional, set up once. Work across many repos from one place; specs and plans live there.</text>
 </svg>

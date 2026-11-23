@@ -133,12 +133,12 @@ text(182, BAND_Y + 36, "runs four phases in order. Each one ends with your appro
 
 CY, CW, CH, GAP = BAND_Y + 56, 262, 126, 34
 xs = [60 + i * (CW + GAP) for i in range(4)]
-skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes brief.md, updates glossary."], CYAN, badge="1")
+skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes spec.md, updates glossary."], CYAN, badge="1")
 skill(xs[1], CY, CW, CH, "strategic-design", ["Refactor first, or not?", "Writes plan.md, does the refactor."],
       "#60a5fa", badge="2")
-skill(xs[2], CY, CW, CH, "build", ["Test-driven. A bug gets a failing", "test before its fix."], "#818cf8",
+skill(xs[2], CY, CW, CH, "build", ["One fresh subagent per plan step.", "Test-driven; bugs reproduce first."], "#818cf8",
       note="won't reproduce?  &#8594;  investigate", badge="3")
-skill(xs[3], CY, CW, CH, "deliver", ["Fresh subagent checks the diff", "against the brief."], VIOLET, badge="4")
+skill(xs[3], CY, CW, CH, "deliver", ["Fresh subagent checks the diff", "against the spec."], VIOLET, badge="4")
 for i in range(3):
     line([(xs[i] + CW + 4, CY + CH / 2), (xs[i + 1] - 4, CY + CH / 2)], CYAN)
 
@@ -161,7 +161,7 @@ text(1095, 780, "Pull request, linked on the ticket", 15, TEXT, 600, "middle")
 add(f'<rect x="35" y="746" width="760" height="56" rx="14" fill="#141a33" stroke="{MUTED}" '
     f'stroke-opacity="0.5" stroke-dasharray="4 5"/>')
 text(55, 780, "home-repo", 15, AMBER, 700, font=MONO)
-text(158, 780, "Optional, set up once. Work across many repos from one place; briefs and plans live there.",
+text(158, 780, "Optional, set up once. Work across many repos from one place; specs and plans live there.",
      13, MUTED)
 
 add("</svg>")

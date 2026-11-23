@@ -45,17 +45,17 @@ Files in `repos/` marked "Inferred" were generated from code. Treat them as a go
 
 ## Language
 
-The glossaries are the agreed domain language. Read the entries for the area before writing a brief, a ticket or code.
+The glossaries are the agreed domain language. Read the entries for the area before writing a spec, a ticket or code.
 
-- Use the glossary's term for a thing, in briefs, tickets, code and tests. A word listed under "Also called" is not used in new work.
+- Use the glossary's term for a thing, in specs, tickets, code and tests. A word listed under "Also called" is not used in new work.
 - The rules on an entry are agreements. Work that would break one stops until the developer says whether the work or the rule changes.
 - Entries with status `agreed` were approved by a person. `inferred` ones were read out of the code: confirm the ones your work relies on.
 - A term means one thing within a repo. When two repos use the same word differently, each keeps its own entry, and `docs/glossary.md` says how the two map to each other.
-- New terms and rules are proposed to the developer, never just written down. The `refine` skill does this and updates the glossary once the brief is approved.
+- New terms and rules are proposed to the developer, never just written down. The `refine` skill does this and updates the glossary once the spec is approved.
 
 ## Work in progress
 
-Briefs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `brief.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design` and `implement` skills write and read them there.
+Specs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `spec.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design` and `implement` skills write and read them there.
 
 ## Adding a repo
 
