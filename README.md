@@ -13,7 +13,7 @@ Update later with `/plugin marketplace update happsie-skills`.
 
 ## Workflow
 
-How the skills fit together. `implement` runs `refine`, `strategic-design`, the build and `deliver` in order, and each of them also works on its own. The code is written in a git worktree per piece of work, so your own checkout stays free while it builds.
+How the skills fit together. `implement` runs `refine`, `strategic-design`, the build and `deliver` in order, and each of them also works on its own. `quick-fix` is the short path for a small, local change: a short spec, one approval, a test first, then the same check in `deliver`. The code is written in a git worktree per piece of work, so your own checkout stays free while it builds.
 
 ![Workflow flowchart](docs/workflow.svg)
 

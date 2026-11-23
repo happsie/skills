@@ -1,6 +1,6 @@
 ---
 name: deliver
-description: Close out finished work. Has an independent subagent with a fresh context check the diff against the approved spec, one acceptance criterion at a time, then opens the pull request with a description built from the spec and links it on the ticket. Use when the user says "deliver this", "ship it", "open the PR", "create a pull request", "wrap this up", "are we done", "check this against the spec", "did we build what we agreed", or when the build phase of the implement skill has finished. Works with any code host and tracker (GitHub, GitLab, Jira, Linear, ...).
+description: Close out finished work. Has an independent subagent with a fresh context check the diff against the approved spec, one acceptance criterion at a time, then opens the pull request with a description built from the spec and links it on the ticket. Use when the user says "deliver this", "ship it", "open the PR", "create a pull request", "wrap this up", "are we done", "check this against the spec", "did we build what we agreed", or when the build in the implement or quick-fix skill has finished. Works with any code host and tracker (GitHub, GitLab, Jira, Linear, ...). Not for work that is still being built, and not for reviewing a pull request someone else opened.
 ---
 
 # Deliver
@@ -13,8 +13,8 @@ No assumptions. The verdict goes to the developer as it came back. What to do ab
 
 ## 1. Find the contract and the change
 
-- **The contract.** `spec.md` for this work, and `plan.md` if there is one. They live in `work/<key-or-slug>/` in a home repo, otherwise in `.implement/<key-or-slug>/` at the root of the repo. The spec must be approved. If there is no spec but there is a ticket, its acceptance criteria are the contract; tell the developer that is what will be checked. If there is neither, ask what the work should be checked against. Don't write the criteria yourself from what was built.
-- **The change.** The branch, the branch it will merge into, and every repo involved. If `plan.md` lists worktrees (the `implement` skill builds in them), the work is there: read, run and push from the worktrees, not from the developer's checkout. Everything must be committed. If there are uncommitted changes, or the work sits on the default branch, stop and ask.
+- **The contract.** `spec.md` for this work, and `plan.md` if there is one. They live in `work/<key-or-slug>/` in a home repo, otherwise in `.implement/<key-or-slug>/` at the root of the repo. The spec must be approved. A spec that says `Kind: quick fix` comes from the `quick-fix` skill: it is short, there is no plan, and its Change section describes the approved change. If there is no spec but there is a ticket, its acceptance criteria are the contract; tell the developer that is what will be checked. If there is neither, ask what the work should be checked against. Don't write the criteria yourself from what was built.
+- **The change.** The branch, the branch it will merge into, and every repo involved. If `plan.md` lists worktrees, or `spec.md` does for a quick fix, the work is there (`implement` and `quick-fix` build in them): read, run and push from the worktrees, not from the developer's checkout. Everything must be committed. If there are uncommitted changes, or the work sits on the default branch, stop and ask.
 
 ## 2. Verify in a fresh subagent
 
@@ -36,11 +36,11 @@ Instructions for the subagent, to pass on as they are:
 
 > You are checking finished work against what was agreed. You have not seen how it was built, and that is the point. Trust only what you read and run yourself. Change no files.
 >
-> 1. Read the spec: goal, target behavior, acceptance criteria, out of scope, language, decisions. Read the plan if there is one; it describes an approved refactor and the build steps.
+> 1. Read the spec: goal, target behavior, acceptance criteria, out of scope, language, decisions. Read the plan if there is one; it describes an approved refactor and the build steps. A quick fix has no plan, and its spec has a Change section that describes the approved change instead.
 > 2. Read the full diff between the base branch and the branch, and enough of the surrounding code to understand it. Follow each changed path from its entry point.
 > 3. For each acceptance criterion, look for two things: the code that makes it true, and a test that would fail if it stopped being true. Read the test and judge whether it really checks the criterion, not just whether it exists or has a matching name.
 > 4. Run the tests, the build and the linter or type checker. Report what you ran and the result. If something can't be run, say so.
-> 5. Look for what the spec didn't ask for: changes that trace to no criterion and no step in the plan, anything listed as out of scope that was touched anyway, and existing tests whose expected results were changed, weakened, skipped or removed.
+> 5. Look for what the spec didn't ask for: changes that trace to no criterion and no step in the plan or the spec's Change section, anything listed as out of scope that was touched anyway, and existing tests whose expected results were changed, weakened, skipped or removed.
 > 6. Look for what the spec implies but the diff misses: the cases named under target behavior and decisions, callers and consumers of what changed, data that predates the change.
 > 7. If the plan has a Decisions section, check that each decision has its ADR, and that the diff does what the ADR says.
 > 8. If the spec has a Language section, check the diff against it. Names the diff adds or changes (types, functions, fields, endpoints, tests, text a user reads) must use the agreed terms: not a word the spec says not to use, and not a new synonym. For each rule listed there that the change touches, look for the code that keeps it true and a test that would fail if it broke.
@@ -61,7 +61,7 @@ Post the subagent's verdict to the developer as it came back: every criterion wi
 
 If everything is met and nothing else was found, go on to step 4.
 
-Otherwise stop and ask what to do with each open point: fix it, accept it as is, or change the spec. Fixes follow the `implement` skill's rules, and a changed spec needs approval again. After any change to the code, run step 2 again with a **new** subagent. Don't send the old one back to re-check; it now has a history with this change.
+Otherwise stop and ask what to do with each open point: fix it, accept it as is, or change the spec. Fixes follow the rules of the skill that built the work, `implement` or `quick-fix`, and a changed spec needs approval again. After any change to the code, run step 2 again with a **new** subagent. Don't send the old one back to re-check; it now has a history with this change.
 
 ## 4. Open the pull request
 
@@ -76,11 +76,11 @@ Write the description from the spec, not from the commit log:
 
 Follow the repo's pull request template and title conventions if it has them. Leave file-by-file walkthroughs out; the diff shows that.
 
-Post the title and description in the chat, with the branch and the target it will merge into. Wait for an explicit approval. Then push the branch and open the pull request with whatever is available: `gh`, `glab`, a code host MCP server.
+Post the title and description in the chat, with the branch and the target it will merge into. If the work has a ticket, say also how the pull request will be linked on it in step 5: through a link field, or with a comment, and then show the comment's text. Wait for an explicit approval. It covers the push, the pull request and that one link on the ticket. Then push the branch and open the pull request with whatever is available: `gh`, `glab`, a code host MCP server.
 
 ## 5. Tell the ticket
 
-If the work has a ticket, link the pull request on it, with a link field if the tracker has one, otherwise a short comment. Don't move the ticket to another status, reassign it or tick off its criteria unless the developer asks.
+If the work has a ticket, link the pull request on it the way step 4 showed: with a link field if the tracker has one, otherwise the short comment the developer approved. Write nothing else on the ticket. Don't move the ticket to another status, reassign it or tick off its criteria unless the developer asks.
 
 ## Report
 

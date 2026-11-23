@@ -1,6 +1,6 @@
 ---
 name: home-repo
-description: Set up or extend a home repo - a personal local repo a developer works from across many repos. It holds a CLAUDE.md index of the other repos (paths, purpose, where their docs live), glossaries that hold the agreed domain terms and rules, shared ADRs and coding standards, and a repos/<repo> folder with seeded docs for repos that lack their own. Use when the user asks to "set up a home repo", "create a home repo", "init my home repo", "add a repo to the home repo", or wants one place to work from across several repos without changing directory.
+description: Set up or extend a home repo - a personal local repo a developer works from across many repos. It holds a CLAUDE.md index of the other repos (paths, purpose, where their docs live), glossaries that hold the agreed domain terms and rules, shared ADRs and coding standards, and a repos/<repo> folder with seeded docs for repos that lack their own. Use when the user asks to "set up a home repo", "create a home repo", "init my home repo", "add a repo to the home repo", or wants one place to work from across several repos without changing directory. Not for work inside a single repo, and not for adding terms or decisions once it is set up (refine and adr do that).
 ---
 
 # Home repo
@@ -10,7 +10,7 @@ A home repo is a personal, local repo the developer sits in while working across
 - `CLAUDE.md`: an index of the other repos (absolute paths, purpose, where their docs live) and the rules for working across them.
 - `docs/glossary.md`, `docs/adr/`, `docs/coding-standards.md`: shared docs, only for things that span two or more repos.
 - `repos/<repo_name>/`: glossary, ADRs and coding standards for repos that do not have their own. Other teams work in those repos with their own conventions, so we keep these docs here instead of adding files to their repos.
-- `work/<key-or-slug>/`: the spec and plan for each piece of work done from here, written by the `refine`, `strategic-design` and `implement` skills, and the git worktrees the code for that work is written in.
+- `work/<key-or-slug>/`: the spec and plan for each piece of work done from here, written by the `refine`, `strategic-design`, `implement` and `quick-fix` skills, and the git worktrees the code for that work is written in.
 - `.claude/settings.json`: the repos listed as additional directories, so Claude can read and edit them from here.
 
 The glossaries are the agreed domain language for the work done from here. The `refine` skill describes what an entry holds (term, meaning, other names, rules, context, status) and keeps them up to date as work is refined; this skill only sets them up and seeds them.

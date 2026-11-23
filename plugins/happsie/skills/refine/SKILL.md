@@ -1,6 +1,6 @@
 ---
 name: refine
-description: Refine a feature request, task or ticket into a spec the developer has approved, before any code is written. Reads the ticket and the code it touches, cross-checks them, and asks the questions whose answers change what gets built, even when the request looks well defined. Also agrees on the domain terms and rules the work depends on and records them in the project's glossary. Use when the user asks to "refine this", "refine PROJ-123", "let's align on this ticket", "what's unclear about this feature", "grill me on this", or as the first phase of the implement skill. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Writes the spec to a file and updates the glossary; it never changes code.
+description: Refine a feature request, task or ticket into a spec the developer has approved, before any code is written. Reads the ticket and the code it touches, cross-checks them, and asks the questions whose answers change what gets built, even when the request looks well defined. Also agrees on the domain terms and rules the work depends on and records them in the project's glossary. Use when the user asks to "refine this", "refine PROJ-123", "let's align on this ticket", "what's unclear about this feature", "grill me on this", or as the first phase of the implement skill. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Writes the spec to a file and updates the glossary; it never changes code. Not for finding the cause of a problem (investigate), and not for writing the ticket itself (ticket-creator).
 ---
 
 # Refine
@@ -11,7 +11,7 @@ This skill never edits code, creates branches or writes to the tracker. The only
 
 ## The ask rule
 
-No assumptions. If something is unclear, contradictory or missing, ask the developer. Never pick an interpretation yourself, and never fill a gap with what seems likely. Reading code, reading the ticket and running read-only commands need no permission. Deciding what the feature should do always does.
+No assumptions. If something is unclear, contradictory or missing, ask the developer. Never pick an interpretation yourself, and never fill a gap with what seems likely. Reading code, reading the ticket, fetching from the remote and running read-only commands need no permission. Deciding what the feature should do always does.
 
 ## Where the documents live
 
@@ -20,7 +20,7 @@ The spec and the plan are files, so they survive a long session and can be picke
 - **In a home repo** (the current directory's `CLAUDE.md` says it is a home repo, as set up by the `home-repo` skill): `work/<key-or-slug>/` in the home repo. This holds even when the code changes land in other repos.
 - **Anywhere else:** `.implement/<key-or-slug>/` at the root of the repo being worked on. Keep it out of git by adding `.implement/` to `.git/info/exclude`. Don't edit the repo's `.gitignore` for this.
 
-The folder holds `spec.md` (written by `refine`) and `plan.md` (written by `strategic-design`). Each starts with a status line: `Status: draft`, or `Status: approved <YYYY-MM-DD>` once the developer has approved it. Only the developer's explicit approval sets it to approved. Any later change sets it back to draft until approved again.
+The folder holds `spec.md` (written by `refine`, or in a short form by `quick-fix`) and `plan.md` (written by `strategic-design`). Each starts with a status line: `Status: draft`, or `Status: approved <YYYY-MM-DD>` once the developer has approved it. Only the developer's explicit approval sets it to approved. Any later change sets it back to draft until approved again.
 
 Writing and updating these two files needs no permission. Don't commit them unless asked.
 
@@ -55,7 +55,7 @@ Where the glossary is:
 
 ## 1. Gather the request
 
-If a `spec.md` already exists for this work, read it and continue from there instead of starting over.
+If a `spec.md` already exists for this work, read it and continue from there instead of starting over. A spec that says `Kind: quick fix` was handed over by the `quick-fix` skill and says why the work was not a quick fix. Treat it as the request plus what is known so far. It has not been through steps 2 to 4, so run them.
 
 - **Free text.** Take it as given. If it points at a ticket, document or conversation you can reach, read that too.
 - **Ticket key or URL.** Fetch it with whatever is available: a tracker MCP server, a CLI such as `gh issue view`, or another skill built for that tracker. Read the description, acceptance criteria and comments, then the parent or epic, sibling tickets, linked issues and any existing branches or PRs. Comments often overrule the description, so read them all.
@@ -80,6 +80,13 @@ What to find: the entry points (endpoint, consumer, job, UI, CLI) and the path d
 - Recent `git log` on those files, for context or half-finished attempts.
 - The glossary entries for the area, and the names the code uses for the same things.
 - Other project docs that define rules: ADRs, coding standards, `CLAUDE.md`, `AGENTS.md`.
+
+Then check that the code that was read is the code the work will start from. The work is not built in this checkout. It is built in a worktree cut from the branch the work starts from, normally the default branch as it is on the remote (`implement`, "Work in a worktree"). A checkout that is behind, on another branch or holds uncommitted changes shows other code, and a spec written against it is wrong from the first line. For each repo:
+
+- Fetch, and note the commit the checkout is at and its branch.
+- Compare the files your findings point to with the remote's default branch (`git diff --name-only <checkout commit> <remote default branch> -- <files>`), and check them for uncommitted changes (`git status --short -- <files>`).
+
+If nothing differs, go on. If something does, ask now, before step 3: say which files differ, and ask whether the work starts from the default branch or from what the checkout has. Then read the differing files as they are at that starting point (`git show <ref>:<path>` reads a file without touching the checkout), so the findings describe the code the work will be built on.
 
 ## 3. Cross-check the request against the code
 
@@ -124,7 +131,7 @@ Write `spec.md` with the sections below, and post it in the chat as well:
 
 - **Goal:** one sentence.
 - **Type:** feature/change or bug.
-- **Today:** current behavior, with file references.
+- **Today:** current behavior, with file references, and the commit and branch the code was read at.
 - **After:** target behavior.
 - **Acceptance criteria:** concrete, testable statements. Each one must be checkable by a test.
 - **Out of scope:** what will not be touched.
@@ -137,6 +144,11 @@ Wait for an explicit approval. If the developer changes something, update the fi
 
 ## 6. Update the glossary
 
-Once the spec is approved, write its new and changed terms into the glossary with status `agreed` and today's date. Approving the spec approves these entries, so nothing goes into the glossary before that. If the spec changes later and is approved again, bring the glossary in line with it.
+Once the spec is approved, its new and changed terms go into the glossary with status `agreed` and today's date. Approving the spec approves these entries, so nothing goes into the glossary before that. If the spec changes later and is approved again, bring the glossary in line with it.
 
-Don't commit the change. Tell the developer which glossary files changed. When the glossary is a tracked file in the repo being worked on, the change belongs on the work's branch, and `strategic-design` plans a commit for it.
+Where they are written depends on where the glossary is:
+
+- **Outside the code this work changes**, such as `repos/<repo>/glossary.md` or `docs/glossary.md` in a home repo: write them now. Don't commit. Tell the developer which files changed.
+- **A tracked file in a repo this work changes:** don't write it in the developer's checkout. The change belongs on the work's branch, and an edit left uncommitted in the checkout has to be moved there and undone here later. The approved spec holds the entries until the work's worktree exists. They are written there and get a commit of their own (`implement`, "Work in a worktree"; `strategic-design` plans the commit). Once the worktree exists, later glossary changes are written in it too.
+
+When this skill runs on its own and no build follows, there is no branch for the second case. Tell the developer that the terms are agreed in the spec and not yet in the glossary file, and write them to the checkout only if they ask.

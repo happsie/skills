@@ -1,6 +1,6 @@
 ---
 name: strategic-design
-description: Strategic programming step between agreed requirements and writing the feature. Takes an approved spec, maps the code changes the feature needs, and asks whether the code would be healthier if it were refactored first so the feature becomes a small, obvious change. Proposes a preparatory refactor (or says none is needed), gets it approved, and carries it out without changing behavior or the expected results of existing tests. Decisions the plan makes that deserve an ADR are recorded once the plan is approved. Use when the user asks "should we refactor first", "do a strategic analysis", "design this before we build it", "prep refactor for this feature", "make the change easy first", or as the second phase of the implement skill.
+description: Strategic programming step between agreed requirements and writing the feature. Takes an approved spec, maps the code changes the feature needs, and asks whether the code would be healthier if it were refactored first so the feature becomes a small, obvious change. Proposes a preparatory refactor (or says none is needed), gets it approved, and carries it out without changing behavior or the expected results of existing tests. Decisions the plan makes that deserve an ADR are recorded once the plan is approved. Use when the user asks "should we refactor first", "do a strategic analysis", "design this before we build it", "prep refactor for this feature", "make the change easy first", or as the second phase of the implement skill. Not for agreeing on what to build (refine), and not for cleanup that no feature needs.
 ---
 
 # Strategic design
@@ -25,12 +25,7 @@ A subagent can't ask the developer, so it asks you: it stops and returns the que
 
 ## Where the documents live
 
-The spec and the plan are files, so they survive a long session and can be picked up in a new one. Each piece of work gets a folder named after the ticket key, or a short slug for free text:
-
-- **In a home repo** (the current directory's `CLAUDE.md` says it is a home repo, as set up by the `home-repo` skill): `work/<key-or-slug>/` in the home repo. This holds even when the code changes land in other repos.
-- **Anywhere else:** `.implement/<key-or-slug>/` at the root of the repo being worked on. Keep it out of git by adding `.implement/` to `.git/info/exclude`. Don't edit the repo's `.gitignore` for this.
-
-The folder holds `spec.md` (written by `refine`) and `plan.md` (written by `strategic-design`). Each starts with a status line: `Status: draft`, or `Status: approved <YYYY-MM-DD>` once the developer has approved it. Only the developer's explicit approval sets it to approved. Any later change sets it back to draft until approved again.
+The spec and the plan are files, so they survive a long session and can be picked up in a new one. They are in the work's folder: `work/<key-or-slug>/` in a home repo, otherwise `.implement/<key-or-slug>/` at the root of the repo being worked on. The `refine` skill owns the rule ("Where the documents live"): how the folder is named and kept out of git, and the status line each file starts with. Only the developer's explicit approval sets a file to approved, and any later change sets it back to draft until it is approved again.
 
 Writing and updating these two files needs no permission. Don't commit them unless asked.
 
@@ -74,10 +69,14 @@ Rules for the proposal:
 
 ## 4. Check the safety net
 
+Map the test layers first, whether or not there is a refactor. Find which layers the repo has: unit, integration, BDD (`.feature` files and their step definitions), end to end. Note the exact command that runs each, and what it needs: Docker, a database, a local environment. The refactor, the build and the final check all run from this list, and so does a session that resumes later. If a layer this work needs can't run locally, ask.
+
 A refactor is only safe if tests pin the current behavior.
 
 - Find the tests that cover the code to be refactored and run them. They must be green before anything changes. If any are red, stop and ask.
 - Where coverage is missing or thin, plan characterization tests: tests that pin what the code does today, written and green before the refactor starts. They record current behavior, including behavior that looks wrong. Report anything that looks wrong; don't fix it.
+
+These runs are in the developer's checkout, since the worktree doesn't exist before the plan is approved. They show whether there is a safety net. The baseline that counts is run again in the worktree before the first change (`implement`, "Work in a worktree").
 
 ## 5. Present the plan and get it approved
 
@@ -87,11 +86,12 @@ Write `plan.md` next to the spec with the sections below, and post it in the cha
 - **Recommendation:** refactor first, or no refactor, with the reason in a sentence or two.
 - **Refactor steps:** ordered, small, each one leaving the tests green. Empty if none.
 - **Characterization tests:** which ones to add first, and what they pin.
+- **Test commands:** the test layers from step 4, each with the exact command that runs it and what it needs.
 - **Names:** the domain names the plan adds or renames, each with the term from the spec it stands for. Existing names on the feature's path that keep a word the spec says not to use are listed too, with the reason they stay.
 - **Feature steps:** how the feature gets built once the code has its new shape. Ordered, each one tied to acceptance criteria from the spec. In `implement`, each step is built by a subagent that starts with nothing but the spec, the plan and that step, so write every step for a reader who hasn't seen this conversation: the files and symbols it touches with `file:line`, what exists when it starts, what must be true when it is done, and what it leaves for later steps. Make each step small enough to build and test in one sitting, and leave the tests green at the end of it.
 - **Decisions:** the decisions in this plan that deserve an ADR, judged by the `adr` skill's "What gets an ADR", including any from the spec's Decisions section. Each one states the context, the decision, the alternatives that lost and why, the consequences, and the ADR it supersedes if there is one. Most plans have none; say so instead of inventing one. If you don't know why an alternative lost, that is a question for the developer, not something to fill in.
 - **Risks and open questions.**
-- **Git:** branch name, the branch it starts from (the default branch unless the developer says otherwise), and where the commits fall. Refactor commits and feature commits are always separate. If `refine` changed a glossary that is a tracked file in the repo, that change gets its own commit on the branch. So do ADRs written to a tracked folder in the repo.
+- **Git:** branch name, the branch it starts from (the default branch unless the spec or the developer says otherwise), and where the commits fall. Refactor commits and feature commits are always separate. If the spec has new or changed terms and the glossary is a tracked file in the repo, writing them gets its own commit on the branch. So do ADRs written to a tracked folder in the repo.
 
 Wait for an explicit approval. The developer may take the refactor, reject it, or cut it down. Update the file and confirm again after any change, then set its status line once approved. If they reject the refactor, the feature steps follow the tactical version.
 
@@ -114,7 +114,7 @@ Subagents with a clean context do the work, and you keep the plan and their repo
 Give the subagent:
 
 - The paths to `spec.md` and `plan.md`, and which steps are its own. It reads the whole of both, and does only its steps.
-- The worktree paths, the branch and the commands that run the tests. They work only in the worktree.
+- The worktree paths and the branch. They work only in the worktree. The commands that run the tests are in the plan under Test commands.
 - The rest of this section, from the numbered steps to the end of the report list, passed on as it is.
 
 The work:
@@ -130,6 +130,7 @@ Hard rules:
 - **Mechanical test edits are allowed**, and only these: imports, renamed or moved symbols, and setup or wiring that moved code makes necessary. List every such edit in the report.
 - **Never delete, skip or disable a test.**
 - **A red test stops the work.** If a test can't stay green without changing what it asserts, either the refactor changed behavior or the test is tied to the old structure. Don't decide which. Stop and ask.
+- **So does a build that breaks, and a tool or an environment that doesn't work.** Don't work around it.
 - **Don't go past the plan.** If the refactor turns out to need more than was approved, stop and ask.
 
 If you hit anything these rules say to stop or ask about, stop there. Leave the working tree as it is, don't try a workaround, and report back with the question: what you found (with `file:line` or the actual output), the options, and what you recommend. You will get the answer and carry on from where you stopped.

@@ -55,7 +55,8 @@ def skill(x, y, w, h, name, lines, color, note=None, badge=None):
 
 
 add(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" '
-    f'aria-label="Workflow: three starting points that all lead into the implement skill and end in a pull request">')
+    f'aria-label="Workflow: three starting points that lead into the implement skill, with quick-fix as the short path '
+    f'for a small change, and end in a pull request">')
 add("<defs>")
 add('<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/>'
     '<stop offset="1" stop-color="#151235"/></linearGradient>')
@@ -84,7 +85,7 @@ for fill in ("url(#bg)", "url(#g1)", "url(#g2)", "url(#dots)"):
 
 # Title
 text(40, 58, "From idea to pull request", 30, "url(#title)", 800)
-text(40, 84, "Start wherever you are. Every path leads into implement.", 15, MUTED)
+text(40, 84, "Start wherever you are. Every path ends in a checked pull request.", 15, MUTED)
 
 # Three starting points
 A, B, C = 235, 640, 1045   # lane centers
@@ -104,24 +105,34 @@ line([(135, 356), (135, RAIL)], VIOLET, arrow=False)
 line([(335, 356), (335, RAIL)], VIOLET, arrow=False)
 text(A, 384, "pick up a ticket", 12, MUTED, anchor="middle")
 
-# Lane B: straight in
-line([(B, 188), (B, RAIL)], CYAN, arrow=False)
-add(f'<rect x="{B - 150}" y="262" width="300" height="60" rx="14" fill="#0b1020" stroke="{CYAN}" '
+# Lane B: straight in, or the short path when the change is small
+IN = 540                    # the straight-in line
+QX, QW = 632, 250           # the quick-fix card
+QC, QD = QX + QW / 2, 1000  # its center, and where its path drops into deliver
+line([(B - 60, 188), (IN, 236), (IN, RAIL)], CYAN, arrow=False)
+line([(B + 60, 188), (QC, 236)], CYAN)
+text(IN - 8, 218, "anything else", 12, MUTED, anchor="end")
+text(QC + 2, 218, "small and local", 12, MUTED)
+add(f'<rect x="{IN - 78}" y="262" width="156" height="60" rx="14" fill="#0b1020" stroke="{CYAN}" '
     f'stroke-opacity="0.5" stroke-dasharray="4 5"/>')
-text(B, 288, "No detour needed.", 14, TEXT, 600, "middle")
-text(B, 308, "Just ask for the implementation.", 13, MUTED, anchor="middle")
+text(IN, 288, "No detour needed.", 14, TEXT, 600, "middle")
+text(IN, 308, "Just ask to implement it.", 13, MUTED, anchor="middle")
+skill(QX, 240, QW, 116, "quick-fix",
+      ["Small, local, nothing to decide.", "Short spec, one approval, test first."], CYAN,
+      note="not quick?  &#8594;  implement or investigate")
 
 # Lane C: find the cause first
 line([(C, 188), (C, 236)], PINK)
-skill(C - 170, 240, 340, 116, "investigate",
+skill(C - 150, 240, 300, 116, "investigate",
       ["Evidence first, one hypothesis at a time.", "Proves the cause. Fixes nothing."], PINK,
       note="no ticket yet?  &#8594;  ticket-creator drafts one")
 line([(C, 356), (C, RAIL)], PINK, arrow=False)
 text(C + 14, 384, "cause proven", 12, MUTED)
 
-# The lanes join and enter implement at refine
+# The lanes join and enter implement at refine. The rail has a gap where the quick-fix path crosses it.
 ENTRY = 205
-add(f'<path d="M135,{RAIL} L{C},{RAIL}" stroke="url(#rail)" stroke-width="2" fill="none"/>')
+add(f'<path d="M135,{RAIL} L{QD - 8},{RAIL} M{QD + 8},{RAIL} L{C},{RAIL}" stroke="url(#rail)" stroke-width="2" '
+    f'fill="none"/>')
 line([(ENTRY, RAIL), (ENTRY, BAND_Y - 2)], CYAN)
 
 # implement band with its four phases
@@ -133,7 +144,12 @@ text(182, BAND_Y + 36, "runs four phases in order. Each one ends with your appro
 
 CY, CW, CH, GAP = BAND_Y + 56, 262, 126, 34
 xs = [60 + i * (CW + GAP) for i in range(4)]
-skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes spec.md, updates glossary."], CYAN, badge="1")
+
+# quick-fix skips phases 1 to 3 and goes straight to the check in deliver
+line([(QC, 356), (QC, 378), (QD, 378), (QD, CY - 4)], CYAN)
+text(QD + 12, BAND_Y + 36, "quick-fix joins here", 12, MUTED)
+
+skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes spec.md, agrees on the terms."], CYAN, badge="1")
 skill(xs[1], CY, CW, CH, "strategic-design", ["Refactor first, or not?", "Writes plan.md, does the refactor."],
       "#60a5fa", note="decision made?  &#8594;  adr records it", badge="2")
 skill(xs[2], CY, CW, CH, "build", ["One fresh subagent per plan step.", "Test-driven; bugs reproduce first."], "#818cf8",

@@ -99,7 +99,7 @@ Post the draft in the chat, together with:
 
 - Where it goes: tracker, project, issue type, parent or epic.
 - The links you will create, each with its direction: "is blocked by ABC-12", "relates to ABC-40".
-- The glossary entries you will add or change, if step 2 settled any.
+- The glossary entries you will add or change, if step 2 settled any, and the file they go in.
 
 Wait for an explicit approval. If the user changes something, update the draft and ask again.
 
@@ -115,10 +115,10 @@ Set only the fields that were approved. Leave assignee, sprint, priority and est
 
 Then create the links. Check the direction of each one before sending it: "A blocks B" and "B blocks A" are easy to swap, and trackers name the two ends differently. If the tracker has no link type for a relation, mention the other ticket's key under the relevant section of the description instead.
 
-Write the approved glossary entries into the glossary with status `agreed` and today's date. Don't commit them.
+Write the approved glossary entries into the glossary with status `agreed` and today's date. Don't commit them. A ticket has no branch to put them on, so when the glossary is a tracked file in a repo, the change is left uncommitted in the developer's checkout. Say that in the report, so they can commit it or take it onto a branch, and it isn't found later as a change nobody remembers making.
 
 If there is no way to reach the tracker, say so and give the finished ticket as text to paste in.
 
 ## Report
 
-The ticket key and URL, the links that were created, and any glossary file that changed. If a link or field couldn't be set, say which and why.
+The ticket key and URL, the links that were created, and any glossary file that changed and is waiting to be committed. If a link or field couldn't be set, say which and why.

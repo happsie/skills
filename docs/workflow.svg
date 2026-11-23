@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 840" width="1280" height="840" role="img" aria-label="Workflow: three starting points that all lead into the implement skill and end in a pull request">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 840" width="1280" height="840" role="img" aria-label="Workflow: three starting points that lead into the implement skill, with quick-fix as the short path for a small change, and end in a pull request">
 <defs>
 <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151235"/></linearGradient>
 <radialGradient id="g1" cx="0.12" cy="0.1" r="0.5"><stop offset="0" stop-color="#a78bfa" stop-opacity="0.28"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
@@ -19,7 +19,7 @@
 <rect width="1280" height="840" rx="24" fill="url(#g2)"/>
 <rect width="1280" height="840" rx="24" fill="url(#dots)"/>
 <text x="40" y="58" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="30" font-weight="800" fill="url(#title)" text-anchor="start" letter-spacing="0">From idea to pull request</text>
-<text x="40" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">Start wherever you are. Every path leads into implement.</text>
+<text x="40" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">Start wherever you are. Every path ends in a checked pull request.</text>
 <text x="235" y="122" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="11" font-weight="700" fill="#a78bfa" text-anchor="middle" letter-spacing="2">START HERE</text>
 <rect x="75.0" y="136" width="320" height="52" rx="26.0" fill="#a78bfa" fill-opacity="0.16" stroke="#a78bfa" stroke-width="1.5" filter="url(#glow)"/>
 <text x="235" y="168" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="16" font-weight="600" fill="#f8fafc" text-anchor="middle" letter-spacing="0">An idea, no ticket yet</text>
@@ -46,31 +46,42 @@
 <path d="M135,356 L135,400" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linejoin="round"/>
 <path d="M335,356 L335,400" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linejoin="round"/>
 <text x="235" y="384" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="middle" letter-spacing="0">pick up a ticket</text>
-<path d="M640,188 L640,400" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round"/>
-<rect x="490" y="262" width="300" height="60" rx="14" fill="#0b1020" stroke="#22d3ee" stroke-opacity="0.5" stroke-dasharray="4 5"/>
-<text x="640" y="288" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#f8fafc" text-anchor="middle" letter-spacing="0">No detour needed.</text>
-<text x="640" y="308" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#a5b0cf" text-anchor="middle" letter-spacing="0">Just ask for the implementation.</text>
+<path d="M580,188 L540,236 L540,400" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round"/>
+<path d="M700,188 L757.0,236" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
+<text x="532" y="218" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="end" letter-spacing="0">anything else</text>
+<text x="759.0" y="218" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">small and local</text>
+<rect x="462" y="262" width="156" height="60" rx="14" fill="#0b1020" stroke="#22d3ee" stroke-opacity="0.5" stroke-dasharray="4 5"/>
+<text x="540" y="288" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="14" font-weight="600" fill="#f8fafc" text-anchor="middle" letter-spacing="0">No detour needed.</text>
+<text x="540" y="308" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#a5b0cf" text-anchor="middle" letter-spacing="0">Just ask to implement it.</text>
+<rect x="632" y="240" width="250" height="116" rx="14" fill="#141a33" stroke="#22d3ee" stroke-width="1.5" filter="url(#glow)"/>
+<rect x="632" y="254" width="4" height="88" rx="2" fill="#22d3ee"/>
+<text x="650" y="272" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#22d3ee" text-anchor="start" letter-spacing="0">quick-fix</text>
+<text x="650" y="298" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Small, local, nothing to decide.</text>
+<text x="650" y="317" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Short spec, one approval, test first.</text>
+<text x="650" y="342" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">not quick?  &#8594;  implement or investigate</text>
 <path d="M1045,188 L1045,236" fill="none" stroke="#fb7185" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-fb7185)"/>
-<rect x="875" y="240" width="340" height="116" rx="14" fill="#141a33" stroke="#fb7185" stroke-width="1.5" filter="url(#glow)"/>
-<rect x="875" y="254" width="4" height="88" rx="2" fill="#fb7185"/>
-<text x="893" y="272" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#fb7185" text-anchor="start" letter-spacing="0">investigate</text>
-<text x="893" y="298" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Evidence first, one hypothesis at a time.</text>
-<text x="893" y="317" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Proves the cause. Fixes nothing.</text>
-<text x="893" y="342" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">no ticket yet?  &#8594;  ticket-creator drafts one</text>
+<rect x="895" y="240" width="300" height="116" rx="14" fill="#141a33" stroke="#fb7185" stroke-width="1.5" filter="url(#glow)"/>
+<rect x="895" y="254" width="4" height="88" rx="2" fill="#fb7185"/>
+<text x="913" y="272" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#fb7185" text-anchor="start" letter-spacing="0">investigate</text>
+<text x="913" y="298" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Evidence first, one hypothesis at a time.</text>
+<text x="913" y="317" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Proves the cause. Fixes nothing.</text>
+<text x="913" y="342" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">no ticket yet?  &#8594;  ticket-creator drafts one</text>
 <path d="M1045,356 L1045,400" fill="none" stroke="#fb7185" stroke-width="2" stroke-linejoin="round"/>
 <text x="1059" y="384" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">cause proven</text>
-<path d="M135,400 L1045,400" stroke="url(#rail)" stroke-width="2" fill="none"/>
+<path d="M135,400 L992,400 M1008,400 L1045,400" stroke="url(#rail)" stroke-width="2" fill="none"/>
 <path d="M205,400 L205,430" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
 <rect x="35" y="432" width="1210" height="262" rx="20" fill="#0e1430" fill-opacity="0.85" stroke="url(#band)" stroke-width="2" filter="url(#glow)"/>
 <text x="60" y="468" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="20" font-weight="800" fill="url(#band)" text-anchor="start" letter-spacing="0">implement</text>
 <text x="182" y="468" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">runs four phases in order. Each one ends with your approval, and each skill also works on its own.</text>
+<path d="M757.0,356 L757.0,378 L1000,378 L1000,484" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
+<text x="1012" y="468" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">quick-fix joins here</text>
 <rect x="60" y="488" width="262" height="126" rx="14" fill="#141a33" stroke="#22d3ee" stroke-width="1.5" filter="url(#glow)"/>
 <rect x="60" y="502" width="4" height="98" rx="2" fill="#22d3ee"/>
 <circle cx="90" cy="515" r="12" fill="#22d3ee"/>
 <text x="90" y="520" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="800" fill="#0b1020" text-anchor="middle" letter-spacing="0">1</text>
 <text x="112" y="520" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#22d3ee" text-anchor="start" letter-spacing="0">refine</text>
 <text x="78" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Asks what changes the outcome.</text>
-<text x="78" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Writes spec.md, updates glossary.</text>
+<text x="78" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Writes spec.md, agrees on the terms.</text>
 <rect x="356" y="488" width="262" height="126" rx="14" fill="#141a33" stroke="#60a5fa" stroke-width="1.5" filter="url(#glow)"/>
 <rect x="356" y="502" width="4" height="98" rx="2" fill="#60a5fa"/>
 <circle cx="386" cy="515" r="12" fill="#60a5fa"/>

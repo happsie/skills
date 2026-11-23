@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Implement a feature, task, bug fix or ticket end to end. Refines the request into a spec the developer approves, does a strategic design pass that decides whether to refactor first, builds with test-driven development, then has the result checked against the spec by an independent subagent and opens the pull request. Never assumes; every open decision or unexpected problem goes to the developer as a question. Use whenever the user asks to implement, build, code, fix, start or pick up something (e.g. "implement PROJ-123", "start on this ticket", "build this feature", "fix this bug", "let's do this one"), or gives a bare ticket key with intent to work on it. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for planning-only or review-only requests.
+description: Implement a feature, task, bug fix or ticket end to end. Refines the request into a spec the developer approves, does a strategic design pass that decides whether to refactor first, builds with test-driven development, then has the result checked against the spec by an independent subagent and opens the pull request. Never assumes; every open decision or unexpected problem goes to the developer as a question. Use whenever the user asks to implement, build, code, fix, start or pick up something (e.g. "implement PROJ-123", "start on this ticket", "build this feature", "fix this bug", "let's do this one"), or gives a bare ticket key with intent to work on it. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for planning-only or review-only requests. A small, local change with nothing to decide can go through quick-fix instead.
 ---
 
 # Implement
@@ -13,6 +13,8 @@ Four phases, each ending in something the developer has approved:
 4. **Deliver**: an independent check against the spec, then the pull request.
 
 Don't skip or reorder phases, however small or well defined the task looks. A small task makes each phase short, not optional.
+
+There is one shorter path, and taking it is not your call. A small, local change with nothing to decide can go through the `quick-fix` skill instead. If the task looks like one, say so once before phase 1 and let the developer choose. Unless they choose it, run all four phases.
 
 ## The ask rule
 
@@ -43,12 +45,7 @@ An agent with a full context gets worse at everything: it forgets the rules, los
 
 ## Where the documents live
 
-The spec and the plan are files, so they survive a long session and can be picked up in a new one. Each piece of work gets a folder named after the ticket key, or a short slug for free text:
-
-- **In a home repo** (the current directory's `CLAUDE.md` says it is a home repo, as set up by the `home-repo` skill): `work/<key-or-slug>/` in the home repo. This holds even when the code changes land in other repos.
-- **Anywhere else:** `.implement/<key-or-slug>/` at the root of the repo being worked on. Keep it out of git by adding `.implement/` to `.git/info/exclude`. Don't edit the repo's `.gitignore` for this.
-
-The folder holds `spec.md` (written by `refine`) and `plan.md` (written by `strategic-design`). Each starts with a status line: `Status: draft`, or `Status: approved <YYYY-MM-DD>` once the developer has approved it. Only the developer's explicit approval sets it to approved. Any later change sets it back to draft until approved again.
+The spec and the plan are files, so they survive a long session and can be picked up in a new one. They are in the work's folder: `work/<key-or-slug>/` in a home repo, otherwise `.implement/<key-or-slug>/` at the root of the repo being worked on. The `refine` skill owns the rule ("Where the documents live"): how the folder is named and kept out of git, and the status line each file starts with. Only the developer's explicit approval sets a file to approved, and any later change sets it back to draft until it is approved again.
 
 Writing and updating these two files needs no permission. Don't commit them unless asked.
 
@@ -65,10 +62,11 @@ All code for a piece of work is written in a git worktree made for it, never in 
 There is one worktree per piece of work, for each repo it changes, and every step uses it. It is not one per subagent: the steps build on each other, so they all work on the same branch in the same place. If the agent tool can give a subagent a worktree of its own, don't use that.
 
 - **Where.** `worktrees/<repo_name>/` inside the work's folder, next to `spec.md` and `plan.md`. Outside a home repo `.implement/` is already kept out of git. In a home repo, add `work/*/worktrees/` to the home repo's `.git/info/exclude`.
-- **When.** Right before the first file is written on the branch: an ADR from the plan that lives in the repo, the refactor in `strategic-design`, or the build when there is neither. Never before the plan is approved.
-- **How.** Fetch, then `git worktree add` at that path with the branch name and the starting point from the plan's Git section. If the branch already exists, add the worktree for that branch instead of creating it. If the branch is checked out somewhere else, or the worktree can't be created, ask.
+- **When.** Right before the first file is written on the branch: a glossary change or an ADR that lives in the repo, the refactor in `strategic-design`, or the build when there is none of those. Never before the plan is approved.
+- **How.** Fetch, then `git worktree add` at that path with the branch name and the starting point from the plan's Git section. If the branch already exists, add the worktree for that branch instead of creating it. If the branch is checked out somewhere else, or the worktree can't be created, ask. If the work came over from `quick-fix`, its worktree is already there and `spec.md` names it: use it, and ask what to do with unfinished changes in it.
 - **Set it up.** A new worktree holds the tracked files and nothing else: no installed dependencies, no build output, no local files that git ignores. Run the repo's install or build step. If the tests need an untracked local file from the checkout, such as an `.env`, copy it over and tell the developer which files you copied.
-- **Move the glossary change.** If `refine` changed a glossary that is a tracked file in the repo, that change sits uncommitted in the checkout and belongs on the work's branch. Apply it in the worktree and restore the file in the checkout. If the file has other uncommitted changes in the checkout, ask instead.
+- **Check the starting point.** The spec and the plan were written from the developer's checkout, and the worktree is cut from the remote. Those can be different code. The spec names the commit it was read at: list the files the spec and the plan refer to that differ between that commit and the worktree (`git diff --name-only <that commit> HEAD -- <files>`). If any do, stop and ask, since the spec's Today and the plan's steps may no longer hold. Then run the plan's test commands once, before the first change. They must be green here. A green run in the checkout says nothing about this code. If they are red, stop and ask.
+- **Write the glossary change.** If the spec's Language section has new or changed terms and the glossary is a tracked file in the repo, `refine` left the file alone so the checkout stays untouched. Write the entries in the worktree now, the way `refine` describes in its step 6, and commit them where the plan says.
 - **Write it down.** Put each repo's worktree path in `plan.md` under a **Worktrees** heading. Like ticking off steps, this leaves the plan's status as it is.
 
 From then on the worktree is the repo path for everything: it is what subagents are given, and where you run tests and check their reports. The checkout is only read.
@@ -85,7 +83,7 @@ Don't go on without an explicit approval of the spec.
 
 ## Phase 2: Strategic design
 
-Run the `strategic-design` skill with the approved spec. It maps the changes the feature needs, judges whether a preparatory refactor would leave the code healthier, gets the plan approved, records the plan's decisions as ADRs through the `adr` skill, and carries out any approved refactor. It never changes behavior or what existing tests expect.
+Run the `strategic-design` skill with the approved spec. It maps the changes the feature needs and the test layers the repo has, judges whether a preparatory refactor would leave the code healthier, gets the plan approved, records the plan's decisions as ADRs through the `adr` skill, and carries out any approved refactor. It never changes behavior or what existing tests expect.
 
 Don't go on until the plan is approved, any refactor is finished, and every test is green.
 
@@ -95,13 +93,13 @@ Work test-first. Every test should pin down behavior someone relies on. A test t
 
 You run this phase and subagents do the building, one feature step each (3.4). If phase 2 wrote nothing to the branch, the worktree doesn't exist yet: create it first ("Work in a worktree"), and run everything below in it. Steps 3.1 to 3.3 prepare what they need.
 
-### 3.1 Map the test layers
+### 3.1 Check the test layers
 
-Find which test layers the repo has and how each runs: unit, integration, BDD (`.feature` files and their step definitions), end to end. Note the exact command for each, and whether it needs Docker, a database or a local environment. For BDD, read the existing feature files and step definitions for the area so you can reuse them.
+`strategic-design` mapped the test layers and wrote them into `plan.md` under **Test commands**: unit, integration, BDD (`.feature` files and their step definitions), end to end, each with its exact command and what it needs to run. Every build subagent works from that list, and so does a session that resumes later.
 
-If a layer the work needs can't run locally, ask before going on.
+Check that it covers every layer this work needs. For BDD, read the existing feature files and step definitions for the area so you can reuse them.
 
-Write the layers and their commands into `plan.md` under a **Test commands** heading. Every build subagent needs them, and so does a session that resumes later. Like ticking off steps, this leaves the plan's status as it is.
+If a layer the work needs is missing from the list or can't run locally, ask before going on. Adding a command to the list is not a change to the plan and leaves its status as it is.
 
 ### 3.2 Bugs: reproduce first
 
@@ -162,7 +160,9 @@ The refactor step here covers only code written in this phase. Anything larger b
 Rules for the loop:
 
 - A test that fails for an unexpected reason, or a test you didn't write going red, stops the work. Ask.
-- Never edit a test to get it green. If you believe a test is wrong, stop and ask.
+- So does a build that breaks, and a tool or an environment that doesn't work. Don't work around it.
+- Never edit a test to get it green, and never skip, disable or delete one. If you believe a test is wrong, stop and ask.
+- Build the step the way the plan describes it. If that way doesn't work, don't try another one. Ask.
 - Existing tests keep their expected results unless the spec says that behavior changes. If one has to change and the spec doesn't cover it, ask.
 - Name things with the terms in the spec's Language section: types, functions, fields, tests, scenario text and anything a user reads. Never use a word the spec says not to use, and don't coin a synonym. If the code needs a domain concept that has no agreed term, stop and ask.
 - Stay inside the spec and the plan. No speculative abstractions, no unrelated cleanup.
@@ -203,7 +203,6 @@ Don't do that check yourself and don't skip it because the tests are green. If t
 Keep it short:
 
 - The pull request and the verdict from `deliver`.
-
 - For a bug: whether it reproduced, and the test that proves the fix.
 - Scenarios covered, and in which layer.
 - What was refactored first, and what was built, by file.

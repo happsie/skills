@@ -64,7 +64,7 @@ The ADRs record decisions and why they were made. Read the ones for the area bef
 
 ## Work in progress
 
-Specs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `spec.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design` and `implement` skills write and read them there.
+Specs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `spec.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design`, `implement` and `quick-fix` skills write and read them there.
 
 The code for each piece of work is written in git worktrees of the repos it changes, in `work/<ticket-key-or-slug>/worktrees/<repo>/`, so the repos' own checkouts are left alone. They are kept out of this repo's git through `.git/info/exclude`.
 
