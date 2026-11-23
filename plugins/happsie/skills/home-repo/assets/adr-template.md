@@ -12,6 +12,10 @@ What situation or problem led to this.
 
 What was decided.
 
+## Alternatives
+
+What else was considered, and why it lost.
+
 ## Consequences
 
 What this makes easier, harder or required.

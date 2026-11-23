@@ -53,6 +53,15 @@ The glossaries are the agreed domain language. Read the entries for the area bef
 - A term means one thing within a repo. When two repos use the same word differently, each keeps its own entry, and `docs/glossary.md` says how the two map to each other.
 - New terms and rules are proposed to the developer, never just written down. The `refine` skill does this and updates the glossary once the spec is approved.
 
+## Decisions
+
+The ADRs record decisions and why they were made. Read the ones for the area before designing a change.
+
+- An ADR with status `Accepted` holds. Work that would go against one stops until the developer says whether the work changes or the ADR is superseded.
+- `Inferred` ones were read out of the code and nobody has confirmed the reasoning.
+- New decisions are proposed to the developer, never just written down. The `strategic-design` skill lists them in the plan, and the `adr` skill writes them once approved.
+- An accepted ADR is never rewritten. A new one supersedes it.
+
 ## Work in progress
 
 Specs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `spec.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design` and `implement` skills write and read them there.

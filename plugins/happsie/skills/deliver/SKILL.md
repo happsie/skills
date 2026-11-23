@@ -42,11 +42,13 @@ Instructions for the subagent, to pass on as they are:
 > 4. Run the tests, the build and the linter or type checker. Report what you ran and the result. If something can't be run, say so.
 > 5. Look for what the spec didn't ask for: changes that trace to no criterion and no step in the plan, anything listed as out of scope that was touched anyway, and existing tests whose expected results were changed, weakened, skipped or removed.
 > 6. Look for what the spec implies but the diff misses: the cases named under target behavior and decisions, callers and consumers of what changed, data that predates the change.
-> 7. If the spec has a Language section, check the diff against it. Names the diff adds or changes (types, functions, fields, endpoints, tests, text a user reads) must use the agreed terms: not a word the spec says not to use, and not a new synonym. For each rule listed there that the change touches, look for the code that keeps it true and a test that would fail if it broke.
+> 7. If the plan has a Decisions section, check that each decision has its ADR, and that the diff does what the ADR says.
+> 8. If the spec has a Language section, check the diff against it. Names the diff adds or changes (types, functions, fields, endpoints, tests, text a user reads) must use the agreed terms: not a word the spec says not to use, and not a new synonym. For each rule listed there that the change touches, look for the code that keeps it true and a test that would fail if it broke.
 >
 > Report:
 > - One line per acceptance criterion: **met**, **not met** or **can't tell**, with `file:line` for the code and for the test, and one sentence of reasoning. "Met" needs both the code and a test that proves it. If you are unsure, it is "can't tell", with what would settle it.
 > - Language: every name that departs from the agreed terms, with `file:line`, and every rule that is broken or that no test pins.
+> - Decisions: every one in the plan with no ADR, and every place the diff goes against an ADR, with `file:line`.
 > - Changes outside the spec and the plan.
 > - Test, build and lint results, with the output of any failure.
 > - Anything else that would make you hesitate to merge this.
@@ -55,7 +57,7 @@ Instructions for the subagent, to pass on as they are:
 
 ## 3. Report the verdict
 
-Post the subagent's verdict to the developer as it came back: every criterion with its status and evidence, the language findings, and every other finding. Don't summarize away a finding, reword it into something milder, or drop one because you know the explanation. If you disagree with a finding, show it anyway and say why you disagree; the developer decides.
+Post the subagent's verdict to the developer as it came back: every criterion with its status and evidence, the language and decision findings, and every other finding. Don't summarize away a finding, reword it into something milder, or drop one because you know the explanation. If you disagree with a finding, show it anyway and say why you disagree; the developer decides.
 
 If everything is met and nothing else was found, go on to step 4.
 
@@ -67,6 +69,7 @@ Write the description from the spec, not from the commit log:
 
 - What changes and why, in a few sentences.
 - The acceptance criteria, each with the verdict it got.
+- The ADRs this work added or superseded, if any.
 - How it was verified: what was run, and anything that couldn't be.
 - Anything the developer accepted as is in step 3, stated plainly.
 - A reference to the ticket.

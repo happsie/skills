@@ -1,6 +1,6 @@
 ---
 name: strategic-design
-description: Strategic programming step between agreed requirements and writing the feature. Takes an approved spec, maps the code changes the feature needs, and asks whether the code would be healthier if it were refactored first so the feature becomes a small, obvious change. Proposes a preparatory refactor (or says none is needed), gets it approved, and carries it out without changing behavior or the expected results of existing tests. Use when the user asks "should we refactor first", "do a strategic analysis", "design this before we build it", "prep refactor for this feature", "make the change easy first", or as the second phase of the implement skill.
+description: Strategic programming step between agreed requirements and writing the feature. Takes an approved spec, maps the code changes the feature needs, and asks whether the code would be healthier if it were refactored first so the feature becomes a small, obvious change. Proposes a preparatory refactor (or says none is needed), gets it approved, and carries it out without changing behavior or the expected results of existing tests. Decisions the plan makes that deserve an ADR are recorded once the plan is approved. Use when the user asks "should we refactor first", "do a strategic analysis", "design this before we build it", "prep refactor for this feature", "make the change easy first", or as the second phase of the implement skill.
 ---
 
 # Strategic design
@@ -69,6 +69,7 @@ Rules for the proposal:
 - **Stay inside the feature's path.** Refactor only code the feature touches. Report other debt you notice as a note; don't act on it.
 - **Use the agreed language.** Every class, function, field, endpoint, table and message the plan adds or renames is named with the terms in the spec's Language section, never with a word the spec says not to use. Renaming existing code to the agreed term is a refactor step like any other, inside the feature's path only. If the design needs a domain concept that has no agreed term, stop and ask. The answer goes into the spec, which then needs approval again.
 - **Match the codebase.** Use the patterns and conventions the project already uses before bringing in new ones.
+- **Follow the recorded decisions.** An accepted ADR for the area holds. If the design you want goes against one, stop and ask. Either the design changes or the ADR is superseded, and the developer says which.
 - **Weigh the cost.** A refactor that is larger or riskier than the feature needs a strong reason.
 
 ## 4. Check the safety net
@@ -88,12 +89,23 @@ Write `plan.md` next to the spec with the sections below, and post it in the cha
 - **Characterization tests:** which ones to add first, and what they pin.
 - **Names:** the domain names the plan adds or renames, each with the term from the spec it stands for. Existing names on the feature's path that keep a word the spec says not to use are listed too, with the reason they stay.
 - **Feature steps:** how the feature gets built once the code has its new shape. Ordered, each one tied to acceptance criteria from the spec. In `implement`, each step is built by a subagent that starts with nothing but the spec, the plan and that step, so write every step for a reader who hasn't seen this conversation: the files and symbols it touches with `file:line`, what exists when it starts, what must be true when it is done, and what it leaves for later steps. Make each step small enough to build and test in one sitting, and leave the tests green at the end of it.
+- **Decisions:** the decisions in this plan that deserve an ADR, judged by the `adr` skill's "What gets an ADR", including any from the spec's Decisions section. Each one states the context, the decision, the alternatives that lost and why, the consequences, and the ADR it supersedes if there is one. Most plans have none; say so instead of inventing one. If you don't know why an alternative lost, that is a question for the developer, not something to fill in.
 - **Risks and open questions.**
-- **Git:** branch name, the branch it starts from (the default branch unless the developer says otherwise), and where the commits fall. Refactor commits and feature commits are always separate. If `refine` changed a glossary that is a tracked file in the repo, that change gets its own commit on the branch.
+- **Git:** branch name, the branch it starts from (the default branch unless the developer says otherwise), and where the commits fall. Refactor commits and feature commits are always separate. If `refine` changed a glossary that is a tracked file in the repo, that change gets its own commit on the branch. So do ADRs written to a tracked folder in the repo.
 
 Wait for an explicit approval. The developer may take the refactor, reject it, or cut it down. Update the file and confirm again after any change, then set its status line once approved. If they reject the refactor, the feature steps follow the tactical version.
 
-## 6. Carry out the refactor
+## 6. Record the decisions
+
+Only after approval, and only if the plan has entries under Decisions. A decision that is written down only in `plan.md` is gone when the work is done, and the plan is not kept in git.
+
+Write each one as an ADR with the `adr` skill. It says where ADRs live and what the file looks like. The plan's approval covers the text, so don't ask again unless the ADR would say something the plan doesn't.
+
+If the ADR folder is a tracked part of a repo this work changes, the ADRs belong on the work's branch: create the worktree first ("Work in a worktree" in `implement`), write them there and commit them where the plan says. Otherwise write them where they live and don't commit.
+
+A decision that comes up later, during the refactor or the build, goes the same way: into the plan's Decisions section, approved with the plan, then recorded.
+
+## 7. Carry out the refactor
 
 Only after approval, and only if the plan has refactor steps. Work on the plan's branch in a git worktree made for this work, never in the developer's checkout and never on the default branch. The `implement` skill says where the worktree goes and how it is set up ("Work in a worktree"). Follow it here too, also when this skill runs on its own.
 
@@ -137,10 +149,11 @@ When a subagent comes back:
 
 Tick the steps off in `plan.md` and send out the next ones.
 
-## 7. Hand off
+## 8. Hand off
 
 Report:
 
+- The ADRs written, with their paths.
 - What was refactored, and where.
 - Test results before and after.
 - Every mechanical test edit made.

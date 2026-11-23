@@ -15,6 +15,8 @@ A home repo is a personal, local repo the developer sits in while working across
 
 The glossaries are the agreed domain language for the work done from here. The `refine` skill describes what an entry holds (term, meaning, other names, rules, context, status) and keeps them up to date as work is refined; this skill only sets them up and seeds them.
 
+The same goes for ADRs. The `adr` skill says what gets one, what the file looks like and how one supersedes another, and writes them as decisions are made; this skill sets up the folders and seeds inferred ones.
+
 Repo-level docs always win. If a repo has its own glossary, ADRs or coding standards, those are used and written to. `repos/<repo_name>/` only fills the gaps, per doc type. The home `docs/` folder is never a place for single-repo content.
 
 The skill is safe to re-run. Use the same steps to add repos later.
@@ -59,7 +61,7 @@ For each repo, for each doc type marked missing, write a seeded draft:
 
 - `repos/<repo_name>/glossary.md`, from `assets/glossary.md`: domain terms from entity and type names, package names, API resources, README. One entry per term in the format the asset shows, every one with status `inferred`. When the code has several names for one thing, pick the most used as the term and list the rest under "Also called". Write a rule only where the code enforces it (a validation, a constraint, a state check), and state what the code does. Skip generic technical words.
 - `repos/<repo_name>/coding-standards.md`: what the code actually does. Language and framework versions, formatter and linter config, package layout, naming, error handling, test layers and naming, build and test commands. State observed conventions, not general best practice.
-- `repos/<repo_name>/adr/NNNN-<slug>.md`: one file per significant decision that is visible in the code (framework, persistence, messaging, API style, module structure), using `assets/adr-template.md` with status `Inferred`. Three to six is normal. The context section should say what the code shows; do not make up the original reasoning.
+- `repos/<repo_name>/adr/NNNN-<slug>.md`: one file per significant decision that is visible in the code (framework, persistence, messaging, API style, module structure), using `assets/adr-template.md` with status `Inferred`. Three to six is normal. The context section should say what the code shows; do not make up the original reasoning, and leave out the Alternatives section, since the code doesn't show what was turned down.
 
 Start every seeded coding standards and ADR file with:
 

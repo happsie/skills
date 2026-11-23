@@ -65,7 +65,7 @@ All code for a piece of work is written in a git worktree made for it, never in 
 There is one worktree per piece of work, for each repo it changes, and every step uses it. It is not one per subagent: the steps build on each other, so they all work on the same branch in the same place. If the agent tool can give a subagent a worktree of its own, don't use that.
 
 - **Where.** `worktrees/<repo_name>/` inside the work's folder, next to `spec.md` and `plan.md`. Outside a home repo `.implement/` is already kept out of git. In a home repo, add `work/*/worktrees/` to the home repo's `.git/info/exclude`.
-- **When.** Right before the first code is written: before the refactor in `strategic-design`, or before the build when there is no refactor. Never before the plan is approved.
+- **When.** Right before the first file is written on the branch: an ADR from the plan that lives in the repo, the refactor in `strategic-design`, or the build when there is neither. Never before the plan is approved.
 - **How.** Fetch, then `git worktree add` at that path with the branch name and the starting point from the plan's Git section. If the branch already exists, add the worktree for that branch instead of creating it. If the branch is checked out somewhere else, or the worktree can't be created, ask.
 - **Set it up.** A new worktree holds the tracked files and nothing else: no installed dependencies, no build output, no local files that git ignores. Run the repo's install or build step. If the tests need an untracked local file from the checkout, such as an `.env`, copy it over and tell the developer which files you copied.
 - **Move the glossary change.** If `refine` changed a glossary that is a tracked file in the repo, that change sits uncommitted in the checkout and belongs on the work's branch. Apply it in the worktree and restore the file in the checkout. If the file has other uncommitted changes in the checkout, ask instead.
@@ -85,7 +85,7 @@ Don't go on without an explicit approval of the spec.
 
 ## Phase 2: Strategic design
 
-Run the `strategic-design` skill with the approved spec. It maps the changes the feature needs, judges whether a preparatory refactor would leave the code healthier, gets the plan approved and carries out any approved refactor. It never changes behavior or what existing tests expect.
+Run the `strategic-design` skill with the approved spec. It maps the changes the feature needs, judges whether a preparatory refactor would leave the code healthier, gets the plan approved, records the plan's decisions as ADRs through the `adr` skill, and carries out any approved refactor. It never changes behavior or what existing tests expect.
 
 Don't go on until the plan is approved, any refactor is finished, and every test is green.
 
@@ -93,7 +93,7 @@ Don't go on until the plan is approved, any refactor is finished, and every test
 
 Work test-first. Every test should pin down behavior someone relies on. A test that exists only to raise coverage costs maintenance and adds nothing.
 
-You run this phase and subagents do the building, one feature step each (3.4). If phase 2 had no refactor steps, the worktree doesn't exist yet: create it first ("Work in a worktree"), and run everything below in it. Steps 3.1 to 3.3 prepare what they need.
+You run this phase and subagents do the building, one feature step each (3.4). If phase 2 wrote nothing to the branch, the worktree doesn't exist yet: create it first ("Work in a worktree"), and run everything below in it. Steps 3.1 to 3.3 prepare what they need.
 
 ### 3.1 Map the test layers
 
@@ -184,7 +184,7 @@ When a subagent comes back:
 - **With a question:** post it to the developer as it came, and wait. Don't answer it yourself, even when the answer looks obvious from the spec; if it were covered there, the subagent would not have had to ask. Then send the answer to the same subagent so it continues with what it already knows. If it can't be continued, start a new one with the step, the question, the answer and a note that the working tree holds unfinished work from the first attempt.
 - **With a report:** check it before going on. The step's commits exist, the working tree is clean, and the tests it names pass when you run them. A report is a claim until then. If something doesn't hold, that is something unexpected: stop and ask.
 
-If an answer changes the spec or the plan, update the file and get it approved again before the next step starts.
+If an answer changes the spec or the plan, update the file and get it approved again before the next step starts. If the answer is a decision that deserves an ADR, it goes under the plan's Decisions and is recorded the way `strategic-design` does it, once the plan is approved again.
 
 Tick the step off in `plan.md`, tell the developer in a line or two what was built, and start the next one.
 
@@ -208,4 +208,5 @@ Keep it short:
 - Scenarios covered, and in which layer.
 - What was refactored first, and what was built, by file.
 - Each question that came up along the way and the answer given.
+- The ADRs written.
 - Anything unverified or left open.

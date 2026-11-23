@@ -135,7 +135,7 @@ CY, CW, CH, GAP = BAND_Y + 56, 262, 126, 34
 xs = [60 + i * (CW + GAP) for i in range(4)]
 skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes spec.md, updates glossary."], CYAN, badge="1")
 skill(xs[1], CY, CW, CH, "strategic-design", ["Refactor first, or not?", "Writes plan.md, does the refactor."],
-      "#60a5fa", badge="2")
+      "#60a5fa", note="decision made?  &#8594;  adr records it", badge="2")
 skill(xs[2], CY, CW, CH, "build", ["One fresh subagent per plan step.", "Test-driven; bugs reproduce first."], "#818cf8",
       note="won't reproduce?  &#8594;  investigate", badge="3")
 skill(xs[3], CY, CW, CH, "deliver", ["Fresh subagent checks the diff", "against the spec."], VIOLET, badge="4")

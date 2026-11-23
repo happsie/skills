@@ -91,6 +91,7 @@ This is where the real questions come from:
 - Hidden scope: migrations, feature flags, API contract changes, translations, docs.
 - Acceptance criteria too vague to write a test against.
 - A proposed solution that is worse than an obvious alternative. Say so.
+- A request that goes against an accepted ADR. Either the request changes or the ADR is superseded, and the developer says which.
 
 Then cross-check the language. Collect the domain terms the request uses and the names the code uses for the same things, and compare both with the glossary. Skip generic technical words. Look for:
 
@@ -128,7 +129,7 @@ Write `spec.md` with the sections below, and post it in the chat as well:
 - **Acceptance criteria:** concrete, testable statements. Each one must be checkable by a test.
 - **Out of scope:** what will not be touched.
 - **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. The rest of the spec uses these terms and no other words for the same things.
-- **Decisions:** each question from step 4 with the answer the developer gave.
+- **Decisions:** each question from step 4 with the answer the developer gave. `strategic-design` picks up the ones that deserve an ADR and records them with the plan.
 
 The spec has no assumptions section. Anything you would have put there is a question for step 4.
 
