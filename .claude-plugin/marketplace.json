@@ -1,0 +1,16 @@
+{
+  "name": "happsie-skills",
+  "owner": {
+    "name": "happsie"
+  },
+  "metadata": {
+    "description": "Personal skills library for Claude Code"
+  },
+  "plugins": [
+    {
+      "name": "happsie",
+      "source": "./plugins/happsie",
+      "description": "General purpose skills"
+    }
+  ]
+}
