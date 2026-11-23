@@ -1,6 +1,6 @@
 ---
 name: quick-fix
-description: Make a small, local change without the full implement workflow, held to the same standards. For when the cause and the fix are known and nothing needs deciding, such as a typo, a wrong value, a missing check or a bug in one place. Checks the change against the glossary and the ADRs, writes a short spec the developer approves once, builds it test-first in a worktree, then hands over to deliver for the independent check and the pull request. Use when the user says "quick fix", "small fix", "just fix this", "tiny change", "one-liner", "fix this typo", "bump this value". Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for an unknown cause (investigate), and not for work that needs a decision, a new domain term, a refactor or a migration (implement). Stops and hands over to implement when the fix turns out bigger than it looked.
+description: Make a small, local change without the full implement workflow, held to the same standards. For when the cause and the fix are known and nothing needs deciding, such as a typo, a wrong value, a missing check or a bug in one place. Checks the change against the glossary and the ADRs, writes a short spec the developer approves once, builds it test-first in a worktree, then hands over to deliver for the independent checks and the pull request. Use when the user says "quick fix", "small fix", "just fix this", "tiny change", "one-liner", "fix this typo", "bump this value". Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for an unknown cause (investigate), and not for work that needs a decision, a new domain term, a refactor or a migration (implement). Stops and hands over to implement when the fix turns out bigger than it looked.
 ---
 
 # Quick fix
@@ -13,7 +13,8 @@ What it keeps:
 - The glossary and the ADRs. The change follows them.
 - A test before the fix.
 - A worktree, never the developer's checkout.
-- The independent check in `deliver` before the pull request.
+- The independent checks in `deliver` before the pull request: against the spec, and a review of the code.
+- The findings log, so `retro` can learn from small changes too.
 
 What it drops: the question rounds in `refine`, the refactor analysis in `strategic-design`, the plan, and the build subagents. You read the code and build the change yourself. The other skills hand that work to subagents because it fills a context. A quick fix doesn't, and if it starts to, it isn't one.
 
@@ -38,6 +39,7 @@ All of these must hold. Check them in step 2, and keep checking while you build.
 - **The language holds.** The change needs no new glossary term, changes no term's meaning and breaks no recorded rule.
 - **The decisions hold.** It follows the accepted ADRs for the area, and makes no decision that deserves an ADR of its own (the `adr` skill, "What gets an ADR").
 - **Nobody else has to adapt.** No migration, no change to an API contract, a message format or stored data, no new dependency, no feature flag. Whatever calls or consumes the changed code behaves as before, apart from the fix itself.
+- **Nothing changes in how it runs.** It trusts no new input, changes nothing about who may do what, adds no query or call on a busy path, and is deployed and reverted as plain code. These are the points `refine` checks as non-functional requirements (its step 3), and for a quick fix every one of them comes out as "no change".
 - **Existing tests keep their expected results.** If a test asserts the behavior you are about to change, somebody decided that behavior once. Changing it is a real question.
 
 ## When it stops being quick
@@ -52,6 +54,8 @@ Nothing is thrown away when the work moves to `implement`:
 ## Where things live
 
 `spec.md` and the worktree are in the work's folder: `work/<key-or-slug>/` in a home repo, otherwise `.implement/<key-or-slug>/` at the root of the repo. The `refine` skill owns the rule ("Where the documents live"): how the folder is named and kept out of git, and the status line the spec starts with. A quick fix has no `plan.md`.
+
+The folder also holds `findings.md`, the log of what went wrong along the way. Add an entry when a question stops the work, with the answer it got, and when the developer corrects something. The `retro` skill owns the format ("The findings log"). Appending to it needs no permission.
 
 If the folder already holds a spec or a plan from `implement`, this work is already in the full workflow. Say so and ask, instead of starting a quick fix beside it.
 
@@ -102,7 +106,7 @@ Then build it yourself, test first:
 2. **Green.** Write the least code that makes it pass. Match the surrounding code and reuse existing helpers.
 3. **Tidy.** Only the code you just wrote, with the tests green.
 
-The rules for the loop in `implement` (3.4) hold here: a test is never edited, skipped or disabled to get to green, names use the agreed terms, and nothing outside the spec is touched. Debt you notice next to the fix goes in the report, not in the diff.
+The rules for the loop in `implement` (3.4) hold here: a test is never edited, skipped or disabled to get to green, names use the agreed terms, the code follows the repo's coding standards, no dependency is added, and nothing outside the spec is touched. Debt you notice next to the fix goes in the report, not in the diff.
 
 Run the test layers the change touches, the build, and the linter or type checker, in the worktree. Show the output of any failure and ask what to do about it. Don't report success on anything you didn't run.
 
@@ -110,15 +114,17 @@ Commit on the branch, never on the default branch.
 
 ## 5. Deliver
 
-Run the `deliver` skill without waiting to be asked. It has a subagent with a fresh context check the diff against the spec, reports the verdict, and opens the pull request once the developer approves it.
+Run the `deliver` skill without waiting to be asked. It has two subagents with a fresh context look at the diff, one that checks it against the spec and one that reviews the code. It reports their verdicts, describes the change so the developer can approve the code, and opens the pull request once they do.
 
-Don't do that check yourself, and don't skip it because the diff is small. Small diffs get waved through, and that is how they break things. If the verdict leads to more work and the work is still a quick fix, do it under the same rules and let `deliver` check again.
+Don't do those checks yourself, and don't skip them because the diff is small. Small diffs get waved through, and that is how they break things. If a verdict leads to more work and the work is still a quick fix, do it under the same rules and let `deliver` check again.
+
+Review comments and failing checks on the pull request go through the `revise` skill. It makes its fixes under the rules of this skill for as long as the work is still a quick fix.
 
 ## Report
 
 Keep it short:
 
-- The pull request and the verdict from `deliver`.
+- The pull request and the verdicts from `deliver`.
 - The test that proves the fix, with `file:line`. For a bug: whether it reproduced.
 - What changed, by file.
 - Anything unverified, and anything you noticed next to the fix and left alone.

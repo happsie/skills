@@ -24,6 +24,8 @@ The folder holds `spec.md` (written by `refine`, or in a short form by `quick-fi
 
 Writing and updating these two files needs no permission. Don't commit them unless asked.
 
+The same folder holds `investigation.md` when `investigate` has run, and `findings.md`, the log of what the checks, the build and the reviewers found along the way. The `retro` skill owns that log ("The findings log").
+
 ## The shared language
 
 The request, the spec, the tickets and the code should use the same word for the same thing. When they don't, people agree on a sentence and mean different things by it, and the code ends up with three names for one concept. So the project's glossary is treated the way domain-driven design treats its ubiquitous language: terms and the rules about them are proposed, agreed with the developer, written down, and from then on followed by every later step.
@@ -100,6 +102,17 @@ This is where the real questions come from:
 - A proposed solution that is worse than an obvious alternative. Say so.
 - A request that goes against an accepted ADR. Either the request changes or the ADR is superseded, and the developer says which.
 
+Then cross-check what the request says nothing about: how the change behaves once it runs for real. Requests describe the behavior and leave this out, and what is never a requirement is never built or checked. For each point, find what the code on the path does today and whether the change moves it:
+
+- **Security:** which input the change trusts and where it comes from, who may do the new thing and where that is enforced, and whether a secret or personal data ends up somewhere new: a log, a response, a message.
+- **Performance:** how much data and how many calls it has to handle in production, not in the test data. A query per row, a list with no limit, a call on a path that runs for every request.
+- **Failure:** what the user sees and what state the data is in when something it depends on is slow, down or answers with an error, and when the operation stops halfway or runs twice.
+- **Observability:** how someone finds out that it stopped working, and what they would need to see to tell why: a log line, a metric, an alert.
+- **Rollout and rollback:** what has to happen besides deploying the code (a migration, configuration, a flag, an order between repos), and whether reverting after a deploy brings the old behavior back. Data written in a new shape, messages already sent and a contract someone has started to use are not undone by a revert.
+- **Dependencies:** whether it needs a package, a service or a tool the repo doesn't use yet. That is a decision, not a detail of the build.
+
+For most work, most of these come out as "no change". Find that out by looking; don't assume it. The ones that apply are questions for step 4.
+
 Then cross-check the language. Collect the domain terms the request uses and the names the code uses for the same things, and compare both with the glossary. Skip generic technical words. Look for:
 
 - A term the work depends on that the glossary doesn't have.
@@ -134,6 +147,7 @@ Write `spec.md` with the sections below, and post it in the chat as well:
 - **Today:** current behavior, with file references, and the commit and branch the code was read at.
 - **After:** target behavior.
 - **Acceptance criteria:** concrete, testable statements. Each one must be checkable by a test.
+- **Non-functional requirements:** one line each for security, performance, failure, observability, and rollout and rollback, from the cross-check in step 3: what is required, or "no change" with the reason in a few words. Whatever a test can check is written as an acceptance criterion as well, so it is built test-first and checked like the rest.
 - **Out of scope:** what will not be touched.
 - **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. The rest of the spec uses these terms and no other words for the same things.
 - **Decisions:** each question from step 4 with the answer the developer gave. `strategic-design` picks up the ones that deserve an ADR and records them with the plan.

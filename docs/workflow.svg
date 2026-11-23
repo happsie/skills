@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 840" width="1280" height="840" role="img" aria-label="Workflow: three starting points that lead into the implement skill, with quick-fix as the short path for a small change, and end in a pull request">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1000" width="1280" height="1000" role="img" aria-label="Workflow: three starting points that lead into the implement skill, with quick-fix as the short path for a small change, and end in a pull request. After that, revise handles review comments and failing checks, and retro turns what was found into lessons">
 <defs>
 <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/><stop offset="1" stop-color="#151235"/></linearGradient>
 <radialGradient id="g1" cx="0.12" cy="0.1" r="0.5"><stop offset="0" stop-color="#a78bfa" stop-opacity="0.28"/><stop offset="1" stop-color="#a78bfa" stop-opacity="0"/></radialGradient>
@@ -14,10 +14,10 @@
 <marker id="arrow-34d399" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
 <marker id="arrow-fbbf24" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
 </defs>
-<rect width="1280" height="840" rx="24" fill="url(#bg)"/>
-<rect width="1280" height="840" rx="24" fill="url(#g1)"/>
-<rect width="1280" height="840" rx="24" fill="url(#g2)"/>
-<rect width="1280" height="840" rx="24" fill="url(#dots)"/>
+<rect width="1280" height="1000" rx="24" fill="url(#bg)"/>
+<rect width="1280" height="1000" rx="24" fill="url(#g1)"/>
+<rect width="1280" height="1000" rx="24" fill="url(#g2)"/>
+<rect width="1280" height="1000" rx="24" fill="url(#dots)"/>
 <text x="40" y="58" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="30" font-weight="800" fill="url(#title)" text-anchor="start" letter-spacing="0">From idea to pull request</text>
 <text x="40" y="84" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">Start wherever you are. Every path ends in a checked pull request.</text>
 <text x="235" y="122" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="11" font-weight="700" fill="#a78bfa" text-anchor="middle" letter-spacing="2">START HERE</text>
@@ -103,17 +103,39 @@
 <circle cx="978" cy="515" r="12" fill="#a78bfa"/>
 <text x="978" y="520" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="800" fill="#0b1020" text-anchor="middle" letter-spacing="0">4</text>
 <text x="1000" y="520" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#a78bfa" text-anchor="start" letter-spacing="0">deliver</text>
-<text x="966" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Fresh subagent checks the diff</text>
-<text x="966" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">against the spec.</text>
+<text x="966" y="546" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Two fresh subagents: spec check</text>
+<text x="966" y="565" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">and code review. You approve.</text>
+<text x="966" y="600" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">what they find  &#8594;  findings.md</text>
 <path d="M326,551.0 L352,551.0" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
 <path d="M622,551.0 L648,551.0" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
 <path d="M918,551.0 L944,551.0" fill="none" stroke="#22d3ee" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-22d3ee)"/>
 <path d="M1019.0,616 L1019.0,638 Q1019.0,648 1009.0,648 L793.0,648 Q783.0,648 783.0,638 L783.0,620" fill="none" stroke="#fbbf24" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#arrow-fbbf24)"/>
-<text x="901.0" y="668" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#fbbf24" text-anchor="middle" letter-spacing="0">criterion not met: fix it, then a new check</text>
+<text x="901.0" y="668" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#fbbf24" text-anchor="middle" letter-spacing="0">not met, or a bug found: fix it, then new checks</text>
 <path d="M1139.0,616 L1139.0,742" fill="none" stroke="#34d399" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-34d399)"/>
-<text x="1125.0" y="726" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="end" letter-spacing="0">all criteria met, you approve</text>
+<text x="1125.0" y="726" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="end" letter-spacing="0">checks pass, you approve the code</text>
 <rect x="945" y="746" width="300" height="56" rx="28" fill="#34d399" fill-opacity="0.18" stroke="#34d399" stroke-width="1.5" filter="url(#glow)"/>
 <text x="1095" y="780" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle" letter-spacing="0">Pull request, linked on the ticket</text>
+<rect x="945" y="852" width="300" height="116" rx="14" fill="#141a33" stroke="#fbbf24" stroke-width="1.5" filter="url(#glow)"/>
+<rect x="945" y="866" width="4" height="88" rx="2" fill="#fbbf24"/>
+<text x="963" y="884" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#fbbf24" text-anchor="start" letter-spacing="0">revise</text>
+<text x="963" y="910" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Review comments and failing checks.</text>
+<text x="963" y="929" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Same rules, then deliver checks again.</text>
+<text x="963" y="954" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">cause unknown?  &#8594;  investigate</text>
+<path d="M1045,804 L1045,848" fill="none" stroke="#fbbf24" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6 6" marker-end="url(#arrow-fbbf24)"/>
+<path d="M1145,850 L1145,808" fill="none" stroke="#34d399" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-34d399)"/>
+<text x="1037" y="832" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="end" letter-spacing="0">comments, red checks</text>
+<text x="1153" y="832" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">fixed, checked</text>
+<rect x="585" y="852" width="300" height="116" rx="14" fill="#141a33" stroke="#34d399" stroke-width="1.5" filter="url(#glow)"/>
+<rect x="585" y="866" width="4" height="88" rx="2" fill="#34d399"/>
+<text x="603" y="884" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#34d399" text-anchor="start" letter-spacing="0">retro</text>
+<text x="603" y="910" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">Reads findings.md, proposes lessons.</text>
+<text x="603" y="929" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#f8fafc" text-anchor="start" letter-spacing="0">You approve each one.</text>
+<text x="603" y="954" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">a rule a machine can check?  &#8594;  ticket</text>
+<path d="M943,774 L835,774 L835,848" fill="none" stroke="#34d399" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-34d399)"/>
+<text x="827" y="832" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" font-weight="400" fill="#a5b0cf" text-anchor="end" letter-spacing="0">merged</text>
+<path d="M581,910.0 L519,910.0" fill="none" stroke="#34d399" stroke-width="2" stroke-linejoin="round" marker-end="url(#arrow-34d399)"/>
+<rect x="35" y="882" width="480" height="56" rx="28" fill="#34d399" fill-opacity="0.18" stroke="#34d399" stroke-width="1.5" filter="url(#glow)"/>
+<text x="275" y="916" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="600" fill="#f8fafc" text-anchor="middle" letter-spacing="0">Lessons in the standards, glossary and ADRs</text>
 <rect x="35" y="746" width="760" height="56" rx="14" fill="#141a33" stroke="#a5b0cf" stroke-opacity="0.5" stroke-dasharray="4 5"/>
 <text x="55" y="780" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#fbbf24" text-anchor="start" letter-spacing="0">home-repo</text>
 <text x="158" y="780" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif" font-size="13" font-weight="400" fill="#a5b0cf" text-anchor="start" letter-spacing="0">Optional, set up once. Work across many repos from one place; specs and plans live there.</text>

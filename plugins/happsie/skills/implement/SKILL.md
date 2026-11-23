@@ -1,6 +1,6 @@
 ---
 name: implement
-description: Implement a feature, task, bug fix or ticket end to end. Refines the request into a spec the developer approves, does a strategic design pass that decides whether to refactor first, builds with test-driven development, then has the result checked against the spec by an independent subagent and opens the pull request. Never assumes; every open decision or unexpected problem goes to the developer as a question. Use whenever the user asks to implement, build, code, fix, start or pick up something (e.g. "implement PROJ-123", "start on this ticket", "build this feature", "fix this bug", "let's do this one"), or gives a bare ticket key with intent to work on it. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for planning-only or review-only requests. A small, local change with nothing to decide can go through quick-fix instead.
+description: Implement a feature, task, bug fix or ticket end to end. Refines the request into a spec the developer approves, does a strategic design pass that decides whether to refactor first, builds with test-driven development, then has independent subagents check the result against the spec and review the code, and opens the pull request once the developer has approved the code. Never assumes; every open decision or unexpected problem goes to the developer as a question. Use whenever the user asks to implement, build, code, fix, start or pick up something (e.g. "implement PROJ-123", "start on this ticket", "build this feature", "fix this bug", "let's do this one"), or gives a bare ticket key with intent to work on it. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Not for planning-only or review-only requests. A small, local change with nothing to decide can go through quick-fix instead.
 ---
 
 # Implement
@@ -10,7 +10,7 @@ Four phases, each ending in something the developer has approved:
 1. **Refine**: agree on what to build. Ends with an approved spec.
 2. **Strategic design**: decide what shape the code should have, and refactor first if that makes it healthier. Ends with an approved plan and a finished refactor.
 3. **Build**: test-driven, following the plan.
-4. **Deliver**: an independent check against the spec, then the pull request.
+4. **Deliver**: an independent check against the spec and an independent code review, a description of the change to approve the code from, then the pull request.
 
 Don't skip or reorder phases, however small or well defined the task looks. A small task makes each phase short, not optional.
 
@@ -25,6 +25,7 @@ This applies to every phase and overrides everything else in this skill.
 - A decision isn't covered by the approved spec or the approved plan.
 - Something unexpected happens: a test fails for the wrong reason, a test you didn't touch goes red, the build breaks, the code behaves differently than the plan says, a tool or environment doesn't work.
 - You want to deviate from the plan, however slightly.
+- The work seems to need a dependency the plan doesn't name: a new package, service or tool, or a new major version of one.
 - The spec or plan turns out to be wrong or incomplete.
 
 What needs no permission: reading code and tickets, running tests and builds, creating the worktree the approved plan names, writing the tests and code that the plan already describes, and keeping `spec.md` and `plan.md` up to date.
@@ -54,6 +55,8 @@ Writing and updating these two files needs no permission. Don't commit them unle
 When starting, look for an existing folder for this work. If `spec.md` or `plan.md` is already approved, tell the developer what you found, including which steps are ticked off, and ask whether to resume from there or start over.
 
 If the developer's answer to a question changes the spec or the plan, update the file and get it approved again before going on.
+
+The folder also holds `findings.md`, the log of what went wrong along the way. Add an entry every time a question stops the work, with the answer it got, and every time the developer corrects something that was built or proposed. Write it when it happens; by the end of the work nobody remembers it. The `retro` skill owns the format ("The findings log") and turns the log into lessons once the work is merged. Appending to it needs no permission.
 
 ## Work in a worktree
 
@@ -114,7 +117,7 @@ That test is the first red of the loop in 3.4.
 
 ### 3.3 Choose the scenarios
 
-Derive scenarios from the spec's acceptance criteria and the real edge cases on the code path: boundaries, empty or missing data, error responses, permissions, concurrency where it matters. Each rule in the spec's Language section that the work touches is a scenario too, unless a test already pins it. A rule nothing tests gets broken by the next change. For each, check:
+Derive scenarios from the spec's acceptance criteria and the real edge cases on the code path: boundaries, empty or missing data, error responses, permissions, concurrency where it matters. Each rule in the spec's Language section that the work touches is a scenario too, unless a test already pins it. A rule nothing tests gets broken by the next change. So is each non-functional requirement a test can check: the input that must be refused, the user who isn't allowed, the dependency that answers with an error. For each, check:
 
 - Would this test fail if the behavior broke?
 - Would anyone care if it broke?
@@ -165,6 +168,8 @@ Rules for the loop:
 - Build the step the way the plan describes it. If that way doesn't work, don't try another one. Ask.
 - Existing tests keep their expected results unless the spec says that behavior changes. If one has to change and the spec doesn't cover it, ask.
 - Name things with the terms in the spec's Language section: types, functions, fields, tests, scenario text and anything a user reads. Never use a word the spec says not to use, and don't coin a synonym. If the code needs a domain concept that has no agreed term, stop and ask.
+- Follow the repo's coding standards and its `CLAUDE.md` or `AGENTS.md`. Read them before you write; in a home repo the home `CLAUDE.md` says where each repo's are. Where they say nothing, do it the way the code around you does, and look for an existing helper before you write a new one.
+- Add no dependency the plan doesn't name. If the step seems to need one, stop and ask.
 - Stay inside the spec and the plan. No speculative abstractions, no unrelated cleanup.
 
 Commit where the plan says to, on the branch, never on the default branch.
@@ -181,7 +186,7 @@ When the step is done, run the test layers it touched and report:
 
 When a subagent comes back:
 
-- **With a question:** post it to the developer as it came, and wait. Don't answer it yourself, even when the answer looks obvious from the spec; if it were covered there, the subagent would not have had to ask. Then send the answer to the same subagent so it continues with what it already knows. If it can't be continued, start a new one with the step, the question, the answer and a note that the working tree holds unfinished work from the first attempt.
+- **With a question:** post it to the developer as it came, and wait. Don't answer it yourself, even when the answer looks obvious from the spec; if it were covered there, the subagent would not have had to ask. Then send the answer to the same subagent so it continues with what it already knows. If it can't be continued, start a new one with the step, the question, the answer and a note that the working tree holds unfinished work from the first attempt. Add the question and its answer to `findings.md`.
 - **With a report:** check it before going on. The step's commits exist, the working tree is clean, and the tests it names pass when you run them. A report is a claim until then. If something doesn't hold, that is something unexpected: stop and ask.
 
 If an answer changes the spec or the plan, update the file and get it approved again before the next step starts. If the answer is a decision that deserves an ADR, it goes under the plan's Decisions and is recorded the way `strategic-design` does it, once the plan is approved again.
@@ -194,15 +199,17 @@ When every step is ticked off, run every affected test layer, the build, and the
 
 ## Phase 4: Deliver
 
-When the build is verified and committed, run the `deliver` skill without waiting to be asked. It has a subagent with a fresh context check the diff against the spec, reports the verdict, and opens the pull request once the developer approves it.
+When the build is verified and committed, run the `deliver` skill without waiting to be asked. It has two subagents with a fresh context look at the diff, one that checks it against the spec and one that reviews the code for bugs and departures from the repo's standards. It reports their verdicts, describes the change so the developer can approve the code, and opens the pull request once they do.
 
-Don't do that check yourself and don't skip it because the tests are green. If the verdict leads to more work, do it under the rules of phase 3, in a new build subagent that gets the finding as its step, and let `deliver` check again.
+Don't do those checks yourself and don't skip them because the tests are green. If a verdict leads to more work, do it under the rules of phase 3, in a new build subagent that gets the finding as its step, and let `deliver` check again.
+
+The work is not over when the pull request is open. Review comments and failing checks go through the `revise` skill, which keeps the fixes under these same rules. Once the pull request is merged, the `retro` skill turns `findings.md` into lessons for the next piece of work.
 
 ## Report
 
 Keep it short:
 
-- The pull request and the verdict from `deliver`.
+- The pull request and the verdicts from `deliver`.
 - For a bug: whether it reproduced, and the test that proves the fix.
 - Scenarios covered, and in which layer.
 - What was refactored first, and what was built, by file.
