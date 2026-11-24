@@ -1,6 +1,6 @@
 ---
 name: refine
-description: Refine a feature request, task or ticket into a spec the developer has approved, before any code is written. Reads the ticket and the code it touches, cross-checks them, and asks the questions whose answers change what gets built, even when the request looks well defined. Also agrees on the domain terms and rules the work depends on and records them in the project's glossary. Use when the user asks to "refine this", "refine PROJ-123", "let's align on this ticket", "what's unclear about this feature", "grill me on this", or as the first phase of the implement skill. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Writes the spec to a file and updates the glossary; it never changes code. Not for finding the cause of a problem (investigate), and not for writing the ticket itself (ticket-creator).
+description: Refine a feature request, task or ticket into a spec the developer has approved, before any code is written. Reads the ticket and the code it touches, cross-checks them, and asks the developer about everything it would otherwise decide itself, even when the answer looks obvious or the request looks well defined. Also agrees on the domain terms and rules the work depends on and records them in the project's glossary. Use when the user asks to "refine this", "refine PROJ-123", "let's align on this ticket", "what's unclear about this feature", "grill me on this", or as the first phase of the implement skill. Input is free text or a ticket key from any tracker (Jira, GitHub, Linear, ...). Writes the spec to a file and updates the glossary; it never changes code. Not for finding the cause of a problem (investigate), and not for writing the ticket itself (ticket-creator).
 ---
 
 # Refine
@@ -111,7 +111,7 @@ Then cross-check what the request says nothing about: how the change behaves onc
 - **Rollout and rollback:** what has to happen besides deploying the code (a migration, configuration, a flag, an order between repos), and whether reverting after a deploy brings the old behavior back. Data written in a new shape, messages already sent and a contract someone has started to use are not undone by a revert.
 - **Dependencies:** whether it needs a package, a service or a tool the repo doesn't use yet. That is a decision, not a detail of the build.
 
-For most work, most of these come out as "no change". Find that out by looking; don't assume it. The ones that apply are questions for step 4.
+For most work, most of these come out as "no change". Find that out by looking; don't assume it. The ones that apply are questions for step 4, and the ones that don't are read back there for confirmation.
 
 Then cross-check the language. Collect the domain terms the request uses and the names the code uses for the same things, and compare both with the glossary. Skip generic technical words. Look for:
 
@@ -126,17 +126,26 @@ Classify the work as a **feature/change** or a **bug/inconsistency** (wrong outp
 
 ## 4. Ask
 
-Always run at least one round, even when the request looks complete. A well-defined ticket still gets its key points read back for confirmation: the ones that cost the most if you understood them wrong.
+The questions are there to align you and the developer, not only to fill gaps. Ask about everything you would otherwise decide yourself, also when the answer looks obvious. An obvious answer takes the developer a few seconds to confirm. A guess that looked obvious and was wrong is found after the code is written.
 
-Post one numbered list. Each question states:
+Always run at least one round, even when the request looks complete. What goes to the developer:
+
+- Every open point from step 3.
+- Everything you inferred instead of read: your reading of a vague sentence, a case the request doesn't mention, a default, what you would leave out of scope. If neither the ticket nor the code says it in so many words, it is a question, with your reading as the recommended answer.
+- The key points of a well-defined ticket, read back for confirmation: the ones that cost the most if you understood them wrong.
+- The non-functional points that came out as "no change", read back together in one question so the developer can object.
+
+Each question states:
 
 - What you found, with a `file:line` reference or a quote from the ticket.
 - The options.
 - Your recommended answer and why.
 
+When the host has a tool for asking the user questions with options to pick from (`AskUserQuestion` in Claude Code), use it. The developer answers with a click, which keeps many questions cheap. Such a tool has room for a short question and its options only, so first post what you found in the chat, numbered and with the references, then ask with the tool: one question per point, the recommended option first, in as many calls as its limits need. Without such a tool, post one numbered list.
+
 A language question is a proposal: the term, its meaning, its rules and the words it replaces, written as the glossary entry would read. Never settle a term or a rule yourself, and never let a request that breaks an agreed rule pass quietly. Either the request changes or the rule does, and the developer says which.
 
-Don't ask what the ticket or the code already answers. Push back when an answer conflicts with the code or the ticket. Keep going round by round until no open question would change what gets built.
+Don't ask what the ticket or the code already says in so many words. Push back when an answer conflicts with the code or the ticket. Keep going round by round until nothing is left that you would have to decide yourself.
 
 ## 5. Write the spec and get it approved
 

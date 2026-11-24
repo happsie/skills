@@ -150,7 +150,7 @@ xs = [60 + i * (CW + GAP) for i in range(4)]
 line([(QC, 356), (QC, 378), (QD, 378), (QD, CY - 4)], CYAN)
 text(QD + 12, BAND_Y + 36, "quick-fix joins here", 12, MUTED)
 
-skill(xs[0], CY, CW, CH, "refine", ["Asks what changes the outcome.", "Writes spec.md, agrees on the terms."], CYAN, badge="1")
+skill(xs[0], CY, CW, CH, "refine", ["Asks until you are aligned.", "Writes spec.md, agrees on the terms."], CYAN, badge="1")
 skill(xs[1], CY, CW, CH, "strategic-design", ["Refactor first, or not?", "Writes plan.md, does the refactor."],
       "#60a5fa", note="decision made?  &#8594;  adr records it", badge="2")
 skill(xs[2], CY, CW, CH, "build", ["One fresh subagent per plan step.", "Test-driven; bugs reproduce first."], "#818cf8",
