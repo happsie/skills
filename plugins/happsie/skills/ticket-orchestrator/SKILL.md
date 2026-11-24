@@ -1,6 +1,6 @@
 ---
 name: ticket-orchestrator
-description: Create two or more tickets as one connected set. Use whenever a request will end in more than one ticket, also when the tickets come from one document, spec, artifact or list, or already exist as drafts. Slices the work, maps dependencies, shows the outline and every draft for approval, then creates the tickets with parent or epic and blocks / relates-to links. Use for "create tickets for this", "create these tickets", "break this down into tickets", "split this epic into stories", "make an epic with stories", "turn this spec into tickets". Works with any tracker (Jira, GitHub, Linear, ...). For a single ticket, use ticket-creator.
+description: Create two or more tickets as one connected set. Use whenever a request will end in more than one ticket, also when the tickets come from one document, spec, artifact or list, or already exist as drafts. Slices the work, groups small items of the same kind into one ticket, maps dependencies, shows the outline and every draft for approval, then creates the tickets with parent or epic and blocks / relates-to links. Use for "create tickets for this", "create these tickets", "break this down into tickets", "split this epic into stories", "make an epic with stories", "turn this spec into tickets". Works with any tracker (Jira, GitHub, Linear, ...). For a single ticket, use ticket-creator.
 ---
 
 # Ticket orchestrator
@@ -36,6 +36,28 @@ Work that has no visible outcome but must happen first (a migration, a new integ
 
 Don't split for the sake of it. If the work is one ticket, say so and hand over to `ticket-creator`.
 
+### Group the small ones
+
+A ticket costs something each time it is handled: someone has to read it, rank it, pick it up, open a pull request for it and close it. A set of ten tickets that each take an hour spends more on that than on the work, and the board stops showing what matters. So after slicing, look for small items that belong together and put them in one ticket, a work package.
+
+Group items only when all of this is true:
+
+- **Each one is small**, about a day or less, and the package still fits in a few days.
+- **They are the same kind and in the same place**: the same issue type, the same part of the product, the same reason for doing them. Three wrong labels on the recipe page are a package. A wrong label and a slow export are not.
+- **They would be built, reviewed and released together** by the same person or team.
+- **They share a priority.** An urgent bug never goes in a package with things that can wait, or it waits with them.
+- **None of them is likely to be dropped, postponed or blocked without the others.** A package can only be done or not done, so an item that may go its own way needs its own ticket.
+
+When in doubt, keep them apart. Splitting a ticket later is harder than it looks: the discussion, the estimate and the links stay on the old one.
+
+A package is still one ticket in the `ticket-creator` format:
+
+- The title names what the items have in common ("Correct the labels on the recipe page"), not "Misc fixes" or a list of the items.
+- Every item is its own acceptance criterion, so each can be checked off alone and none gets lost. Items with a rule or an edge case get their own scenario.
+- The description says in one line that the ticket holds several small items and why they are together.
+
+Grouping is slicing, so it is the user's decision. Show what went into each package in the outline. If grouping leaves one ticket in total, hand over to `ticket-creator`.
+
 Then check the set against the whole: together the tickets cover the goal, and nothing in them goes beyond it. Whatever was left out is listed as out of scope on the parent, or on the ticket where a reader would expect it.
 
 ## 3. Map the connections
@@ -56,6 +78,8 @@ Before writing full descriptions, post the outline. Give each new ticket a tempo
 | E1 | Epic | ... | ... | | |
 | T1 | Story | ... | one line | | |
 | T2 | Story | ... | one line | T1 | ABC-40 |
+
+For a ticket that is a package of small items, list the items under the table and say why they are together, so the user can pull one out or split the package.
 
 Add where the set goes (tracker, project, parent), what is out of scope for the whole, and any open question about the slicing with your recommendation.
 
