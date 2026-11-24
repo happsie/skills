@@ -20,6 +20,7 @@ No assumptions. The verdicts go to the developer as they came back. What to do a
 
 - **The contract.** `spec.md` for this work, and `plan.md` if there is one. They live in `work/<key-or-slug>/` in a home repo, otherwise in `.implement/<key-or-slug>/` at the root of the repo. The spec must be approved. A spec that says `Kind: quick fix` comes from the `quick-fix` skill: it is short, there is no plan, and its Change section describes the approved change. If there is no spec but there is a ticket, its acceptance criteria are the contract; tell the developer that is what will be checked. If there is neither, ask what the work should be checked against. Don't write the criteria yourself from what was built.
 - **The change.** The branch, the branch it will merge into, and every repo involved. If `plan.md` lists worktrees, or `spec.md` does for a quick fix, the work is there (`implement` and `quick-fix` build in them): read, run and push from the worktrees, not from the developer's checkout. Everything must be committed. If there are uncommitted changes, or the work sits on the default branch, stop and ask.
+- **Up to date.** Fetch, and compare the branch with the branch it will merge into. The target has usually moved since the worktree was cut, and checks run against an old base say nothing about what will be merged. If the branch conflicts with the target, or the new commits on the target touch files this change touches, stop and ask how to bring it up to date: merge the target in, or rebase. With a pull request already open, a rebase is never done unasked (`revise`, step 3). Bringing it up to date changes the code: a conflict is resolved under the rules of the skill that built the work, and the tests are run again in the worktree before step 2. If the target has moved only in other files, go on, and say so in step 4.
 - **The standards.** Where the repo keeps its coding standards (`CONTRIBUTING.md`, `docs/coding-standards*`, `docs/conventions*`, `STYLEGUIDE*`), its `CLAUDE.md` or `AGENTS.md`, and its ADRs. In a home repo the home `CLAUDE.md` says where each repo's are. Note the paths and leave the reading to the code review. If the repo has none, the review compares the change with the code around it.
 
 ## 2. Check in two fresh subagents
@@ -47,7 +48,7 @@ Instructions for the subagent, to pass on as they are:
 > You are checking finished work against what was agreed. You have not seen how it was built, and that is the point. Trust only what you read and run yourself. Change no files.
 >
 > 1. Read the spec: goal, target behavior, acceptance criteria, non-functional requirements, out of scope, language, decisions. Read the plan if there is one; it describes an approved refactor and the build steps. A quick fix has no plan, and its spec has a Change section that describes the approved change instead.
-> 2. Read the full diff between the base branch and the branch, and enough of the surrounding code to understand it. Follow each changed path from its entry point.
+> 2. Read the full diff of the branch since it left the base branch (`git diff <base>...<branch>`, with three dots, so that what happened on the base since then is not read as part of this change), and enough of the surrounding code to understand it. Follow each changed path from its entry point.
 > 3. For each acceptance criterion, look for two things: the code that makes it true, and a test that would fail if it stopped being true. Read the test and judge whether it really checks the criterion, not just whether it exists or has a matching name.
 > 4. If the spec has non-functional requirements, look for the code that meets each one that asks for something, and for a test where a test can check it. For each one marked "no change", check that the diff really changes nothing there.
 > 5. Run the tests, the build and the linter or type checker. Report what you ran and the result. If something can't be run, say so.
@@ -76,7 +77,7 @@ Instructions for the subagent, to pass on as they are:
 > That other check covers whether the acceptance criteria are met, so don't repeat it. Read the spec to know what the change is for. Your question is a different one: is this good code, and does it do what it means to do in every case, not only the ones someone wrote down?
 >
 > 1. Read the spec. Read the repo's coding standards, its `CLAUDE.md` or `AGENTS.md`, and the ADRs for the area, at the paths you were given.
-> 2. Read the full diff between the base branch and the branch. For every function the diff touches, read the whole function, what calls it and what it calls. A diff read without the code around it hides most bugs.
+> 2. Read the full diff of the branch since it left the base branch (`git diff <base>...<branch>`, with three dots, so that what happened on the base since then is not read as part of this change). For every function the diff touches, read the whole function, what calls it and what it calls. A diff read without the code around it hides most bugs.
 > 3. Hunt for bugs. For each changed path, ask what happens with: empty, missing or malformed input; an error from something it calls (is it handled, passed on or swallowed); two requests at the same time; a retry or a second run; far more data than the tests use; a user who isn't allowed; data written before this change. Look for input that is trusted without a check, secrets or personal data that reach a log or a response, queries or calls inside a loop, resources that are never released, and a fallback or default that hides a failure instead of reporting it.
 > 4. Look for departures from the standards, the ADRs and the way the code around the change does things. A new helper where one already exists: search before you accept anything new. Another way of handling errors, logging, configuration, naming or test setup than the repo's. A new dependency: check that the plan names it, that a package with exactly that name exists and is the one meant, and that nothing the repo already uses does the job. Code nothing calls, leftover debug output, commented-out code, a TODO. An abstraction, option or parameter that nothing in the spec needs.
 > 5. Read the tests the diff adds as code too. Report a test that can't fail, one that asserts on a mock instead of on behavior, and one whose expected value repeats the implementation.
@@ -129,18 +130,28 @@ Write the description from the spec, not from the commit log:
 
 Follow the repo's pull request template and title conventions if it has them. Leave file-by-file walkthroughs out; the diff shows that.
 
+Work that changes several repos gets one pull request per repo. Each description covers that repo's part, names the others, and says in which order they are merged and deployed, from step 4. A reviewer who sees one of them has to know that it is not the whole change.
+
 Post the description of the change from step 4 in the chat, then the pull request's title and description, with the branch and the target it will merge into. If the work has a ticket, say also how the pull request will be linked on it in step 6: through a link field, or with a comment, and then show the comment's text. Wait for an explicit approval. It covers the code as step 4 describes it, the push, the pull request and that one link on the ticket. Then push the branch and open the pull request with whatever is available: `gh`, `glab`, a code host MCP server.
 
-If the pull request is already open, the `revise` skill has sent the work back here after review. Show the commits to be pushed and what changes in the description instead, and after the approval push and update the pull request. Don't open a second one. The ticket already has its link, so step 6 is done.
+Write the URL of each pull request under a **Pull requests** heading in `plan.md`, or in `spec.md` for a quick fix. That is how `revise`, `retro` and a session with a new context find them, and it leaves the file's status as it is.
+
+With several repos, show every pull request before asking. One approval covers the set. Open them all, then put the links between them into the descriptions, since a pull request can't link to one that doesn't exist yet. If one can't be opened, stop and say which are open and which are not.
+
+If the pull request is already open, the `revise` skill has sent the work back here after review. Show the commits to be pushed and what changes in the description instead, and after the approval push and update the pull request. Don't open a second one. The ticket already has its link, so step 6 only checks that the ticket still says what was built.
 
 ## 6. Tell the ticket
 
-If the work has a ticket, link the pull request on it the way step 5 showed: with a link field if the tracker has one, otherwise the short comment the developer approved. Write nothing else on the ticket. Don't move the ticket to another status, reassign it or tick off its criteria unless the developer asks.
+If the work has a ticket, link each pull request on it the way step 5 showed: with a link field if the tracker has one, otherwise the short comment the developer approved. Don't move the ticket to another status, reassign it or tick off its criteria unless the developer asks.
+
+Then check that the ticket still says what was built. `refine` brought it in line with the spec when the spec was approved (its step 7), and the spec may have changed since: during the build, in review, or because the developer accepted something as is in step 3. If the spec's goal, acceptance criteria or out of scope now differ from the ticket's, say what differs and ask, the way `refine` does there. An update goes through `ticket-creator`. Write nothing else on the ticket.
 
 ## Report
 
-The pull request URL, the verdicts in one line (for example "5 of 5 criteria met, review clean, lint clean"), and anything accepted as is or left unverified.
+The URL of each pull request, the verdicts in one line (for example "5 of 5 criteria met, review clean, lint clean"), and anything accepted as is or left unverified.
 
-Say what comes after: review comments and failing checks on the pull request are handled with the `revise` skill, and once it is merged the `retro` skill turns `findings.md` into lessons.
+Say what comes after: review comments and failing checks on the pull request are handled with the `revise` skill, and once it is merged the `retro` skill turns `findings.md` into lessons and the `cleanup` skill removes the worktrees and the branches.
 
-If the work has worktrees, list them and say that `git worktree remove <path>` removes each one once the pull request is merged. Don't remove them yourself: review comments get fixed there.
+An open pull request is a point where the files hold everything, and what comes next may be days away. Say that the context can be cleared now, and give the prompts for what comes next, as `implement` describes ("Clear the context"): one that runs `revise` on this pull request, and one each for `retro` and `cleanup` on this work once it is merged.
+
+If the work has worktrees, list them and say that `cleanup` removes them, and the branches, once the work is merged. Don't remove them yourself: review comments get fixed there.

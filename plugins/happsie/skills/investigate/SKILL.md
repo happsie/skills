@@ -7,7 +7,7 @@ description: Find the cause of a problem when nobody knows it yet. Pins down the
 
 A fix for a guessed cause is worse than no fix: the real problem stays, and now something else has changed too. This skill finds the cause and proves it. Fixing is a separate step, done with the `implement` skill once the cause is known.
 
-This skill changes nothing that lasts. It may add logging, write throwaway scripts and run experiments locally, and it reverts all of it before finishing. It commits nothing. The only file it leaves behind is `investigation.md`.
+This skill changes nothing that lasts. It may add logging, write throwaway scripts and run experiments locally, in a worktree made for the investigation and never in the developer's checkout, and it removes all of it before finishing. It commits nothing. The only file it leaves behind is `investigation.md`.
 
 ## The ask rule
 
@@ -21,6 +21,19 @@ Notes go in `investigation.md`, in the same folder the other skills use for this
 
 Update it as you go, not at the end. An investigation often outlasts a session, and what has been ruled out is the most expensive thing to lose.
 
+That also makes a long investigation safe to clear the context on. Once the last result is recorded and no experiment is running, recommend it when the context shows that it is full, and give the prompt that runs this skill on the same work again. The `implement` skill owns the rule ("Clear the context").
+
+## Look at the code that runs
+
+A problem happens in one version of the code: what is deployed where it shows, a release, or what the developer has on their machine. The checkout in front of you may be ahead of that version, behind it, on another branch or full of uncommitted changes. A cause found in code that is not the code running is not a cause.
+
+- **Find the commit.** In step 1, find out which version shows the problem and resolve it to a commit: a deploy record, a release tag, an image tag, a version the service reports. Write it in `investigation.md`. If nobody can say, ask before going on. Don't take the checkout's commit for it.
+- **Read at that commit.** `git show <commit>:<path>` reads a file without touching the checkout. When the checkout is at that commit and the files on the path have no uncommitted changes, reading it directly is the same thing.
+- **Experiment in a worktree.** The first time an experiment needs a changed file (a log line, a component switched off, a config value), make a worktree at that commit: `worktrees/<repo_name>-investigate/` in the work's folder, detached and with no branch, since nothing is committed. Set it up the way `implement` describes ("Work in a worktree"): how the folder is kept out of git, the install step, the untracked files it needs. Write its path in `investigation.md`. Every change, every script inside the repo and every subagent that changes something works there, and so does `git bisect`, which moves the worktree's commit. The checkout is only read, so the developer can keep working in it and no experiment gets mixed up with their uncommitted changes.
+- **If it only shows in the developer's checkout,** with their uncommitted changes, that is where the problem lives. Read it there. Before changing anything in it, ask, and say exactly what you will change and how it is undone.
+
+Note what `git status` shows in the checkout before the first experiment, so step 6 can check that it still shows the same.
+
 ## Keep the thread, hand off the digging
 
 An investigation is one line of reasoning: each result decides what to look at next. That line stays with you, and so do the hypothesis list and `investigation.md`. What fills the context is the digging: searching logs, reading through a code path, running an experiment and wading through its output. Give that to subagents, so your context is still clear when the tenth hypothesis comes up.
@@ -29,7 +42,7 @@ An investigation is one line of reasoning: each result decides what to look at n
 - For an experiment, say what to run and what to record. Don't tell it which result you hope for. To test a hypothesis, ask it to look for what would disprove it. An agent that is handed a theory tends to confirm it.
 - Ask for the raw evidence along with the answer: the log lines, the output, `file:line`. A conclusion without them is one more claim to check.
 - The ask rule holds for them too. A subagent never runs an experiment that could affect something shared; that goes through you to the developer first.
-- They revert what they change. You still check `git status` in step 6.
+- They change files only in the investigation's worktree, never in the checkout. You still check both in step 6.
 
 Don't hand off the thinking. Forming the hypotheses, choosing the next test and judging whether a cause is proven are yours, and you check the evidence a subagent returns before you record it as confirmed or ruled out.
 
@@ -39,6 +52,7 @@ Write down, and ask for what is missing:
 
 - **Expected and actual.** What should happen, and what happens instead. Exact error text, numbers and timings, not "it's broken" or "it's slow".
 - **Where and who.** Which environment, which users, accounts or data. Everyone, or some?
+- **Which version.** The commit that runs where the problem shows ("Look at the code that runs").
 - **When.** Since when, how often, at what times. Always, or sometimes?
 - **What it was like before.** Did it ever work? What is the last time it is known to have worked?
 
@@ -92,11 +106,11 @@ A story that merely fits is not proof. If that is all there is, report it as the
 
 ## 6. Clean up and report
 
-Revert every temporary change: logging, scripts, config, local data. Check with `git status` that the working tree is as you found it.
+Remove the investigation's worktree (`git worktree remove --force <path>`; everything in it was an experiment), and whatever else the experiments created outside the work's folder: scripts, config, local data. Check with `git worktree list` that it is gone, and with `git status` that the developer's checkout shows what it showed when you started.
 
 Finish `investigation.md` and post it in the chat:
 
-- **Symptom:** from step 1.
+- **Symptom:** from step 1, with the commit it was investigated at.
 - **Cause:** what it is, with `file:line` and the evidence. Or **Not found**, with the leading hypotheses and what would confirm each.
 - **How to reproduce:** exact steps, or why it can't be done.
 - **Ruled out:** each hypothesis that was tested and what disproved it.
@@ -107,7 +121,7 @@ Finish `investigation.md` and post it in the chat:
 
 Findings that live only in a chat and a local file are lost to everyone else.
 
-- **No ticket exists for the problem:** run the `ticket-creator` skill with `investigation.md` as input. It drafts the ticket and creates it once the developer approves. Do this also when the cause wasn't found, so what was ruled out isn't investigated twice. Skip it only if the developer says no ticket is needed.
+- **No ticket exists for the problem:** run the `ticket-creator` skill with `investigation.md` as input. It drafts the ticket and creates it once the developer approves. Do this also when the cause wasn't found, so what was ruled out isn't investigated twice. Skip it only if the developer says no ticket is needed. Once the ticket exists, `ticket-creator` renames the work's folder to its key (`refine`, "Where the documents live"), so the skill that fixes the problem finds `investigation.md`.
 - **A ticket exists:** draft a short comment with the cause, how to reproduce it and the recommended next step, and ask before posting it.
 
 Don't start on the fix. The developer decides what happens next.

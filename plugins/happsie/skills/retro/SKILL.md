@@ -44,7 +44,7 @@ For each piece of work, read:
 - `findings.md`.
 - The Decisions section of `spec.md`, and Risks and open questions in `plan.md`.
 - `investigation.md`, if there is one.
-- The pull request, if it can be fetched: review comments and failed checks that are not in the log.
+- The pull request, if it can be fetched, or each of them when the work changed several repos: review comments and failed checks that are not in the log.
 
 If there is no log, the work was not built with these skills or the log was lost. Work from the pull request and from what the developer tells you, and say that this is the basis.
 

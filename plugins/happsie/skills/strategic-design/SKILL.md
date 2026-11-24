@@ -31,6 +31,8 @@ Writing and updating these two files needs no permission. Don't commit them unle
 
 During the refactor, `plan.md` also records progress: tick off each refactor step when it is done. That is not a change to the plan and leaves its status as it is.
 
+If a `plan.md` already exists for this work, read it and continue from there instead of starting over. An approved plan is not written again, and a ticked step is done.
+
 ## 1. Map the tactical change
 
 Work out what the feature would look like if it were built straight into the code as it is today. List every place that would change, with `file:line`, and what would change there. This is the baseline the refactor is judged against. Don't write any of it.
@@ -64,7 +66,7 @@ Rules for the proposal:
 - **Stay inside the feature's path.** Refactor only code the feature touches. Report other debt you notice as a note; don't act on it.
 - **Use the agreed language.** Every class, function, field, endpoint, table and message the plan adds or renames is named with the terms in the spec's Language section, never with a word the spec says not to use. Renaming existing code to the agreed term is a refactor step like any other, inside the feature's path only. If the design needs a domain concept that has no agreed term, stop and ask. The answer goes into the spec, which then needs approval again.
 - **Match the codebase.** Use the patterns and conventions the project already uses before bringing in new ones.
-- **Follow the recorded decisions.** An accepted ADR for the area holds. If the design you want goes against one, stop and ask. Either the design changes or the ADR is superseded, and the developer says which.
+- **Follow the recorded decisions.** An accepted ADR for the area holds. If the design you want goes against one, stop and ask. Either the design changes or the ADR is superseded, and the developer says which. An ADR with status `Inferred` was read out of the code and binds nothing yet. If the design relies on one or goes against one, ask whether it holds; the `adr` skill records the answer ("Confirming an inferred ADR").
 - **A new dependency is a decision.** Use what the repo already has first. If the design needs a package, a service or a tool the repo doesn't use yet, or a new major version of one, it goes under Decisions with what it is for and why nothing already in the repo does the job. Check that a package with exactly that name exists in the registry and is the one you mean; a name that only sounds right is how the wrong package gets installed. The build adds no dependency the plan doesn't name.
 - **Weigh the cost.** A refactor that is larger or riskier than the feature needs a strong reason.
 
@@ -161,3 +163,5 @@ Report:
 - Every mechanical test edit made.
 - The feature steps, updated in `plan.md` if the refactor changed anything about them. A changed plan needs approval again.
 - Debt noticed outside the feature's path.
+
+An approved plan with its refactor done is a point where the files hold everything. When this skill runs on its own, say that this is a good time to clear the context, and give the prompt that continues the work with `implement`. That skill owns the rule ("Clear the context"), and says it itself when this skill runs as its second phase.

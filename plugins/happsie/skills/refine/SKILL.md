@@ -26,6 +26,10 @@ Writing and updating these two files needs no permission. Don't commit them unle
 
 The same folder holds `investigation.md` when `investigate` has run, and `findings.md`, the log of what the checks, the build and the reviewers found along the way. The `retro` skill owns that log ("The findings log").
 
+Work that started as free text can get a ticket later: `investigate` ends by drafting one, and `ticket-creator` can turn a spec into one. The folder then takes the ticket key as its name. Otherwise the skill that picks the ticket up starts an empty folder beside the one that holds what is already known. `ticket-creator` renames it when it creates a ticket from a `spec.md` or an `investigation.md`. Git records where each worktree is, so if the folder holds worktrees, run `git worktree repair <new path>` in the repo for each one after the rename, and correct the paths written in `plan.md` or `spec.md`.
+
+A ticket can also be created by hand. So before starting a new folder for a ticket key, look at the folders named with a slug. If one of them looks like the same work, ask whether it is, instead of starting a second folder.
+
 ## The shared language
 
 The request, the spec, the tickets and the code should use the same word for the same thing. When they don't, people agree on a sentence and mean different things by it, and the code ends up with three names for one concept. So the project's glossary is treated the way domain-driven design treats its ubiquitous language: terms and the rules about them are proposed, agreed with the developer, written down, and from then on followed by every later step.
@@ -60,6 +64,8 @@ Where the glossary is:
 ## 1. Gather the request
 
 If a `spec.md` already exists for this work, read it and continue from there instead of starting over. A spec that says `Kind: quick fix` was handed over by the `quick-fix` skill and says why the work was not a quick fix. Treat it as the request plus what is known so far. It has not been through steps 2 to 4, so run them.
+
+If the folder has an `investigation.md`, read it. The `investigate` skill wrote it, and it is where a fix starts: the symptom, the cause, how to reproduce it, what was ruled out and the commit all of that was found at. What it proved is known and is not asked about again. Carry the cause and the reproduction into the spec's Today, since the build reads the spec and not the investigation. What it calls a hypothesis is not known. If its cause is **Not found**, there is no fix to specify yet: say so and ask.
 
 - **Free text.** Take it as given. If it points at a ticket, document or conversation you can reach, read that too.
 - **Ticket key or URL.** Fetch it with whatever is available: a tracker MCP server, a CLI such as `gh issue view`, or another skill built for that tracker. Read the description, acceptance criteria and comments, then the parent or epic, sibling tickets, linked issues and any existing branches or PRs. Comments often overrule the description, so read them all.
@@ -103,6 +109,7 @@ This is where the real questions come from:
 - Acceptance criteria too vague to write a test against.
 - A proposed solution that is worse than an obvious alternative. Say so.
 - A request that goes against an accepted ADR. Either the request changes or the ADR is superseded, and the developer says which.
+- An ADR with status `Inferred` that the request relies on or goes against. It was read out of the code and nobody has confirmed it, so it is a question: does the decision hold? The `adr` skill records the answer ("Confirming an inferred ADR").
 
 Then cross-check what the request says nothing about: how the change behaves once it runs for real. Requests describe the behavior and leave this out, and what is never a requirement is never built or checked. For each point, find what the code on the path does today and whether the change moves it:
 
@@ -158,7 +165,7 @@ Write `spec.md` with the sections below, and post it in the chat as well:
 - **Today:** current behavior, with file references, and the commit and branch the code was read at.
 - **After:** target behavior.
 - **Acceptance criteria:** concrete, testable statements. Each one must be checkable by a test.
-- **Non-functional requirements:** one line each for security, performance, failure, observability, and rollout and rollback, from the cross-check in step 3: what is required, or "no change" with the reason in a few words. Whatever a test can check is written as an acceptance criterion as well, so it is built test-first and checked like the rest.
+- **Non-functional requirements:** one line each for security, performance, failure, observability, rollout and rollback, and dependencies, from the cross-check in step 3: what is required, or "no change" with the reason in a few words. Whatever a test can check is written as an acceptance criterion as well, so it is built test-first and checked like the rest.
 - **Out of scope:** what will not be touched.
 - **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. A new term also says whether the developer wanted it in the glossary or only in this spec. The rest of the spec uses these terms and no other words for the same things.
 - **Decisions:** each question from step 4 with the answer the developer gave. `strategic-design` picks up the ones that deserve an ADR and records them with the plan.
@@ -177,3 +184,19 @@ Where they are written depends on where the glossary is:
 - **A tracked file in a repo this work changes:** don't write it in the developer's checkout. The change belongs on the work's branch, and an edit left uncommitted in the checkout has to be moved there and undone here later. The approved spec holds the entries until the work's worktree exists. They are written there and get a commit of their own (`implement`, "Work in a worktree"; `strategic-design` plans the commit). Once the worktree exists, later glossary changes are written in it too.
 
 When this skill runs on its own and no build follows, there is no branch for the second case. Tell the developer that the terms are agreed in the spec and not yet in the glossary file, and write them to the checkout only if they ask.
+
+## 7. Bring the ticket in line
+
+Only when the work came from a ticket. The questions in step 4 usually change what the ticket says: a criterion got sharper, a case was added, something moved out of scope. The spec is a local file that is not in git, so the ticket is the only place the rest of the team sees what was agreed. A ticket that still says the old thing misleads the tester, the reviewer and whoever plans from it.
+
+Compare the approved spec with the ticket on what a reader of the ticket relies on: the goal, the acceptance criteria, what is out of scope, and the decisions that change what a user gets. File references and how it will be built don't count. The ticket never had them.
+
+If nothing differs, say so. If something does, list the differences and ask what to do with the ticket: update its description, add a comment that says what changed, or leave it. That is the developer's call, since the ticket may belong to someone else. This skill doesn't write to the tracker. An update or a comment goes through `ticket-creator` ("An existing ticket"), which puts it in plain language, shows the text and waits for approval before it writes.
+
+When an approved spec changes later and is approved again, do this again.
+
+## When it is done
+
+Tell the developer the path of the spec, which glossary files changed, and what happened with the ticket.
+
+An approved spec is a point where the files hold everything. When this skill runs on its own, say that this is a good time to clear the context, and give the prompt that continues the work with `strategic-design` or `implement`. The `implement` skill owns the rule ("Clear the context"), and says it itself when this skill runs as its first phase.

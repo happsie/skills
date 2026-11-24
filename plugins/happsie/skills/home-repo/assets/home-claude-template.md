@@ -58,7 +58,7 @@ The glossaries are the agreed domain language. Read the entries for the area bef
 The ADRs record decisions and why they were made. Read the ones for the area before designing a change.
 
 - An ADR with status `Accepted` holds. Work that would go against one stops until the developer says whether the work changes or the ADR is superseded.
-- `Inferred` ones were read out of the code and nobody has confirmed the reasoning.
+- `Inferred` ones were read out of the code and nobody has confirmed the reasoning. They bind nothing yet. Get the ones your work relies on or goes against confirmed; the `adr` skill records the answer.
 - New decisions are proposed to the developer, never just written down. The `strategic-design` skill lists them in the plan, and the `adr` skill writes them once approved.
 - An accepted ADR is never rewritten. A new one supersedes it.
 
@@ -66,7 +66,9 @@ The ADRs record decisions and why they were made. Read the ones for the area bef
 
 Specs and plans for work done from here live in `work/<ticket-key-or-slug>/` as `spec.md` and `plan.md`, also when the code changes land in other repos. The `refine`, `strategic-design`, `implement` and `quick-fix` skills write and read them there. `findings.md` in the same folder logs what the checks, the build and the reviewers found along the way, and the `retro` skill turns it into lessons for the coding standards, the glossary and the ADRs.
 
-The code for each piece of work is written in git worktrees of the repos it changes, in `work/<ticket-key-or-slug>/worktrees/<repo>/`, so the repos' own checkouts are left alone. They are kept out of this repo's git through `.git/info/exclude`.
+The code for each piece of work is written in git worktrees of the repos it changes, in `work/<ticket-key-or-slug>/worktrees/<repo>/`, so the repos' own checkouts are left alone. They are kept out of this repo's git through `.git/info/exclude`. Once the work is merged or dropped, the `cleanup` skill removes the worktrees and the branches; the folder with the spec, the plan and the findings stays.
+
+A folder named with a slug takes the ticket key as its name when the work gets a ticket, so the skill that picks the ticket up finds it.
 
 ## Adding a repo
 

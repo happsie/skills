@@ -6,7 +6,7 @@ No dependencies. Edit the layout below, never the SVG.
 """
 from pathlib import Path
 
-W, H = 1280, 1000
+W, H = 1280, 1096
 VIOLET, CYAN, PINK, GREEN, AMBER = "#a78bfa", "#22d3ee", "#fb7185", "#34d399", "#fbbf24"
 TEXT, MUTED = "#f8fafc", "#a5b0cf"
 SANS = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif"
@@ -57,7 +57,7 @@ def skill(x, y, w, h, name, lines, color, note=None, badge=None):
 add(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" '
     f'aria-label="Workflow: three starting points that lead into the implement skill, with quick-fix as the short path '
     f'for a small change, and end in a pull request. After that, revise handles review comments and failing checks, '
-    f'and retro turns what was found into lessons">')
+    f'and once it is merged retro turns what was found into lessons and cleanup removes the worktrees">')
 add("<defs>")
 add('<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0b1020"/>'
     '<stop offset="1" stop-color="#151235"/></linearGradient>')
@@ -175,7 +175,7 @@ add(f'<rect x="945" y="746" width="300" height="56" rx="28" fill="{GREEN}" fill-
     f'stroke="{GREEN}" stroke-width="1.5" filter="url(#glow)"/>')
 text(1095, 780, "Pull request, linked on the ticket", 15, TEXT, 600, "middle")
 
-# After the pull request: revise for review comments and failing checks, retro once it is merged
+# After the pull request: revise for review comments and failing checks, retro and cleanup once it is merged
 AY, AH = 852, 116           # the row below the pull request
 skill(945, AY, 300, AH, "revise", ["Review comments and failing checks.", "Same rules, then deliver checks again."],
       AMBER, note="cause unknown?  &#8594;  investigate")
@@ -184,14 +184,22 @@ line([(1145, AY - 2), (1145, 808)], GREEN)
 text(1037, 832, "comments, red checks", 12, MUTED, anchor="end")
 text(1153, 832, "fixed, checked", 12, MUTED)
 
-skill(585, AY, 300, AH, "retro", ["Reads findings.md, proposes lessons.", "You approve each one."], GREEN,
+RX, KX = 585, 215           # the retro card and the cleanup card
+RC, KC = RX + 150, KX + 150  # their centers
+skill(RX, AY, 300, AH, "retro", ["Reads findings.md, proposes lessons.", "You approve each one."], GREEN,
       note="a rule a machine can check?  &#8594;  ticket")
+skill(KX, AY, 300, AH, "cleanup", ["Removes the worktrees and branches.", "Checks first; you approve the list."],
+      GREEN, note="spec, plan and findings stay")
 line([(943, 774), (835, 774), (835, AY - 4)], GREEN)
-text(827, 832, "merged", 12, MUTED, anchor="end")
-line([(581, AY + AH / 2), (519, AY + AH / 2)], GREEN)
-add(f'<rect x="35" y="{AY + 30}" width="480" height="56" rx="28" fill="{GREEN}" fill-opacity="0.18" '
+line([(835, 824), (KC, 824), (KC, AY - 4)], GREEN)
+text(889, 764, "merged", 12, MUTED, anchor="middle")
+
+# What retro leaves behind
+LY = AY + AH + 44
+line([(RC, AY + AH + 2), (RC, LY - 4)], GREEN)
+add(f'<rect x="{RC - 240}" y="{LY}" width="480" height="56" rx="28" fill="{GREEN}" fill-opacity="0.18" '
     f'stroke="{GREEN}" stroke-width="1.5" filter="url(#glow)"/>')
-text(275, AY + 64, "Lessons in the standards, glossary and ADRs", 15, TEXT, 600, "middle")
+text(RC, LY + 34, "Lessons in the standards, glossary and ADRs", 15, TEXT, 600, "middle")
 
 # home-repo, the optional base for all of it
 add(f'<rect x="35" y="746" width="760" height="56" rx="14" fill="#141a33" stroke="{MUTED}" '

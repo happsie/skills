@@ -17,7 +17,7 @@ Never do these to get a check green or a thread closed: weaken, change, skip or 
 
 ## 1. Find the work
 
-- **The pull request.** From the key, the URL or the branch. Fetch it with whatever is available: `gh`, `glab`, a code host MCP server.
+- **The pull request.** From the key, the URL or the branch, or from the Pull requests heading `deliver` wrote in `plan.md` or `spec.md`. Fetch it with whatever is available: `gh`, `glab`, a code host MCP server. Work that changes several repos has one per repo, and `plan.md` lists a worktree for each. Find them all: a comment on one is often answered by a change in another, and steps 2 to 7 cover the whole set.
 - **The work's folder.** `work/<key-or-slug>/` in a home repo, otherwise `.implement/<key-or-slug>/` at the root of the repo (`refine`, "Where the documents live"). It holds `spec.md`, `plan.md` for work built with `implement`, and `findings.md`.
 - **The worktree.** `plan.md` lists it, or `spec.md` does for a quick fix. All changes are made there, never in the developer's checkout (`implement`, "Work in a worktree"). If it is gone but the branch is still there, add it again. Check that it is clean and holds what the pull request holds. If it has uncommitted changes or commits that were never pushed, say what they are and ask.
 
@@ -92,4 +92,4 @@ Add each comment and each failing check to `findings.md` in the work's folder, w
 - The verdicts from `deliver`, if it ran.
 - Anything unverified, and anything still waiting for the reviewer or the developer.
 
-Review often takes several rounds. Run this skill again for each one. Once the pull request is merged, the `retro` skill turns `findings.md` into lessons.
+Review often takes several rounds. Run this skill again for each one. The end of a round is a point where the files hold everything, and the next round may be days away, so say that the context can be cleared and give the prompt that runs this skill on the pull request again (`implement`, "Clear the context"). Once the pull request is merged, the `retro` skill turns `findings.md` into lessons and the `cleanup` skill removes the worktrees and the branches.

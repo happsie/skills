@@ -1,6 +1,6 @@
 ---
 name: ticket-creator
-description: Write exactly one ticket and create it in the user's tracker, after the user has approved the draft. For two or more tickets, use ticket-orchestrator instead, never this skill in a loop. The ticket is non-technical, with the sections Description, Why, Acceptance criteria, Scenarios and Out of scope, and gets links to related tickets. Use for every request to create a ticket, also a rushed "just create it", since creating one directly skips the draft and the approval. Triggers: "create a ticket", "write a ticket for this", "make a Jira issue", "open an issue", "file a bug", "turn this spec into a ticket", or to rewrite an existing ticket in this format. Works with any tracker (Jira, GitHub, Linear, ...).
+description: Write exactly one ticket and create it in the user's tracker, after the user has approved the draft. For two or more tickets, use ticket-orchestrator instead, never this skill in a loop. The ticket is non-technical, with the sections Description, Why, Acceptance criteria, Scenarios and Out of scope, and gets links to related tickets. Use for every request to create a ticket, also a rushed "just create it", since creating one directly skips the draft and the approval. Triggers: "create a ticket", "write a ticket for this", "make a Jira issue", "open an issue", "file a bug", "turn this spec into a ticket", or to rewrite an existing ticket in this format or bring it in line with an approved spec. Works with any tracker (Jira, GitHub, Linear, ...).
 ---
 
 # Ticket creator
@@ -46,7 +46,7 @@ Use the project's own names for these types. If the tracker has no issue types, 
 ## 1. Gather
 
 - **Free text or conversation.** Take it as given. Read any ticket, document or thread it points at.
-- **A spec from `refine`** (`spec.md`, see the `refine` skill for where it lives). It must be approved. Use it only when the work has no ticket yet. If the spec was refined from an existing ticket, say so and ask whether to update that ticket's description instead of creating a new one.
+- **A spec from `refine`** (`spec.md`, see the `refine` skill for where it lives). It must be approved. When the work has no ticket yet, the spec becomes one. When the spec was refined from an existing ticket, never create a second one: that ticket is brought in line with the spec instead ("An existing ticket"), which is what `refine` sends the work here for in its step 7.
 - **Findings from `investigate`** (`investigation.md`). The ticket is usually a bug. The symptom becomes the Description, with how to see it in the steps a user would take. The cause goes in as one plain sentence; if it wasn't found, say that and what has been ruled out. The acceptance criteria describe the correct behavior, not the fix.
 
 - **Ready-made ticket drafts** in a document, an artifact or the conversation. They are input like any other, not finished tickets. Rewrite each into the template and the plain language below, however complete it looks. A technical draft is rewritten from what it gives, not sentence by sentence: take the outcome and the reason from it, and leave the steps it lists for building it behind. If something in a draft doesn't fit the template, ask where it goes; don't keep the draft's format to make room for it.
@@ -153,8 +153,18 @@ Then create the links. Check the direction of each one before sending it: "A blo
 
 Write the glossary entries the user confirmed in step 2 into the glossary with status `agreed` and today's date. Don't commit them. A ticket has no branch to put them on, so when the glossary is a tracked file in a repo, the change is left uncommitted in the developer's checkout. Say that in the report, so they can commit it or take it onto a branch, and it isn't found later as a change nobody remembers making.
 
+If the ticket was written from a `spec.md` or an `investigation.md` in a work folder named with a slug, rename that folder to the new ticket's key, as `refine` describes ("Where the documents live"). Whoever picks the ticket up then finds the spec or the findings instead of starting over. When `ticket-orchestrator` makes several tickets from one spec, no single key fits, so the folder keeps its name.
+
 If there is no way to reach the tracker, say so and give the finished ticket as text to paste in.
+
+## An existing ticket
+
+When the ticket is already there, and the work is to rewrite it or to bring it in line with an approved spec, steps 1 to 4 hold and step 5 updates instead of creating. A spec changes during refinement, and the ticket is what the rest of the team reads.
+
+- Read the ticket as it is now, with its comments. Draft the new description in the template. When the developer chose a comment over an update, draft a short comment instead that says what changed and why, in the same plain language.
+- In step 4, show what changes next to what is there today: the criteria that were added, removed or reworded, and what moved into or out of scope. Someone who agreed to the old text has to be shown the difference, not left to find it.
+- After the approval, update the description or post the comment. Never create a second ticket for the same work. Change no other field, and leave the status, the assignee and the existing comments alone.
 
 ## Report
 
-The ticket key and URL, the links that were created, and any glossary file that changed and is waiting to be committed. If a link or field couldn't be set, say which and why.
+The ticket key and URL, the links that were created, and any glossary file that changed and is waiting to be committed. If a link or field couldn't be set, say which and why. For an existing ticket, what was changed on it. If the work's folder was renamed, its new path.

@@ -41,8 +41,58 @@ A subagent can't ask the developer, so it asks you: it stops and returns the que
 An agent with a full context gets worse at everything: it forgets the rules, loses track of the plan and stops noticing its own mistakes. On a large codebase one ticket fills a context several times over, so this skill keeps the heavy work out of the main thread.
 
 - **You hold the spec, the plan and the reports.** Reading through code and writing code is done by subagents, which start with a clean context and hand back a short report. `refine` reads the code this way, `strategic-design` maps the change and carries out the refactor this way, the build in phase 3 runs one subagent per feature step, and `deliver` checks the result in another. Open code yourself only to check a specific claim or to answer a specific question.
-- **The files carry the state.** `spec.md` and `plan.md` hold everything the next phase needs, so nothing is lost when a session ends. When the spec is approved, and again when the plan is approved and the refactor is done, tell the developer that this is a good point to clear the context or start a new session, and that running `implement` on the same work picks it up from the files.
+- **The files carry the state.** `spec.md` and `plan.md` hold everything the next phase needs, so nothing is lost when a session ends, and the context can be cleared between phases. "Clear the context" below says when to recommend that and what to tell the developer.
 - **This costs more tokens in total**, since every subagent reads its part of the code from scratch. That is the price of a context that stays sharp to the end.
+
+## Clear the context
+
+Subagents keep the heavy work out of your context, and it still fills: with the questions and the answers, the reports, and everything you opened to check them. Only the developer can clear it. Your part is to say when, to make sure nothing is lost by it, and to hand over the line that picks the work up again. A developer who is only told "you may want to clear the context" has to work out what to type afterwards, and usually doesn't clear.
+
+When to recommend it:
+
+- **At the points where the files hold everything.** The spec is approved and `refine` has finished with the glossary and the ticket. The plan is approved, its decisions are recorded and the refactor is done. The build is verified (3.5). The pull request is open. Say it in a line or two when you report that point, then go on with the next phase unless the developer takes it. The next phase starts from the files either way.
+- **When the context shows that it is full.** The host has compacted or summarized the conversation. Several feature steps, or more than one round of checks, have gone through this thread since it was last cleared. You had to open the spec or the plan again to recall what it says. The developer points out something you forgot, or a rule you stopped following. Then finish what is in flight, stop at the next safe point, and recommend it before starting anything new. Wait for the answer. An agent with a full context is the one that drops the rules, so carrying on is the developer's call and not yours.
+
+A safe point is one where nothing lives only in the conversation: no subagent has a step half done, no question is waiting for an answer, no file is waiting for approval, and the worktree has no uncommitted changes. Never recommend a clear in the middle of one of those. Get the answer or finish the step first.
+
+Before you recommend it, make the files carry what you know. The status lines are right, the finished steps are ticked off, the worktree paths, the scenarios that got their go-ahead and the notes from finished steps are in `plan.md`, and `findings.md` has every question and correction so far. If the next session needs something that has no place in those files, this is not a safe point yet.
+
+What to tell the developer:
+
+- That this is a good point to clear the context, or that it is needed, with the sign you saw.
+- What is saved and where: the work's folder, and how far the work has come.
+- How: `/clear` in Claude Code, or a new session. Either way from the same directory as now, the repo or the home repo, and not from the worktree.
+- The prompt to paste afterwards, in a code block so it can be copied. It names the skill, the work's key or slug, the folder, and where to pick up:
+
+  ```
+  Continue PROJ-123 with the implement skill. The files are in .implement/PROJ-123/. The spec and the plan are approved, and feature steps 1 to 3 are ticked off. Pick up at feature step 4.
+  ```
+
+The prompt points at the files. It doesn't carry the state. If you are adding facts to it that the next session would need, write them to the files instead: the prompt is gone after the next clear, and the files are not.
+
+Recommend a clear, not a summary of the conversation (`/compact` in Claude Code). A summary keeps a blurred copy of everything, including what no longer matters. The files are exact.
+
+### Pick up from the files
+
+A new context knows nothing about the work. The prompt says where to look, and that is all to take from it. Where the work stands is read from the files and the repo, because those are what was left behind on purpose, and a prompt can be out of date or mistyped.
+
+1. **Read the work's folder.** `spec.md`, `plan.md` and `findings.md`, in full. Not the code: subagents read that.
+2. **Check that the files and the repo agree.** The worktrees `plan.md` lists exist, are on the plan's branch and have no uncommitted changes. Every ticked step has its commits, and the branch has no commits past the last ticked step. If a worktree is gone and the branch is still there, add it again. Anything else that doesn't fit, or a prompt that says something the files don't, is something unexpected: say what you found and ask.
+3. **Find the place.** Take the first row that fits:
+
+   | The files say | Pick up at |
+   |---|---|
+   | No `spec.md`, or its status is draft | Phase 1. `refine` continues from the draft. |
+   | The spec is approved. No `plan.md`, or its status is draft | Phase 2. `strategic-design` continues from the draft. |
+   | The plan is approved. A decision has no ADR yet, or a refactor step is not ticked | Phase 2, at step 6 or 7 of `strategic-design`, with the first thing that is open. |
+   | The refactor is done. `plan.md` has no Scenarios | Phase 3, from 3.1. |
+   | The scenarios are there. A feature step is not ticked | 3.4, at the first step that is not ticked. |
+   | Every step is ticked. `plan.md` lists no pull request | 3.5. Run the verification again, since a new context has not seen it pass. Then phase 4. |
+   | `plan.md` lists a pull request | Not this skill. `revise` for review comments and failing checks, `retro` and `cleanup` once it is merged. |
+
+4. **Say it, then go on.** Tell the developer in a few lines what the files say and where you pick up. Don't redo what is approved: an approved spec is not asked about again, an approved plan is not designed again, and the scenarios in `plan.md` have their go-ahead.
+
+The other skills follow this rule when they run on their own, each with its own files and its own prompt.
 
 ## Where the documents live
 
@@ -50,11 +100,11 @@ The spec and the plan are files, so they survive a long session and can be picke
 
 Writing and updating these two files needs no permission. Don't commit them unless asked.
 
-`plan.md` also records progress: `strategic-design` ticks off each refactor step when it is done, and the build does the same for each feature step once it is committed. That is not a change to the plan and leaves its status as it is.
+`plan.md` also records progress: `strategic-design` ticks off each refactor step when it is done, and the build does the same for each feature step once it is committed. That is not a change to the plan and leaves its status as it is. The same goes for the other things that are written there as the work goes on: the worktree paths ("Work in a worktree"), the scenarios the developer gave a go-ahead for (3.3), the notes finished steps leave for later ones (3.4), and the pull requests once `deliver` has opened them.
 
-When starting, look for an existing folder for this work. If `spec.md` or `plan.md` is already approved, tell the developer what you found, including which steps are ticked off, and ask whether to resume from there or start over.
+When starting, look for an existing folder for this work. If `spec.md` or `plan.md` is already approved, tell the developer what you found, including which steps are ticked off, and ask whether to resume from there or start over. If they came with the prompt from "Clear the context", they have answered that already. Either way, resuming is done the way "Pick up from the files" describes.
 
-If the developer's answer to a question changes the spec or the plan, update the file and get it approved again before going on.
+If the developer's answer to a question changes the spec or the plan, update the file and get it approved again before going on. A spec that changed may no longer match its ticket, so bring the ticket in line the way `refine` does in its step 7.
 
 The folder also holds `findings.md`, the log of what went wrong along the way. Add an entry every time a question stops the work, with the answer it got, and every time the developer corrects something that was built or proposed. Write it when it happens; by the end of the work nobody remembers it. The `retro` skill owns the format ("The findings log") and turns the log into lessons once the work is merged. Appending to it needs no permission.
 
@@ -76,7 +126,7 @@ From then on the worktree is the repo path for everything: it is what subagents 
 
 When resuming, use the worktree `plan.md` lists. If it is gone but the branch is still there, add it again.
 
-The worktree stays after the pull request is opened, since review comments get fixed there. Never remove it yourself; `deliver` tells the developer how.
+The worktree stays after the pull request is opened, since review comments get fixed there. Never remove it on your own. The `cleanup` skill removes it, with the developer's approval, once the work is merged or dropped.
 
 ## Phase 1: Refine
 
@@ -106,7 +156,7 @@ If a layer the work needs is missing from the list or can't run locally, ask bef
 
 ### 3.2 Bugs: reproduce first
 
-For a bug, don't touch production code until a test reproduces it.
+For a bug, don't touch production code until a test reproduces it. If the `investigate` skill found the cause, its way to reproduce the bug is in `investigation.md` and in the spec's Today, and the test starts from it.
 
 1. State the bug as: given X, expected Y, actual Z.
 2. Write a test that asserts the expected behavior, in the layer closest to where the bug shows.
@@ -135,6 +185,8 @@ Don't push everything into unit tests because they are easiest, and don't repeat
 
 Post the list, one line per scenario with its layer, the acceptance criterion or rule it covers and the feature step it belongs to. Wait for a go-ahead before any of them is written.
 
+Then write the list into `plan.md` under a **Scenarios** heading, grouped by feature step. Until it is there, the go-ahead exists only in the conversation, and the list is gone the first time the context is cleared. Like ticking off steps, this leaves the plan's status as it is. When resuming, the scenarios in `plan.md` already have their go-ahead, so don't choose them again. A change to the list later is asked about the same way and written there too.
+
 To find the edge cases and what is already covered, use the code facts `refine` collected and the `file:line` references in the plan. If that isn't enough, send a read-only subagent to look, as `refine` does, instead of reading the code path yourself.
 
 ### 3.4 The loop
@@ -144,7 +196,7 @@ Build the feature steps from the plan in order, each one in a new subagent with 
 Give the subagent:
 
 - The paths to `spec.md` and `plan.md`, and which feature step is its own. It reads the whole of both, and builds only its step.
-- The scenarios for that step from 3.3, each with its layer.
+- The scenarios for that step, as `plan.md` lists them under Scenarios, each with its layer.
 - The worktree paths and the branch. It works only in the worktree, on that branch, and never in the developer's checkout or on the default branch.
 - The rest of this section, from "Work outside-in" to the end of the report list, passed on as it is.
 
@@ -187,15 +239,17 @@ When the step is done, run the test layers it touched and report:
 When a subagent comes back:
 
 - **With a question:** post it to the developer as it came, and wait. Don't answer it yourself, even when the answer looks obvious from the spec; if it were covered there, the subagent would not have had to ask. Then send the answer to the same subagent so it continues with what it already knows. If it can't be continued, start a new one with the step, the question, the answer and a note that the working tree holds unfinished work from the first attempt. Add the question and its answer to `findings.md`.
-- **With a report:** check it before going on. The step's commits exist, the working tree is clean, and the tests it names pass when you run them. A report is a claim until then. If something doesn't hold, that is something unexpected: stop and ask.
+- **With a report:** check it before going on. The step's commits exist, the working tree is clean, and the tests it names pass when you run them. A report is a claim until then. If something doesn't hold, that is something unexpected: stop and ask. If the report says something a later step should know, write it in `plan.md` under a **Notes from the build** heading, as the report said it and with the step it came from. The next subagent reads the plan and not this conversation, and so does a new context. A note leaves the plan's status as it is. If it means a later step no longer holds as written, that is a change to the plan: ask.
 
 If an answer changes the spec or the plan, update the file and get it approved again before the next step starts. If the answer is a decision that deserves an ADR, it goes under the plan's Decisions and is recorded the way `strategic-design` does it, once the plan is approved again.
 
-Tick the step off in `plan.md`, tell the developer in a line or two what was built, and start the next one.
+Tick the step off in `plan.md`, tell the developer in a line or two what was built, and start the next one. The gap between two steps is a safe point: if the context shows that it is full, recommend clearing it before the next step starts ("Clear the context").
 
 ### 3.5 Verify
 
 When every step is ticked off, run every affected test layer, the build, and the linter or type checker yourself, in the worktree. Show the output of any failure, and ask what to do about it. If something can't be run, say exactly what is unverified. Don't report success on anything you didn't run.
+
+A verified build is one of the points in "Clear the context". Say so with the prompt, then go on to phase 4.
 
 ## Phase 4: Deliver
 
@@ -203,7 +257,7 @@ When the build is verified and committed, run the `deliver` skill without waitin
 
 Don't do those checks yourself and don't skip them because the tests are green. If a verdict leads to more work, do it under the rules of phase 3, in a new build subagent that gets the finding as its step, and let `deliver` check again.
 
-The work is not over when the pull request is open. Review comments and failing checks go through the `revise` skill, which keeps the fixes under these same rules. Once the pull request is merged, the `retro` skill turns `findings.md` into lessons for the next piece of work.
+The work is not over when the pull request is open. Review comments and failing checks go through the `revise` skill, which keeps the fixes under these same rules. Once the pull request is merged, the `retro` skill turns `findings.md` into lessons for the next piece of work, and the `cleanup` skill removes the worktrees and the branches the work left behind.
 
 ## Report
 

@@ -1,6 +1,6 @@
 ---
 name: adr
-description: Record a decision as an ADR (architecture decision record) so the reason for it outlives the conversation it was made in. Writes one short file per decision with the context, the decision, the alternatives that lost and the consequences, in the project's ADR folder, and marks an older ADR as superseded when the new one replaces it. Use when the user says "write an ADR", "record this decision", "add a decision record", "document why we chose X", "supersede ADR 7", or when the strategic-design skill has an approved plan with decisions to record. Not for making the decision, not for domain terms and rules (the glossary, through refine), and not for what a feature should do (the spec).
+description: Record a decision as an ADR (architecture decision record) so the reason for it outlives the conversation it was made in. Writes one short file per decision with the context, the decision, the alternatives that lost and the consequences, in the project's ADR folder, and marks an older ADR as superseded when the new one replaces it. Also turns an ADR that was inferred from the code into an accepted one, once the developer confirms that the decision holds. Use when the user says "write an ADR", "record this decision", "add a decision record", "document why we chose X", "supersede ADR 7", "confirm this inferred ADR", or when the strategic-design skill has an approved plan with decisions to record. Not for making the decision, not for domain terms and rules (the glossary, through refine), and not for what a feature should do (the spec).
 ---
 
 # ADR
@@ -45,7 +45,7 @@ Most pieces of work produce no ADR. If you are unsure whether a decision qualifi
 
 When the folder has no format of its own, use `assets/adr-template.md`:
 
-- **Status:** `Accepted` once the developer has approved it. `Proposed` when they want it written down before it is settled, for example to take it to the team. `Superseded by NNNN` when a later ADR replaced it. `Inferred` is for records read out of code that nobody has confirmed; the `home-repo` skill seeds those, and this skill doesn't write them.
+- **Status:** `Accepted` once the developer has approved it. `Proposed` when they want it written down before it is settled, for example to take it to the team. `Superseded by NNNN` when a later ADR replaced it. `Inferred` is for records read out of code that nobody has confirmed; the `home-repo` skill seeds those, and this skill doesn't write them. It turns one into an accepted ADR once someone confirms it ("Confirming an inferred ADR").
 - **Repos:** the repos affected. Leave the line out when the ADR lives in the only repo it concerns.
 - **Context:** the situation that forced a choice, and the constraints that mattered. Facts, not the argument for the decision.
 - **Decision:** what was decided, in a sentence or two, stated as what we do.
@@ -77,6 +77,21 @@ When `strategic-design` calls this skill with an approved plan, that approval co
 - When it supersedes an older ADR, set the old one's status to `Superseded by NNNN` and update its index row. Change nothing else in the old file.
 
 Don't commit unless asked. When the ADR folder is a tracked part of a repo that a piece of work is changing, the ADR belongs on that work's branch: write it in the work's worktree, and `strategic-design` plans a commit for it.
+
+## Confirming an inferred ADR
+
+An ADR with status `Inferred` was read out of the code by the `home-repo` skill. It says what the code does. Nobody has said that the decision still holds, or why it was made, so it binds nobody, and it stays that way until someone asks. `refine` and `strategic-design` ask when a piece of work relies on one or goes against one, and the developer can ask at any time.
+
+Show the ADR and ask two things:
+
+- Does this decision hold, as something later work has to follow?
+- Why was it made, and what was turned down? "Nobody knows any more" is an answer. Write that instead of a reason.
+
+Then draft the result and get it approved as in step 2:
+
+- **It holds.** Rewrite the file with what the developer said: fill in Alternatives, set the status to `Accepted` with today's date, and remove the "Inferred from the code" line at the top. An inferred ADR may be rewritten. The rule against rewriting protects accepted ones.
+- **It doesn't hold.** It was an accident of the code, or the team has moved on. If something else was decided in its place, write that as a new ADR and mark this one `Superseded by NNNN`. If nothing was, delete the file and its index row: a record of a decision nobody made is worse than no record.
+- **The developer can't say.** Leave it as `Inferred`, and say that the work goes on without it binding anything.
 
 ## Report
 

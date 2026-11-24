@@ -88,6 +88,7 @@ Write `spec.md`, and post it in the chat as well. It starts with the status line
 - **Today:** what the code does, with `file:line`, and the commit it was read at.
 - **After:** what it does instead.
 - **Acceptance criteria:** usually one to three. Each one must be checkable by a test.
+- **Non-functional requirements:** one line that says "no change" for security, performance, failure, observability, rollout and rollback, and dependencies, with the reason in a few words. This is what "Nothing changes in how it runs" and "Nobody else has to adapt" came to in step 2. It is written down so that the spec check in `deliver` holds the diff to it: a small diff is the one where a new query or an unchecked input gets waved through.
 - **Out of scope:** what a reader might expect to be fixed along the way but isn't.
 - **Language:** the glossary terms the change touches, each with the words not to use for it. All of them exist already.
 - **Change:** the lines to change and what they become. The test: what it asserts, its layer and the command that runs it. If no test fits (a typo in a comment, a value no test can reach), say why instead of inventing one. The branch name and the branch it starts from, the default branch unless the developer says otherwise. One commit.
@@ -118,7 +119,7 @@ Run the `deliver` skill without waiting to be asked. It has two subagents with a
 
 Don't do those checks yourself, and don't skip them because the diff is small. Small diffs get waved through, and that is how they break things. If a verdict leads to more work and the work is still a quick fix, do it under the same rules and let `deliver` check again.
 
-Review comments and failing checks on the pull request go through the `revise` skill. It makes its fixes under the rules of this skill for as long as the work is still a quick fix.
+Review comments and failing checks on the pull request go through the `revise` skill. It makes its fixes under the rules of this skill for as long as the work is still a quick fix. Once the pull request is merged, the `retro` skill turns `findings.md` into lessons and the `cleanup` skill removes the worktree and the branch.
 
 ## Report
 
