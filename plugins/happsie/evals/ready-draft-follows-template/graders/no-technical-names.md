@@ -1,7 +1,7 @@
 ---
 type: regex
 target: last_message
-flags: i
+flags: im
 match: not_contains
 ---
-RecipeImporter|recipe_importer|source_url|recipes_router|0042_|/api/v2|cookbook/importer|JSON-LD|\.py\b
+^\s*(?:#{1,6}\s*|h[1-6]\.\s*|\*\*)?(?:Title|Description)\b[\s\S]*?(?:RecipeImporter|recipe_importer|source_url|recipes_router|0042_|/api/v2|cookbook/importer|JSON-LD|\.py\b)[\s\S]*?^\s*(?:#{1,6}\s*|h[1-6]\.\s*|\*\*)?Out of scope\b

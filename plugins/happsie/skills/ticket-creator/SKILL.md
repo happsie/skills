@@ -27,6 +27,7 @@ The ticket describes what the user or the business gets, in the words they would
 - Use the domain's own terms. If the project has a glossary, follow it exactly: its terms, never a word it lists under "Also called", and nothing that goes against a rule it records. The `refine` skill describes where the glossary is and what an entry holds. A ticket that calls one thing by two names gets built as two things.
 - Write in the language the project's existing tickets use.
 - Short sentences. No filler, no selling.
+- Don't describe how it is built in everyday words either. "A check runs every night and marks the shopping lists nobody has opened for 30 days" has no technical name in it, and is still the implementation. "A shopping list nobody has opened for 30 days moves to the archive" is what it gives. A job, a schedule, a stored flag or a template is only in the ticket when a user would notice it.
 
 If the work is technical by nature (an upgrade, a migration, a cleanup), still say it in terms of what it gives: what gets faster, safer, cheaper or possible afterwards. Name the technical thing once, in plain words, and leave the details out.
 
@@ -36,7 +37,7 @@ If the work is technical by nature (an upgrade, a migration, a cleanup), still s
 - **A spec from `refine`** (`spec.md`, see the `refine` skill for where it lives). It must be approved. Use it only when the work has no ticket yet. If the spec was refined from an existing ticket, say so and ask whether to update that ticket's description instead of creating a new one.
 - **Findings from `investigate`** (`investigation.md`). The ticket is usually a bug. The symptom becomes the Description, with how to see it in the steps a user would take. The cause goes in as one plain sentence; if it wasn't found, say that and what has been ruled out. The acceptance criteria describe the correct behavior, not the fix.
 
-- **Ready-made ticket drafts** in a document, an artifact or the conversation. They are input like any other, not finished tickets. Rewrite each into the template and the plain language below, however complete it looks. If something in a draft doesn't fit the template, ask where it goes; don't keep the draft's format to make room for it.
+- **Ready-made ticket drafts** in a document, an artifact or the conversation. They are input like any other, not finished tickets. Rewrite each into the template and the plain language below, however complete it looks. A technical draft is rewritten from what it gives, not sentence by sentence: take the outcome and the reason from it, and leave the steps it lists for building it behind. If something in a draft doesn't fit the template, ask where it goes; don't keep the draft's format to make room for it.
 
 Specs and findings are written for developers. From a spec, carry over the goal, the target behavior, the acceptance criteria and what is out of scope, and translate them into plain language. Keep the terms from its Language section as they are; they are already the domain's words. Leave the file references and technical detail behind in both cases.
 
