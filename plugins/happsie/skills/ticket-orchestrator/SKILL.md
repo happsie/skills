@@ -79,6 +79,8 @@ Before writing full descriptions, post the outline. Give each new ticket a tempo
 | T1 | Story | ... | one line | | |
 | T2 | Story | ... | one line | T1 | ABC-40 |
 
+Pick each type by the rule in `ticket-creator` ("Issue type"): story or bug for anything that changes the product, task only for administrative work.
+
 For a ticket that is a package of small items, list the items under the table and say why they are together, so the user can pull one out or split the package.
 
 Add where the set goes (tracker, project, parent), what is out of scope for the whole, and any open question about the slicing with your recommendation.

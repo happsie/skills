@@ -13,7 +13,7 @@ Nothing is written to the tracker before that approval.
 
 Count the tickets the request will end in before doing anything else. If it is two or more (a list of things to file, a document or spec with several pieces of work, an epic with stories, "tickets" in the plural), stop and run the `ticket-orchestrator` skill. Open it and follow it; its name alone doesn't tell you what it asks for. Don't run this skill once per ticket: tickets written one at a time overlap, leave gaps and get their links wrong, and the user never sees the set as a whole.
 
-The one exception is when `ticket-orchestrator` sent you here to read the ticket format. Then steps 3 and 5 apply to each ticket, and the orchestrator handles the rest.
+The one exception is when `ticket-orchestrator` sent you here to read the ticket format. Then "Issue type" and steps 3 and 5 apply to each ticket, and the orchestrator handles the rest.
 
 ## The ask rule
 
@@ -31,6 +31,18 @@ The ticket describes what the user or the business gets, in the words they would
 
 If the work is technical by nature (an upgrade, a migration, a cleanup), still say it in terms of what it gives: what gets faster, safer, cheaper or possible afterwards. Name the technical thing once, in plain words, and leave the details out.
 
+## Issue type
+
+The type says what kind of work the ticket is, and boards, filters and reports are built on it. A feature filed as a task drops out of all of them.
+
+- **Story** (or what the tracker calls it: feature, user story) for anything that adds or changes what the product does. Technical work is a story too, since step 3 already has it described by what it gives.
+- **Bug** for something that doesn't work the way it should.
+- **Task** only for administrative work, where nothing in the product changes: ordering a certificate, giving someone access, booking a workshop, updating a document outside the product.
+
+When it isn't clear whether something is a story or a bug, ask. Don't use task as the type for what you couldn't place.
+
+Use the project's own names for these types. If the tracker has no issue types, use what the project uses in their place, such as labels. If the user names a type, that is their call.
+
 ## 1. Gather
 
 - **Free text or conversation.** Take it as given. Read any ticket, document or thread it points at.
@@ -47,7 +59,7 @@ Then look in the tracker:
 
 - Search for tickets about the same thing. If one looks like a duplicate, show it and ask before going on.
 - Find related tickets: work this one depends on, work that waits for this one, and a parent or epic it belongs under.
-- Read a few recent tickets in the project to see which issue types, labels and language are in use. That is all they decide. They are not a model for the format or the level of technical detail: a project full of technical tickets still gets this template in plain language. If the user wants the project's existing style instead, that is their call, so ask; don't choose it for them.
+- Read a few recent tickets in the project to see which issue types, labels and language are in use. That is all they decide. A project that files everything as tasks doesn't change the rule under "Issue type". They are not a model for the format or the level of technical detail: a project full of technical tickets still gets this template in plain language. If the user wants the project's existing style instead, that is their call, so ask; don't choose it for them.
 
 ## 2. Ask
 
