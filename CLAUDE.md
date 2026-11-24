@@ -7,6 +7,7 @@ A Claude Code plugin marketplace. The `happsie` plugin holds general purpose ski
 - `.claude-plugin/marketplace.json`: the marketplace, lists every plugin.
 - `plugins/happsie/.claude-plugin/plugin.json`: plugin name and version.
 - `plugins/happsie/skills/<name>/SKILL.md`: one skill per folder, with extra files in `assets/` when needed.
+- `plugins/happsie/evals/<case>/`: one eval case per folder, with `prompt.md` and `graders/*.md`. Results land in `evals/results/`, which is ignored.
 - `docs/workflow.py`: generates the workflow flowchart. `docs/workflow.svg` is its output and is shown in the README.
 
 ## Keep the workflow flowchart up to date
@@ -47,5 +48,12 @@ Never edit `docs/workflow.svg` by hand. Look at the rendered picture before fini
 ## Before finishing a change
 
 - Run `claude plugin validate .`.
+- When a ticket skill changed, run its evals, on Sonnet and never on Fable. `--ablation none` makes the "skill fired" graders count, and `--no-publish` keeps the report local:
+
+  ```
+  claude plugin eval plugins/happsie --model sonnet --ablation none --no-publish
+  ```
+
+  The runs have no tracker, so the evals check routing, the template and that the reply stops for approval. They can't catch a real create call. A failure worth fixing in a skill gets a case here.
 - Bump `version` in `plugins/happsie/.claude-plugin/plugin.json` when a skill is added or its behavior changes. Installed plugins only update when the version changes.
 - Update the README if install steps, layout or the workflow changed.

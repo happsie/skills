@@ -1,6 +1,6 @@
 ---
 name: ticket-creator
-description: Write one ticket and create it in the user's tracker. The ticket is non-technical and readable by anyone on the team, yet precise enough for an agent to build from, with the sections Description, Why, Acceptance criteria, Scenarios and Out of scope. Finds related tickets and sets up links (blocks, is blocked by, relates to, parent or epic) when the tracker supports it. Use when the user asks to "create a ticket", "write a ticket for this", "make a Jira issue", "open an issue for this", "file a bug", "turn this spec into a ticket", or wants an existing ticket description rewritten in this format. Input is free text, the conversation so far, an approved spec from the refine skill, or the findings of the investigate skill. Works with any tracker (Jira, GitHub, Linear, ...). For more than one ticket, use ticket-orchestrator.
+description: Write exactly one ticket and create it in the user's tracker, after the user has approved the draft. For two or more tickets, use ticket-orchestrator instead, never this skill in a loop. The ticket is non-technical, with the sections Description, Why, Acceptance criteria, Scenarios and Out of scope, and gets links to related tickets. Use for every request to create a ticket, also a rushed "just create it", since creating one directly skips the draft and the approval. Triggers: "create a ticket", "write a ticket for this", "make a Jira issue", "open an issue", "file a bug", "turn this spec into a ticket", or to rewrite an existing ticket in this format. Works with any tracker (Jira, GitHub, Linear, ...).
 ---
 
 # Ticket creator
@@ -8,6 +8,12 @@ description: Write one ticket and create it in the user's tracker. The ticket is
 A ticket is read many times: by the person who prioritizes it, the developer or agent who builds it, the tester who checks it, and whoever wonders a year later why it was done. This skill writes one ticket that all of them can understand, shows the draft, and creates it in the tracker once the user has approved it.
 
 Nothing is written to the tracker before that approval.
+
+## One ticket only
+
+Count the tickets the request will end in before doing anything else. If it is two or more (a list of things to file, a document or spec with several pieces of work, an epic with stories, "tickets" in the plural), stop and run the `ticket-orchestrator` skill. Open it and follow it; its name alone doesn't tell you what it asks for. Don't run this skill once per ticket: tickets written one at a time overlap, leave gaps and get their links wrong, and the user never sees the set as a whole.
+
+The one exception is when `ticket-orchestrator` sent you here to read the ticket format. Then steps 3 and 5 apply to each ticket, and the orchestrator handles the rest.
 
 ## The ask rule
 
@@ -30,6 +36,8 @@ If the work is technical by nature (an upgrade, a migration, a cleanup), still s
 - **A spec from `refine`** (`spec.md`, see the `refine` skill for where it lives). It must be approved. Use it only when the work has no ticket yet. If the spec was refined from an existing ticket, say so and ask whether to update that ticket's description instead of creating a new one.
 - **Findings from `investigate`** (`investigation.md`). The ticket is usually a bug. The symptom becomes the Description, with how to see it in the steps a user would take. The cause goes in as one plain sentence; if it wasn't found, say that and what has been ruled out. The acceptance criteria describe the correct behavior, not the fix.
 
+- **Ready-made ticket drafts** in a document, an artifact or the conversation. They are input like any other, not finished tickets. Rewrite each into the template and the plain language below, however complete it looks. If something in a draft doesn't fit the template, ask where it goes; don't keep the draft's format to make room for it.
+
 Specs and findings are written for developers. From a spec, carry over the goal, the target behavior, the acceptance criteria and what is out of scope, and translate them into plain language. Keep the terms from its Language section as they are; they are already the domain's words. Leave the file references and technical detail behind in both cases.
 
 Read the glossary entries for the area, if the project has a glossary.
@@ -38,7 +46,7 @@ Then look in the tracker:
 
 - Search for tickets about the same thing. If one looks like a duplicate, show it and ask before going on.
 - Find related tickets: work this one depends on, work that waits for this one, and a parent or epic it belongs under.
-- Read a few recent tickets in the project to see which issue types, labels and language are in use.
+- Read a few recent tickets in the project to see which issue types, labels and language are in use. That is all they decide. They are not a model for the format or the level of technical detail: a project full of technical tickets still gets this template in plain language. If the user wants the project's existing style instead, that is their call, so ask; don't choose it for them.
 
 ## 2. Ask
 
@@ -93,6 +101,10 @@ Scenario: <short name>
 
 Keep each scenario to one behavior, in the words of the criteria. No UI element names, no technical steps.
 
+The headings are fixed: these five, with these names, in this order. Scenarios is the only one that may be left out. Don't add a heading such as "Technical notes" or "Implementation" for what the plain-language rules keep out.
+
+Before showing the draft, read it once more against the rules above: every heading is there, nothing in it names a file, class, endpoint, table or library, and every criterion can be checked by using the product.
+
 ## 4. Get it approved
 
 Post the draft in the chat, together with:
@@ -102,6 +114,17 @@ Post the draft in the chat, together with:
 - The glossary entries you will add or change, if step 2 settled any, and the file they go in.
 
 Wait for an explicit approval. If the user changes something, update the draft and ask again.
+
+Approval can only be given to a draft the user has seen, in full, in the chat. None of these are approval:
+
+- The request itself. "Create a ticket for X" asks for this skill to run; it doesn't approve a text that didn't exist yet.
+- Answers to the questions in step 2. They fill gaps in the draft; they don't approve it.
+- "Just create it", "no need to check with me" or "I trust you", said before the draft exists. The user is trusting a text they haven't read. Show the draft anyway, keep the message short, and say that one word creates it.
+- A permission mode that lets tool calls through without asking, or a user who seems to be in a hurry.
+
+Handing the create call to a subagent doesn't change any of this.
+
+If the last thing the user saw wasn't the exact text you are about to send to the tracker, you don't have approval. A ticket created without it has to be found, read and fixed or deleted by the user afterwards, which costs more than the wait.
 
 ## 5. Create and link
 

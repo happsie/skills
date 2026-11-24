@@ -1,15 +1,15 @@
 ---
 name: ticket-orchestrator
-description: Break a piece of work into several tickets and create them as one connected set. Slices the work into tickets that each deliver something on their own, maps how they depend on each other, gets the whole set approved, then creates them in the right order with parent or epic and blocks / relates-to links in place. Each ticket is written in the ticket-creator format. Use whenever more than one ticket is to be created, e.g. "create tickets for this feature", "break this down into tickets", "split this epic into stories", "make an epic with stories for this", "turn this spec into tickets". Input is free text, the conversation so far, an existing epic or ticket to break down, or an approved spec from the refine skill. Works with any tracker (Jira, GitHub, Linear, ...). For a single ticket, use ticket-creator.
+description: Create two or more tickets as one connected set. Use whenever a request will end in more than one ticket, also when the tickets come from one document, spec, artifact or list, or already exist as drafts. Slices the work, maps dependencies, shows the outline and every draft for approval, then creates the tickets with parent or epic and blocks / relates-to links. Use for "create tickets for this", "create these tickets", "break this down into tickets", "split this epic into stories", "make an epic with stories", "turn this spec into tickets". Works with any tracker (Jira, GitHub, Linear, ...). For a single ticket, use ticket-creator.
 ---
 
 # Ticket orchestrator
 
 Several tickets created one at a time end up overlapping, leaving gaps, and pointing at each other in the wrong direction. This skill plans the set as a whole first, then creates it in an order where every link can be made.
 
-Each ticket follows the `ticket-creator` skill: its sections, its plain-language rules and its tracker formatting. Read that skill before drafting. This skill adds what a set needs on top: slicing, connections and creation order.
+Each ticket follows the `ticket-creator` skill: its sections, its plain-language rules and its tracker formatting. Open that skill and read it before drafting, every time; the template is there and not here, and tickets written from memory of it come out in another format. This skill adds what a set needs on top: slicing, connections and creation order.
 
-Nothing is written to the tracker before the user has approved the set.
+Nothing is written to the tracker before the user has approved the set. There are two approvals, the outline in step 4 and the drafts in step 5, and both are needed however many tickets there are.
 
 ## The ask rule
 
@@ -17,7 +17,7 @@ No assumptions. How the work is sliced, what depends on what, and what is left o
 
 ## 1. Understand the whole
 
-Gather the request the way `ticket-creator` does: free text, the conversation, or an approved spec from `refine`. If the input is an existing epic or ticket to break down, read it with its children, links and comments.
+Gather the request the way `ticket-creator` does: free text, the conversation, ready-made ticket drafts, or an approved spec from `refine`. Ready-made drafts are input, not finished tickets: they still go through the slicing below and get rewritten into the `ticket-creator` format. If the input is an existing epic or ticket to break down, read it with its children, links and comments.
 
 Then look in the tracker for what already exists: tickets that cover part of this work, and tickets outside the set that it depends on or that wait for it. Existing tickets are reused and linked, not recreated.
 
@@ -70,7 +70,9 @@ Write each ticket in the `ticket-creator` format. Across the set:
 - Out of scope on one ticket names the ticket in the set that covers it ("Sharing a list is handled in T3").
 - Refer to other new tickets by temporary id for now.
 
-Post all drafts and wait for an explicit approval of the set. If the user changes one ticket, check whether the change moves a criterion or a dependency in another, and show those changes too.
+Post all drafts in the chat, each one in full, and wait for an explicit approval of the set. A summary, a table of titles or "the drafts follow the outline" is not the drafts. With many tickets, post them in batches rather than shortening them.
+
+The rules for what counts as approval are the ones in `ticket-creator` ("Get it approved"): the original request, the answers to your questions and the approved outline are not approval of the drafts. The user approves the text that will be sent, after seeing it. If the user changes one ticket, check whether the change moves a criterion or a dependency in another, and show those changes too.
 
 ## 6. Create in order
 
