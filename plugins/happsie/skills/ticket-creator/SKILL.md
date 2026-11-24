@@ -69,7 +69,7 @@ Ask for whatever is still missing, in one numbered list, with your recommended a
 - What is deliberately not part of it.
 - Project, issue type and parent or epic, when they can't be read from the request or the tracker.
 - Whether a related ticket you found really blocks this one or is just related.
-- A term the ticket needs that the glossary doesn't have, or that the request uses in another sense than the glossary. Propose the entry as `refine` does: the term, its meaning, its rules. The same goes for a request that breaks a recorded rule: ask whether the request or the rule changes.
+- A term the ticket needs that the glossary doesn't have, or that the request uses in another sense than the glossary. Propose the entry as `refine` does ("The shared language"): the term, its meaning, its rules, and for a new term two questions, whether to add it to the glossary and whether the definition is correct. The same goes for a request that breaks a recorded rule: ask whether the request or the rule changes.
 
 Don't ask what the request or the tracker already answers.
 
@@ -151,7 +151,7 @@ Set only the fields that were approved. Leave assignee, sprint, priority and est
 
 Then create the links. Check the direction of each one before sending it: "A blocks B" and "B blocks A" are easy to swap, and trackers name the two ends differently. If the tracker has no link type for a relation, mention the other ticket's key under the relevant section of the description instead.
 
-Write the approved glossary entries into the glossary with status `agreed` and today's date. Don't commit them. A ticket has no branch to put them on, so when the glossary is a tracked file in a repo, the change is left uncommitted in the developer's checkout. Say that in the report, so they can commit it or take it onto a branch, and it isn't found later as a change nobody remembers making.
+Write the glossary entries the user confirmed in step 2 into the glossary with status `agreed` and today's date. Don't commit them. A ticket has no branch to put them on, so when the glossary is a tracked file in a repo, the change is left uncommitted in the developer's checkout. Say that in the report, so they can commit it or take it onto a branch, and it isn't found later as a change nobody remembers making.
 
 If there is no way to reach the tracker, say so and give the finished ticket as text to paste in.
 

@@ -47,6 +47,8 @@ A glossary entry holds a term and the agreements about it:
 - **Rules** are the agreements: statements about the term that hold no matter which feature is being built. A rule is not an acceptance criterion. A criterion is done when the work is done; a rule keeps holding afterwards.
 - **Status** says how far to trust the entry. `agreed` means a person approved it. `inferred` means it was read out of code or tickets and nobody has confirmed it. Follow agreed entries. Treat inferred ones as a good guess, and get the ones this work relies on confirmed.
 
+Nothing goes into the glossary as `agreed` until the developer has said yes to two things about it: that the term should be in the glossary, and that the definition is correct. They are two questions, because the answers differ. A developer can agree that a word is needed and mean something else by it, and a definition can be right for a word that only matters in this one piece of work and has no place in a shared glossary. Ask both for every new term, with the entry written out as it would read, and take each term on its own. An approval of a spec or a ticket that happens to contain the entry answers neither question. A change to an existing entry is asked about the same way, with the old wording next to the new.
+
 One term has one meaning within a context. If two repos or modules use the same word for different things, that is two entries, each with its context. Don't bend them into one definition. Write down both, and how one translates into the other where they meet.
 
 Where the glossary is:
@@ -143,7 +145,7 @@ Each question states:
 
 When the host has a tool for asking the user questions with options to pick from (`AskUserQuestion` in Claude Code), use it. The developer answers with a click, which keeps many questions cheap. Such a tool has room for a short question and its options only, so first post what you found in the chat, numbered and with the references, then ask with the tool: one question per point, the recommended option first, in as many calls as its limits need. Without such a tool, post one numbered list.
 
-A language question is a proposal: the term, its meaning, its rules and the words it replaces, written as the glossary entry would read. Never settle a term or a rule yourself, and never let a request that breaks an agreed rule pass quietly. Either the request changes or the rule does, and the developer says which.
+A language question is a proposal: the term, its meaning, its rules and the words it replaces, written as the glossary entry would read. For a new term, ask the two questions from "The shared language", one term at a time: should it be added to the glossary, and is this definition correct. Post the full entry in the chat first, since the question tool has no room for it. If the developer corrects the definition, show the corrected entry and ask again until they say it is right. If they don't want the term in the glossary, it is still agreed for this work and stays in the spec only. Never settle a term or a rule yourself, and never let a request that breaks an agreed rule pass quietly. Either the request changes or the rule does, and the developer says which.
 
 Don't ask what the ticket or the code already says in so many words. Push back when an answer conflicts with the code or the ticket. Keep going round by round until nothing is left that you would have to decide yourself.
 
@@ -158,7 +160,7 @@ Write `spec.md` with the sections below, and post it in the chat as well:
 - **Acceptance criteria:** concrete, testable statements. Each one must be checkable by a test.
 - **Non-functional requirements:** one line each for security, performance, failure, observability, and rollout and rollback, from the cross-check in step 3: what is required, or "no change" with the reason in a few words. Whatever a test can check is written as an acceptance criterion as well, so it is built test-first and checked like the rest.
 - **Out of scope:** what will not be touched.
-- **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. The rest of the spec uses these terms and no other words for the same things.
+- **Language:** the terms this work depends on, each with its meaning, its rules and the words not to use for it, marked new, changed or existing. A new term also says whether the developer wanted it in the glossary or only in this spec. The rest of the spec uses these terms and no other words for the same things.
 - **Decisions:** each question from step 4 with the answer the developer gave. `strategic-design` picks up the ones that deserve an ADR and records them with the plan.
 
 The spec has no assumptions section. Anything you would have put there is a question for step 4.
@@ -167,7 +169,7 @@ Wait for an explicit approval. If the developer changes something, update the fi
 
 ## 6. Update the glossary
 
-Once the spec is approved, its new and changed terms go into the glossary with status `agreed` and today's date. Approving the spec approves these entries, so nothing goes into the glossary before that. If the spec changes later and is approved again, bring the glossary in line with it.
+Once the spec is approved, the new and changed terms the developer confirmed in step 4 go into the glossary with status `agreed` and today's date. Both answers are needed: the developer said yes to adding the term and said the definition is correct. Approving the spec doesn't replace either answer, so a term that got into the spec without them is asked about now, before it is written. A term the developer kept out of the glossary is not written. Nothing goes into the glossary before the spec is approved. If the spec changes later and is approved again, bring the glossary in line with it, and ask again about any entry whose wording changed.
 
 Where they are written depends on where the glossary is:
 
