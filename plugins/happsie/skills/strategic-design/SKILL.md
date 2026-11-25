@@ -1,13 +1,15 @@
 ---
 name: strategic-design
-description: Strategic programming step between agreed requirements and writing the feature. Takes an approved spec, maps the code changes the feature needs, and asks whether the code would be healthier if it were refactored first so the feature becomes a small, obvious change. Proposes a preparatory refactor (or says none is needed), gets it approved, and carries it out without changing behavior or the expected results of existing tests. Decisions the plan makes that deserve an ADR are recorded once the plan is approved. Use when the user asks "should we refactor first", "do a strategic analysis", "design this before we build it", "prep refactor for this feature", "make the change easy first", or as the second phase of the implement skill. Not for agreeing on what to build (refine), and not for cleanup that no feature needs.
+description: Strategic programming step between agreed requirements and writing the feature. Takes an approved spec, maps the code changes the feature needs, and asks whether the code would be healthier if it were refactored first so the feature becomes a small, obvious change. Recommends the refactor when it leaves the code on the feature's path healthier than it is today, or when the feature is the start of something that is expected to grow and needs a structure to grow in. Proposes a preparatory refactor (or argues why none is needed), gets it approved, and carries it out without changing behavior or the expected results of existing tests. Decisions the plan makes that deserve an ADR are recorded once the plan is approved. Use when the user asks "should we refactor first", "do a strategic analysis", "design this before we build it", "prep refactor for this feature", "make the change easy first", or as the second phase of the implement skill. Not for agreeing on what to build (refine), and not for cleanup that no feature needs.
 ---
 
 # Strategic design
 
 Tactical programming gets the feature working in the code as it stands and leaves the design a little worse each time. Strategic programming asks first what shape the code should have for this feature to fit well, and gets it into that shape before building. Make the change easy, then make the easy change.
 
-This skill answers one question: **with this feature in it, would the code be healthier if we refactored first?** It then produces a plan the developer approves, and carries out the refactor part of it.
+This skill answers one question: **with this feature in it, would the code be healthier if we refactored first?** There are two reasons to say yes. The code the feature touches would end up in better shape than it is in today. Or the feature is the first of more to come, and the code needs a structure the rest can plug into. It then produces a plan the developer approves, and carries out the refactor part of it.
+
+The pull is always toward the tactical version, because it is less work today and its cost only shows later. So lean the other way: when a refactor would raise the health of the code, recommend it. The developer can still turn it down, and they can only do that if it was proposed.
 
 It needs an approved spec (goal, target behavior, acceptance criteria). Read it from `spec.md`. If there isn't one, or its status is still draft, run the `refine` skill first.
 
@@ -53,22 +55,35 @@ Look at the tactical version and at the code around it. Signs that the code is t
 - This is the second or third variant of something handled ad hoc each time.
 - The code to change is hard enough to follow that the change itself is risky.
 
+The feature doesn't have to make the code worse for a refactor to be worth it. Code on the feature's path that is already in poor shape counts too, even when the feature could be squeezed in without adding to the problem: a function too long to hold in your head, duplication, a misleading name, logic in the wrong layer, code nobody can test. The work is opening this code anyway, with tests running and a reviewer reading. That is the cheapest moment it will ever get to fix it.
+
+Then look ahead. Signs that this feature is the start of something that will grow:
+
+- The spec, the ticket, its epic or its sibling tickets name later work in the same place: more variants, more providers, more rules, more formats.
+- The feature adds the first case of something that plainly comes in kinds, such as a payment method, an export format or a notification channel.
+- `git log` shows this area picking up a new case every so often.
+- The developer has said that more is coming.
+
+Growth has to rest on something you can point to. "Someone might want this one day" is not a sign. If it looks likely but nothing says so, ask the developer whether more is planned. Don't guess either way.
+
 If you don't understand why the code is built the way it is, ask before judging it. Check ADRs and `git log` first.
 
 ## 3. Decide: refactor first, or not
 
-For each problem found in step 2, ask what shape of code would make the feature a small, local change. Typical moves: extract a function or class, split a responsibility, move logic to the data it uses, introduce an interface so variants plug in, replace a conditional with polymorphism, add a seam that makes the code testable.
+For each problem found in step 2, ask what shape of code would make the feature a small, local change. For growth found in step 2, ask what shape would make the next case a small, local change as well. Typical moves: extract a function or class, split a responsibility, move logic to the data it uses, introduce an interface so variants plug in, replace a conditional with polymorphism, add a seam that makes the code testable.
 
 Rules for the proposal:
 
-- **A pattern must earn its place.** Name a design pattern only when it removes a concrete problem from step 2. Never introduce one for its own sake or for features that might come later.
-- **"No refactor needed" is a valid answer**, and often the right one. If the tactical change is already small and clean, say so and move on.
+- **Refactor when the code ends up healthier.** If the refactor leaves the code on the feature's path easier to read, test and change than it is today, recommend it. It doesn't need the feature to be hard without it.
+- **Build for growth you can point to.** When step 2 found signs that more is coming, give the code the structure the next cases need now: an interface the variants plug into, a strategy, a registry, whatever fits. Doing it with the first case is cheaper than after three have been written ad hoc. Say in the plan what the growth is and what it rests on. Build the structure and the one case the spec asks for, never the later cases themselves.
+- **A pattern must earn its place.** Name a design pattern only when it removes a concrete problem from step 2 or carries growth found there. Never introduce one for its own sake, or for a future nothing points to.
+- **"No refactor needed" has to be argued.** It is a valid answer when the tactical change is small and clean, the code around it is in good shape and nothing points to growth. Say that for each of the three, in the plan. It is not the answer to give because it is less work.
 - **Stay inside the feature's path.** Refactor only code the feature touches. Report other debt you notice as a note; don't act on it.
 - **Use the agreed language.** Every class, function, field, endpoint, table and message the plan adds or renames is named with the terms in the spec's Language section, never with a word the spec says not to use. Renaming existing code to the agreed term is a refactor step like any other, inside the feature's path only. If the design needs a domain concept that has no agreed term, stop and ask. The answer goes into the spec, which then needs approval again.
 - **Match the codebase.** Use the patterns and conventions the project already uses before bringing in new ones.
 - **Follow the recorded decisions.** An accepted ADR for the area holds. If the design you want goes against one, stop and ask. Either the design changes or the ADR is superseded, and the developer says which. An ADR with status `Inferred` was read out of the code and binds nothing yet. If the design relies on one or goes against one, ask whether it holds; the `adr` skill records the answer ("Confirming an inferred ADR").
 - **A new dependency is a decision.** Use what the repo already has first. If the design needs a package, a service or a tool the repo doesn't use yet, or a new major version of one, it goes under Decisions with what it is for and why nothing already in the repo does the job. Check that a package with exactly that name exists in the registry and is the one you mean; a name that only sounds right is how the wrong package gets installed. The build adds no dependency the plan doesn't name.
-- **Weigh the cost.** A refactor that is larger or riskier than the feature needs a strong reason.
+- **Weigh the cost, on both sides.** A refactor that is larger or riskier than the feature needs a strong reason. Skipping one has a cost too: every later change in that code pays for it. When the full refactor is too big for this work, propose the part that gives the most and note the rest as debt, instead of dropping it.
 
 ## 4. Check the safety net
 
@@ -86,7 +101,7 @@ These runs are in the developer's checkout, since the worktree doesn't exist bef
 Write `plan.md` next to the spec with the sections below, and post it in the chat as well:
 
 - **Tactical version:** the changes from step 1, and what they cost the design.
-- **Recommendation:** refactor first, or no refactor, with the reason in a sentence or two.
+- **Recommendation:** refactor first, or no refactor, with the reason in a sentence or two. A refactor says what gets healthier, and any growth it prepares for with what that growth rests on. No refactor says why the tactical change is clean, the code around it is in good shape, and nothing points to growth.
 - **Refactor steps:** ordered, small, each one leaving the tests green. Empty if none.
 - **Characterization tests:** which ones to add first, and what they pin.
 - **Test commands:** the test layers from step 4, each with the exact command that runs it and what it needs.
@@ -124,7 +139,7 @@ The work:
 
 1. Add the characterization tests. Run them. They must pass against the unchanged code.
 2. Take one refactor step. Run the tests. Green means go on to the next step.
-3. Commit where the plan says to.
+3. Commit where the plan says to. Keep the message short and about why the change is made: a subject line, and a line or two under it only when the reason isn't plain from the subject. Leave out how; the diff shows that. Follow the repo's commit conventions if it has them.
 
 Hard rules:
 

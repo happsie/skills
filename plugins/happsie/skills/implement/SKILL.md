@@ -224,7 +224,7 @@ Rules for the loop:
 - Add no dependency the plan doesn't name. If the step seems to need one, stop and ask.
 - Stay inside the spec and the plan. No speculative abstractions, no unrelated cleanup.
 
-Commit where the plan says to, on the branch, never on the default branch.
+Commit where the plan says to, on the branch, never on the default branch. Keep the message short and about why the change is made: a subject line, and a line or two under it only when the reason isn't plain from the subject. Leave out how; the diff shows that. Follow the repo's commit conventions if it has them.
 
 If you hit anything the rules above say to ask about, stop there. Leave the working tree as it is, don't try a workaround, and report back with the question: what you found (with `file:line` or the actual output), the options, and what you recommend. You will get the answer and carry on from where you stopped.
 

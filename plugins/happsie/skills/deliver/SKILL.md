@@ -118,17 +118,15 @@ If the spec's non-functional requirements say how the change is rolled out and r
 
 ## 5. Open the pull request
 
-Write the description from the spec, not from the commit log:
+Write the description from the spec, not from the commit log, and keep it short. A reviewer reads a few lines and then the diff, and a description as long as a page gets skipped, with whatever mattered in it. It says why the change is made, not how:
 
-- What changes and why, in a few sentences.
-- The acceptance criteria, each with the verdict it got.
-- What happens when it is deployed and whether it can be reverted, from step 4.
-- The ADRs this work added or superseded, if any.
-- How it was verified: what was run, and anything that couldn't be.
-- Anything the developer accepted as is in step 3, stated plainly.
+- Why the change is needed and what it changes, in a few sentences. This is most of the description.
+- What happens when it is deployed and whether it can be reverted, from step 4, only when it is more than new code running or a plain revert is not enough.
+- The ADRs this work added or superseded, one line each, if any.
+- What couldn't be verified, and anything the developer accepted as is in step 3, stated plainly. Leave both out when there is nothing.
 - A reference to the ticket.
 
-Follow the repo's pull request template and title conventions if it has them. Leave file-by-file walkthroughs out; the diff shows that.
+The acceptance criteria and their verdicts stay in the chat and in the spec; the ticket has the criteria for anyone who wants them. Follow the repo's pull request template and title conventions if it has them. Leave out file-by-file walkthroughs and how the code works; the diff shows that.
 
 Work that changes several repos gets one pull request per repo. Each description covers that repo's part, names the others, and says in which order they are merged and deployed, from step 4. A reviewer who sees one of them has to know that it is not the whole change.
 

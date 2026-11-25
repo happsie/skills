@@ -111,7 +111,7 @@ The rules for the loop in `implement` (3.4) hold here: a test is never edited, s
 
 Run the test layers the change touches, the build, and the linter or type checker, in the worktree. Show the output of any failure and ask what to do about it. Don't report success on anything you didn't run.
 
-Commit on the branch, never on the default branch.
+Commit on the branch, never on the default branch. Keep the message short and about why the change is made: a subject line, and a line or two under it only when the reason isn't plain from the subject. Leave out how; the diff shows that. Follow the repo's commit conventions if it has them.
 
 ## 5. Deliver
 
