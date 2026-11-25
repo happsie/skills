@@ -144,15 +144,49 @@ Always run at least one round, even when the request looks complete. What goes t
 - The key points of a well-defined ticket, read back for confirmation: the ones that cost the most if you understood them wrong.
 - The non-functional points that came out as "no change", read back together in one question so the developer can object.
 
-Each question states:
+A question has to be answerable by someone who has not read what you read. You have just been through the ticket and the code; the developer has not, and a bare "Should X handle Y?" leaves them to guess what you saw and what each answer would lead to. Each question states:
 
-- What you found, with a `file:line` reference or a quote from the ticket.
-- The options.
-- Your recommended answer and why.
+- **The situation:** what you found and why it is a question, in two or three sentences, with a `file:line` reference or a quote from the ticket. Say what the code does today and what the request says or leaves out.
+- **A scenario:** one concrete case that shows the open point, written as Given / When / Then with real values, not placeholders. The `Then` is the part that is undecided, so write it once per option.
+- **The options:** each with what it leads to: what the user gets, and what it costs in scope, such as a migration or another consumer that has to change.
+- **Your recommended answer and why.**
 
-When the host has a tool for asking the user questions with options to pick from (`AskUserQuestion` in Claude Code), use it. The developer answers with a click, which keeps many questions cheap. Such a tool has room for a short question and its options only, so first post what you found in the chat, numbered and with the references, then ask with the tool: one question per point, the recommended option first, in as many calls as its limits need. Without such a tool, post one numbered list.
+For example:
 
-A language question is a proposal: the term, its meaning, its rules and the words it replaces, written as the glossary entry would read. For a new term, ask the two questions from "The shared language", one term at a time: should it be added to the glossary, and is this definition correct. Post the full entry in the chat first, since the question tool has no room for it. If the developer corrects the definition, show the corrected entry and ask again until they say it is right. If they don't want the term in the glossary, it is still agreed for this work and stays in the spec only. Never settle a term or a rule yourself, and never let a request that breaks an agreed rule pass quietly. Either the request changes or the rule does, and the developer says which.
+```
+3. Invoices that are already overdue when the reminder setting is turned on
+
+The ticket says "send a reminder 7 days after the due date". ReminderJob only
+looks at invoices that became due since its last run (ReminderJob.kt:41), so an
+invoice that was overdue before the setting was turned on is never picked up.
+The ticket doesn't mention them.
+
+  Given an invoice that was due on 1 March and is unpaid
+  And the customer turns reminders on on 20 March
+  When the reminder job runs that night
+  Then (A) no reminder is sent for it, only for invoices that fall due later
+       (B) a reminder is sent for it the same night
+
+A. Only invoices that fall due after the setting was turned on. No change to
+   the job's query. Recommended: it is what the ticket describes, and B can
+   send a customer many reminders at once on the day they turn it on.
+B. Also invoices that are already overdue. The job needs a query without the
+   "since last run" limit, and a way to not send twice.
+```
+
+A scenario fits a question about behavior. A question that is about something else, such as a term, a name or whether a decision still holds, doesn't need one. Give it the situation and the options, and don't force it into Given / When / Then.
+
+When the host has a tool for asking the user questions with options to pick from (`AskUserQuestion` in Claude Code), use it. The developer answers with a click, which keeps many questions cheap. Post the questions in the chat first, written out in full and numbered as above, then ask with the tool: one question per point, the recommended option first, in as many calls as its limits need.
+
+The dialog can cover the chat, so what is in the tool has to make sense without it. A question that only says "Question 3?" or repeats a headline is the short question with no information again:
+
+- The question text names the point and the case in one full sentence: "An invoice was already overdue when reminders were turned on. Should it get a reminder?"
+- Each option's description says what happens if it is picked, including the cost. A label alone, such as "Yes" or "Option B", is not enough.
+- When the tool can show a preview for an option, put the scenario there with that option's `Then`.
+
+Without such a tool, post the numbered list and wait for the answers.
+
+A language question is a proposal: the term, its meaning, its rules and the words it replaces, written as the glossary entry would read. For a new term, ask the two questions from "The shared language", one term at a time: should it be added to the glossary, and is this definition correct. Post the full entry in the chat first, and put it in the option's preview when the tool has one. If the developer corrects the definition, show the corrected entry and ask again until they say it is right. If they don't want the term in the glossary, it is still agreed for this work and stays in the spec only. Never settle a term or a rule yourself, and never let a request that breaks an agreed rule pass quietly. Either the request changes or the rule does, and the developer says which.
 
 Don't ask what the ticket or the code already says in so many words. Push back when an answer conflicts with the code or the ticket. Keep going round by round until nothing is left that you would have to decide yourself.
 
