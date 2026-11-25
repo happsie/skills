@@ -223,6 +223,8 @@ Rules for the loop:
 - Follow the repo's coding standards and its `CLAUDE.md` or `AGENTS.md`. Read them before you write; in a home repo the home `CLAUDE.md` says where each repo's are. Where they say nothing, do it the way the code around you does, and look for an existing helper before you write a new one.
 - Add no dependency the plan doesn't name. If the step seems to need one, stop and ask.
 - Stay inside the spec and the plan. No speculative abstractions, no unrelated cleanup.
+- Keep it simple. Write the most straightforward code that passes the test: no layer, option, generic type or pattern that the step doesn't need today. Code that is clever or built for a future nobody asked for costs every reader after you.
+- Don't comment code that explains itself. Write a comment only for what the code can't say: why it is done this way, or a trap the next reader would walk into. A comment that repeats the code goes stale and gets in the way. If the repo's standards ask for more, such as doc comments on a public API, follow them.
 
 Commit where the plan says to, on the branch, never on the default branch. Keep the message short and about why the change is made: a subject line, and a line or two under it only when the reason isn't plain from the subject. Leave out how; the diff shows that. Follow the repo's commit conventions if it has them.
 

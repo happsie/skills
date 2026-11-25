@@ -107,7 +107,7 @@ Then build it yourself, test first:
 2. **Green.** Write the least code that makes it pass. Match the surrounding code and reuse existing helpers.
 3. **Tidy.** Only the code you just wrote, with the tests green.
 
-The rules for the loop in `implement` (3.4) hold here: a test is never edited, skipped or disabled to get to green, names use the agreed terms, the code follows the repo's coding standards, no dependency is added, and nothing outside the spec is touched. Debt you notice next to the fix goes in the report, not in the diff.
+The rules for the loop in `implement` (3.4) hold here: a test is never edited, skipped or disabled to get to green, names use the agreed terms, the code follows the repo's coding standards, it is kept simple and has no comment the code doesn't need, no dependency is added, and nothing outside the spec is touched. Debt you notice next to the fix goes in the report, not in the diff.
 
 Run the test layers the change touches, the build, and the linter or type checker, in the worktree. Show the output of any failure and ask what to do about it. Don't report success on anything you didn't run.
 
